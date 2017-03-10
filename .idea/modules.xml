@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/API.iml" filepath="$PROJECT_DIR$/API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Core/Core.iml" filepath="$PROJECT_DIR$/Core/Core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Dist.iml" filepath="$PROJECT_DIR$/Dist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Essentials/Essentials.iml" filepath="$PROJECT_DIR$/Essentials/Essentials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Factions.iml" filepath="$PROJECT_DIR$/Factions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Guard/Guard.iml" filepath="$PROJECT_DIR$/Guard/Guard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Hub.iml" filepath="$PROJECT_DIR$/Hub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Network.iml" filepath="$PROJECT_DIR$/Network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SurvivalGames.iml" filepath="$PROJECT_DIR$/SurvivalGames.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SurvivalGamesLobby.iml" filepath="$PROJECT_DIR$/SurvivalGamesLobby.iml" />
+    </modules>
+  </component>
+</project>

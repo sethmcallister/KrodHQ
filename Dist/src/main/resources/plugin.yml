@@ -1,0 +1,67 @@
+name: Kihar
+main: xyz.sethy.core.Core
+load: startup
+version: 0.0.1
+depend: [ProtocolLib]
+commands:
+  deleteuser:
+  setrank:
+  help:
+  coords:
+  forcestart:
+  suspendgame:
+  ping:
+  sotw:
+  setbalance:
+    aliases: [setbal, secmoney, seteco, setecon]
+  balance:
+    aliases: [bal, money, econ, eco]
+  message:
+    aliases: [m, msg, tell, wisper, tellraw]
+  reply:
+    aliases: [r]
+  setkb:
+  refund:
+  addlives:
+  safeshutdown:
+  redeem:
+  crate:
+  list:
+    aliases: [online]
+  staffchat:
+    aliases: [sc]
+  slowchat:
+  givebal:
+  mutechat:
+  request:
+  sounds:
+    aliases: [pmsounds, togglepmsounds]
+  autoban:
+  potspeed:
+  tempban:
+  mute:
+  vanish:
+    aliases: [v, hide]
+  unmute:
+  unban:
+  sbtype:
+  cancel:
+  information:
+  teleport:
+    aliases: [tp]
+  clearchat:
+    aliases: [cc]
+  freeze:
+    aliases: [ss, screenshare, halt]
+  gamemode:
+    aliases: [gm]
+  staffmode:
+    aliases: [h, staff, sm]
+  pay:
+  pvp:
+  koth:
+  ban:
+  tempban:
+  blacklist:
+  faction:
+    aliases: [f, factions, fac, facs, team, teams, t]

@@ -1,0 +1,5 @@
+MODULES:
+  SG_LOBBY: true
+  HUB: false
+  SG: false
+  HCF_FIX: false

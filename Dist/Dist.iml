@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="API" />
+    <orderEntry type="module" module-name="Core" />
+    <orderEntry type="module" module-name="SurvivalGamesLobby" />
+    <orderEntry type="module" module-name="SurvivalGames" />
+    <orderEntry type="module" module-name="Hub" />
+    <orderEntry type="module" module-name="HCFCore" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.massivecraft:factions:0.0.9">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/Resources/HCFactions.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.sk89q:worldguard:6.1">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/Resources/worldguard-6.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Maven: redis.clients:jedis:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.4.2" level="project" />
+    <orderEntry type="library" name="Maven: com.sk89q:worldedit:5.6.3" level="project" />
+    <orderEntry type="library" name="Maven: de.schlichtherle:truezip:6.8.3" level="project" />
+    <orderEntry type="library" name="Maven: rhino:js:1.7R2" level="project" />
+    <orderEntry type="library" name="Maven: org.spigotmc:spigot:1.7.10-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.7" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.sk89q:WorldEdit:6.0">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/Resources/worldedit-bukkit-6.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>
