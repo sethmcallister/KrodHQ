@@ -4,7 +4,6 @@ import xyz.sethy.api.framework.group.Group;
 import xyz.sethy.api.framework.user.User;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Seth on 07/03/2017.
@@ -17,14 +16,19 @@ public class DeathbanManager
     {
         this.deathbanTimes = new ConcurrentHashMap<>();
 
-        this.deathbanTimes.put(Group.DEFAULT, TimeUnit.MINUTES.toMillis(90L));
-        this.deathbanTimes.put(Group.ANT, TimeUnit.MINUTES.toMillis(60L));
-        this.deathbanTimes.put(Group.ELAPH, TimeUnit.MINUTES.toMillis(30L));
-        this.deathbanTimes.put(Group.KROD, TimeUnit.MINUTES.toMillis(15L));
+        this.deathbanTimes.put(Group.DEFAULT, 5400000L);
+        this.deathbanTimes.put(Group.ANT, 3600000L);
+        this.deathbanTimes.put(Group.ELAPH, 1800000L);
+        this.deathbanTimes.put(Group.KROD, 900000L);
+    }
+
+    public long getDeathbanTime(Group group)
+    {
+        return this.deathbanTimes.get(group) + System.currentTimeMillis();
     }
 
     public long getDeathbanTime(User user)
     {
-        return this.deathbanTimes.get(user.getGroup());
+        return this.deathbanTimes.get(user.getGroup()) + System.currentTimeMillis();
     }
 }

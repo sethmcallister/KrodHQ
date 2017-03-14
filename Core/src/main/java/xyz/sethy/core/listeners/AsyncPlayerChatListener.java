@@ -49,12 +49,12 @@ public class AsyncPlayerChatListener implements Listener
             }
             if (mute.getType().equals(MuteType.NORMAL_TEMPORARILY))
             {
-                Date expire = mute.getExpireDate();
+                Long expire = mute.getExpireDate();
                 Date now = new Date();
-                if (expire.after(now))
+                if (expire < System.currentTimeMillis())
                 {
                     final Player player = event.getPlayer();
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been muted, this mute expires at " + expire.toGMTString()));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been muted. "));
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You where muted for the reason: &3" + mute.getReason() + "&7."));
                     event.setCancelled(true);
                     return;
@@ -64,7 +64,9 @@ public class AsyncPlayerChatListener implements Listener
 
         if(Core.getInstance().getChatMuted().get())
         {
+            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You cannot chat while chat is muted."));
             event.setCancelled(true);
+            return;
         }
 
         if (this.cooldowns.containsKey(event.getPlayer()) && this.cooldowns.get(event.getPlayer()) > System.currentTimeMillis())

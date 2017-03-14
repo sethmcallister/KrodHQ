@@ -5,8 +5,8 @@ package xyz.sethy.api.framework.server;
  */
 public enum Server
 {
-    HCF("&6Hardcore Factions", "hcf", "&6HCFactions", 0),
-    SG("&eSurvival Games Lobby", "sglobby", "&eSG Lobby", 0),
+    HCF("&3Hardcore Factions", "hcf", "&6HCFactions", 0),
+    KITMAP("&3Kits", "sglobby", "&3Kits", 0),
     PRACTICE("&bPractice", "practice", "&bPractice", 0);
 
     private String displayName;

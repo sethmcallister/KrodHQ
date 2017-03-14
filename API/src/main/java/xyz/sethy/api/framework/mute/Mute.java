@@ -15,9 +15,9 @@ public interface Mute
 
     String getBannedBy();
 
-    Date getExpireDate();
+    Long getExpireDate();
 
-    Date getBanDate();
+    Date getMuteDate();
 
     String getTarget();
 

@@ -57,7 +57,9 @@ public class PlayerInteractListener implements Listener
             if (hand.equals(Hub.getInstance().getHubItems().getServerClock()))
             {
                 Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.translateAlternateColorCodes('&', "&3Select a server to join."));
-                inventory.setItem(4, Hub.getInstance().getClockItems().getHcf(player));
+                inventory.setItem(3, Hub.getInstance().getClockItems().getHcf(player));
+                inventory.setItem(5, Hub.getInstance().getClockItems().getKitmap(player));
+
 //                inventory.setItem(4, Hub.getInstance().getClockItems().getPractice());
 //                inventory.setItem(6, Hub.getInstance().getClockItems().getSgLobby(player));
 //                inventory.setItem(13, Hub.getInstance().getClockItems().getKitmap(player));
@@ -83,11 +85,26 @@ public class PlayerInteractListener implements Listener
         Player player = (Player) event.getWhoClicked();
         if (inventory.getTitle().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', "&3Select a server to join.")))
         {
-            if (event.getRawSlot() == 4)
+            if (event.getRawSlot() == 3)
             {
                 PlayerQueue queue = Hub.getInstance().getPlayerQueue();
                 queue.addToQueue(Server.HCF, player);
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have joined the queue for &3Hardcore Factions&7 in position &3#" + queue.getPos(player) + "/" + queue.getQueueSize(Server.HCF) + "&7."));
+                User user = API.getUserManager().findByUniqueId(player.getUniqueId());
+                if (user.getGroup().equals(Group.DEFAULT))
+                {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You can purchase &3Krod&7 to obtain highest queue priority. &3http://store.KrodHQ.com/"));
+                }
+                event.setCancelled(true);
+                player.closeInventory();
+                player.getInventory().setItem(4, Hub.getInstance().getHubItems().getLeaveQueue());
+                player.updateInventory();
+            }
+            if (event.getRawSlot() == 5)
+            {
+                PlayerQueue queue = Hub.getInstance().getPlayerQueue();
+                queue.addToQueue(Server.KITMAP, player);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have joined the queue for &3Kits&7 in position &3#" + queue.getPos(player) + "/" + queue.getQueueSize(Server.KITMAP) + "&7."));
                 User user = API.getUserManager().findByUniqueId(player.getUniqueId());
                 if (user.getGroup().equals(Group.DEFAULT))
                 {

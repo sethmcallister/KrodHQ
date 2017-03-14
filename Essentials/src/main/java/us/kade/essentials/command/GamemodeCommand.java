@@ -17,7 +17,7 @@ public class GamemodeCommand extends CommandBase
 {
     public GamemodeCommand()
     {
-        super("gamemode", Group.ADMIN, true);
+        super("gamemode", Group.PLATFORM_ADMIN, true);
         Bukkit.getPluginCommand("gamemode").setExecutor(this);
     }
 

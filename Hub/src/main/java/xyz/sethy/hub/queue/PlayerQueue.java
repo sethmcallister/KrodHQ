@@ -2,6 +2,7 @@ package xyz.sethy.hub.queue;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,9 +14,11 @@ import xyz.sethy.api.framework.user.hcf.HCFUser;
 import xyz.sethy.hub.Hub;
 import xyz.sethy.hub.server.Server;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by sethm on 22/12/2016.
@@ -65,7 +68,6 @@ public class PlayerQueue
                                 queue.remove(player);
                                 continue;
                             }
-                            System.out.println("Players in queue = " + queue.toArray().toString());
                             User user = API.getUserManager().findByUniqueId(player1.getUniqueId());
                             if (user != null)
                             {
@@ -163,7 +165,7 @@ public class PlayerQueue
             }
             if(hcfUser.deathbanTime() > System.currentTimeMillis())
             {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou are currently death-banned, You cannot join HCF for another &3" + getConvertedTime(hcfUser.deathbanTime() - System.currentTimeMillis()) + "&7."));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou are currently death-banned, You cannot join HCF for another &3" + formatTime(hcfUser.deathbanTime() - System.currentTimeMillis()) + "&7."));
                 if(hcfUser.getLives() > 0)
                 {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have &3" + hcfUser.getLives() + "&7 rejoin the queue within 20 seconds to use a life!"));
@@ -185,50 +187,32 @@ public class PlayerQueue
         this.waitingSince.put(player, System.currentTimeMillis());
     }
 
-    private String getConvertedTime(long i)
+    private final DecimalFormat FORMAT = new DecimalFormat("0.0");
+
+    private String format(long millisecond)
     {
-        i = Math.abs(i);
-        final int hours = (int) Math.floor(i / 3600L);
-        final int remainder = (int) (i % 3600L);
-        final int minutes = remainder / 60;
-        final int seconds = remainder % 60;
-        if (seconds == 0 && minutes == 0)
+        return FORMAT.format(millisecond / 1000.0D);
+    }
+
+    private String formatTime(long time)
+    {
+        if (time > 60000L)
         {
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + "0 seconds";
-        }
-        if (minutes == 0)
-        {
-            if (seconds == 1)
-            {
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%s seconds", seconds);
-            }
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%s seconds", seconds);
-        }
-        else if (seconds == 0)
-        {
-            if (minutes == 1)
-            {
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm", minutes);
-            }
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm", minutes);
-        }
-        else if (seconds == 1)
-        {
-            if (minutes == 1)
-            {
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm %ss", minutes, seconds);
-            }
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm %ss", minutes, seconds);
+            return setLongFormat(time);
         }
         else
         {
-            if (minutes == 1)
-            {
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm %ss", minutes, seconds);
-            }
-            final String toReturn = String.format("%sm %ss", minutes, seconds);
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + " " + toReturn;
+            return format(time);
         }
+    }
+
+    private String setLongFormat(long paramMilliseconds)
+    {
+        if (paramMilliseconds < TimeUnit.MINUTES.toMillis(1L))
+        {
+            return FORMAT.format(paramMilliseconds);
+        }
+        return DurationFormatUtils.formatDuration(paramMilliseconds, (paramMilliseconds >= TimeUnit.HOURS.toMillis(1L) ? "HH:" : "") + "mm:ss");
     }
 
     public void removeFromQueue(Player player)

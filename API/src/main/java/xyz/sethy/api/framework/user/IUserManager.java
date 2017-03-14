@@ -28,4 +28,6 @@ public abstract interface IUserManager
     void deleteUser(String paramString);
 
     User getTempUser(UUID paramUUID);
+
+    HCFUser getTempHCFUser(UUID uuid);
 }

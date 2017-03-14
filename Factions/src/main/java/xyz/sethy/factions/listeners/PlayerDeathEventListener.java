@@ -1,6 +1,7 @@
 package xyz.sethy.factions.listeners;
 
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -20,6 +21,7 @@ import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.dto.Faction;
 import xyz.sethy.factions.timers.TimerType;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -65,43 +67,6 @@ public class PlayerDeathEventListener implements Listener
     {
         Player killer = event.getEntity().getKiller();
         Player killed = event.getEntity();
-        HCFUser fKilled = API.getUserManager().findHCFByUniqueId(killed.getUniqueId());
-
-        if (killer == null)
-        {
-            Bukkit.getServer().getWorld(killed.getWorld().getUID()).strikeLightningEffect(killed.getLocation());
-            killed.teleport(new Location(Bukkit.getWorld("world"), 0.5, 72, 0.5));
-
-            if (Factions.getInstance().getTimerHandler().hasTimer(killed, TimerType.COMBAT_TAG))
-            {
-                Factions.getInstance().getTimerHandler().getPlayerTimers(killed).remove(Factions.getInstance().getTimerHandler().getTimer(killed, TimerType.COMBAT_TAG));
-            }
-            Faction faction = Factions.getInstance().getFactionManager().findByPlayer(killed);
-            if (faction != null)
-            {
-                double oldDTR = faction.getDTR();
-                faction.setDtr(oldDTR - 0.25);
-                if (faction.isRaidable())
-                {
-                    faction.setRaidableCooldown(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(90L));
-                }
-                Factions.getInstance().getDtrHandler().setCooldown(faction);
-                faction.setDeathCooldown(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(4L));
-                for (UUID uuid : faction.getOnlineMembers())
-                {
-                    Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Member death: &4" + killed.getName()));
-                    Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&3DTR change: &4" + oldDTR + " &3-> &4" + faction.getDTR()));
-                }
-            }
-            long deathbanTime = Factions.getInstance().getDeathbanManager().getDeathbanTime(API.getUserManager().findByUniqueId(fKilled.getUUID()));
-            fKilled.setDeathbanTime(deathbanTime + System.currentTimeMillis());
-            String deathMessage = ChatColor.translateAlternateColorCodes('&', "&c" + killed.getName() + "&4[" + fKilled.getKills() + "]&7 has died&7.");
-            fKilled.setDeathbanMessage(deathMessage);
-            killed.kickPlayer(ChatColor.translateAlternateColorCodes('&', deathMessage + "\n" + "&cYour deathban expires in &7" + getConvertedTime(deathbanTime) + "&c." + "\n" + "&cThank you for playing &3KrodHQ.com&c."));
-            Bukkit.broadcastMessage(deathMessage);
-            event.setDeathMessage(null);
-            return;
-        }
 
         String itemName;
         if (killer.getItemInHand().getType() == Material.AIR)
@@ -116,6 +81,7 @@ public class PlayerDeathEventListener implements Listener
         if (Factions.getInstance().isKitmap())
         {
             KitmapUser fKiller = API.getUserManager().findKitmapByUniqueId(killer.getUniqueId());
+            KitmapUser fKilled = API.getUserManager().findKitmapByUniqueId(killed.getUniqueId());
             fKiller.setKills(fKiller.getKills() + 1);
             fKilled.setDeaths(fKilled.getDeaths() + 1);
             fKiller.setBalance(fKiller.getBalance() + 75);
@@ -149,6 +115,7 @@ public class PlayerDeathEventListener implements Listener
         }
         else
         {
+            HCFUser fKilled = API.getUserManager().findHCFByUniqueId(killed.getUniqueId());
             HCFUser fKiller = API.getUserManager().findByUniqueId(killer.getUniqueId()).getHCFUser();
             fKiller.setKills(fKiller.getKills() + 1);
             fKilled.setDeaths(fKilled.getDeaths() + 1);
@@ -176,7 +143,7 @@ public class PlayerDeathEventListener implements Listener
             fKilled.setDeathbanTime(deathbanTime + System.currentTimeMillis());
             String deathMessage = ChatColor.translateAlternateColorCodes('&', "&c" + killed.getName() + "&4[" + fKilled.getKills() + "]&7 was slain by &c" + killer.getName() + "&4[" + fKiller.getKills() + "]&7 using &c" + itemName + "&7.");
             fKilled.setDeathbanMessage(deathMessage);
-            killed.kickPlayer(ChatColor.translateAlternateColorCodes('&', deathMessage + "\n" + "&cYour deathban expires in &7" + getConvertedTime(deathbanTime) + "&c." + "\n" + "&cThank you for playing &3KrodHQ.com&c."));
+            killed.kickPlayer(ChatColor.translateAlternateColorCodes('&', deathMessage + "\n" + "&cYour deathban expires in &7" + formatTime(deathbanTime) + "&c." + "\n" + "&cThank you for playing &3KrodHQ.com&c."));
             Bukkit.broadcastMessage(deathMessage);
         }
         event.setDeathMessage(null);
@@ -190,43 +157,31 @@ public class PlayerDeathEventListener implements Listener
         return WordUtils.capitalizeFully(i.getType().name().replace('_', ' '));
     }
 
-    private String getConvertedTime(long i)
+    private final DecimalFormat FORMAT = new DecimalFormat("0.0");
+
+    private String format(long millisecond)
     {
-        i = Math.abs(i);
-        final int hours = (int) Math.floor(i / 3600L);
-        final int remainder = (int) (i % 3600L);
-        final int minutes = remainder / 60;
-        final int seconds = remainder % 60;
-        if (seconds == 0 && minutes == 0)
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + "0 seconds";
+        return FORMAT.format(millisecond / 1000.0D);
+    }
 
-        if (minutes == 0)
+    private String formatTime(long time)
+    {
+        if (time > 60000L)
         {
-            if (seconds == 1)
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%s seconds", seconds);
-
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%s seconds", seconds);
-        }
-        else if (seconds == 0)
-        {
-            if (minutes == 1)
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm", minutes);
-
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm", minutes);
-        }
-        else if (seconds == 1)
-        {
-            if (minutes == 1)
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm %ss", minutes, seconds);
-
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm %ss", minutes, seconds);
+            return setLongFormat(time);
         }
         else
         {
-            if (minutes == 1)
-                return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + "" + String.format("%sm %ss", minutes, seconds);
-            final String toReturn = String.format("%sm %ss", minutes, seconds);
-            return ((hours != 0) ? ((hours == 1) ? (hours + "h") : (hours + "h")) : "") + " " + toReturn;
+            return format(time);
         }
+    }
+
+    private String setLongFormat(long paramMilliseconds)
+    {
+        if (paramMilliseconds < TimeUnit.MINUTES.toMillis(1L))
+        {
+            return FORMAT.format(paramMilliseconds);
+        }
+        return DurationFormatUtils.formatDuration(paramMilliseconds, (paramMilliseconds >= TimeUnit.HOURS.toMillis(1L) ? "HH:" : "") + "mm:ss");
     }
 }

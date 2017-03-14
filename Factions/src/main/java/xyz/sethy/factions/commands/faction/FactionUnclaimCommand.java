@@ -54,7 +54,7 @@ public class FactionUnclaimCommand implements ICommand
         faction.setHome(null);
         faction.flagSave();
 
-        faction.getOnlineMembers().forEach(uuid -> Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Your faction has been refunded &3" + finalRefund + "Emerald Blocks&7.")));
-        faction.getOnlineMembers().forEach(uuid -> Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&7" + sender.getName() + " has unclaimed all of your faction's land. (&3" + claims + " total&7)")));
+        faction.getOnlineMembers().forEach(uuid -> Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Your faction has been refunded &3$" + finalRefund + "s&7.")));
+        faction.getOnlineMembers().forEach(uuid -> Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&7" + sender.getName() + " has unclaimed all of your faction's land.")));
     }
 }

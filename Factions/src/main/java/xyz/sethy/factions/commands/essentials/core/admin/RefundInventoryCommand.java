@@ -15,7 +15,7 @@ public class RefundInventoryCommand extends CommandBase
 {
     public RefundInventoryCommand()
     {
-        super("refund", Group.TRAIL_MOD, true);
+        super("refund", Group.SR_MOD, true);
         Bukkit.getPluginCommand("refund").setExecutor(this);
     }
 

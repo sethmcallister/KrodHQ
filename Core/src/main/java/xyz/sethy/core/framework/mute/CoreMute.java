@@ -16,7 +16,7 @@ public class CoreMute implements Mute
     private SimplifiedMuteType simplifiedType;
     private String reason;
     private String bannedBy;
-    private Date expireDate;
+    private long expireDate;
     private Date banDate;
     private boolean isActive;
 
@@ -28,7 +28,7 @@ public class CoreMute implements Mute
         this.simplifiedType = type == MuteType.IP_PERMANENT || type == MuteType.NORMAL_PERMANENT ? SimplifiedMuteType.PERMANENT : SimplifiedMuteType.TEMPORARILY;
         this.reason = reason;
         this.bannedBy = bannedBy;
-        this.expireDate = new Date();
+        this.expireDate = 0L;
         this.banDate = new Date();
     }
 
@@ -40,66 +40,10 @@ public class CoreMute implements Mute
         this.simplifiedType = null;
         this.reason = null;
         this.banDate = null;
-        this.expireDate = null;
+        this.expireDate = 0L;
     }
 
-    public void loadFromString(String string)
-    {
-        if (string == null)
-        {
-            return;
-        }
-
-        String[] strings = string.split("\n");
-        System.out.println(string);
-        for (String line : strings)
-        {
-            String identifier = line.substring(0, line.indexOf(58));
-            String[] lineParts = line.substring(line.indexOf(58)).split(",");
-            if (identifier.equalsIgnoreCase("Target"))
-            {
-                this.target = lineParts[0].replace(":", "");
-            }
-            if (identifier.equalsIgnoreCase("Type"))
-            {
-                this.type = MuteType.valueOf(lineParts[0].replace(":", ""));
-            }
-            if (identifier.equalsIgnoreCase("SimpleType"))
-            {
-                this.simplifiedType = SimplifiedMuteType.valueOf(lineParts[0].replace(":", ""));
-            }
-            if (identifier.equalsIgnoreCase("Reason"))
-            {
-                this.reason = lineParts[0].replace(":", "");
-            }
-            if (identifier.equalsIgnoreCase("ExpireDate"))
-            {
-                this.expireDate = new Date(Long.valueOf(lineParts[0].replace(":", "")));
-            }
-            if (identifier.equalsIgnoreCase("BanDate"))
-            {
-                this.banDate = new Date(Long.valueOf(lineParts[0].replace(":", "")));
-            }
-            if (identifier.equalsIgnoreCase("Active"))
-                this.isActive = Boolean.valueOf(lineParts[0].replace(":", ""));
-        }
-    }
-
-
-    public String saveToString()
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Target:").append(this.target).append("\n");
-        stringBuilder.append("Type:").append(this.type.toString()).append("\n");
-        stringBuilder.append("SimpleType:").append(this.simplifiedType.toString()).append("\n");
-        stringBuilder.append("Reason:").append(this.reason).append("\n");
-        stringBuilder.append("ExpireDate:").append(this.expireDate.getTime()).append("\n");
-        stringBuilder.append("BanDate:").append(this.banDate.getTime()).append("\n");
-        stringBuilder.append("Active:").append(this.isActive).append("\n");
-        return stringBuilder.toString();
-    }
-
-    public CoreMute(String target, MuteType type, String reason, String bannedBy, Date expireDate)
+    public CoreMute(String target, MuteType type, String reason, String bannedBy, Long expireDate)
     {
         this.target = target;
         this.isActive = true;
@@ -135,13 +79,13 @@ public class CoreMute implements Mute
     }
 
     @Override
-    public Date getExpireDate()
+    public Long getExpireDate()
     {
         return this.expireDate;
     }
 
     @Override
-    public Date getBanDate()
+    public Date getMuteDate()
     {
         return this.banDate;
     }

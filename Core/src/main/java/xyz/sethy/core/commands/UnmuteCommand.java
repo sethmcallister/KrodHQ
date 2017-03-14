@@ -8,12 +8,7 @@ import org.bukkit.entity.Player;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.commands.CommandBase;
 import xyz.sethy.api.framework.group.Group;
-import xyz.sethy.api.framework.mute.Mute;
 import xyz.sethy.core.framework.mute.MuteManager;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 /**
  * Created by Seth on 22/01/2017.
@@ -38,29 +33,10 @@ public class UnmuteCommand extends CommandBase
         MuteManager muteManager = (MuteManager) API.getMuteManager();
         if (muteManager.getMute(target.getUniqueId()) == null)
         {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThat player has not been muted."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThat player has not been banned."));
             return;
         }
-        while (muteManager.getMute(target.getUniqueId()) != null)
-        {
-            Mute mute = muteManager.getMute(target.getUniqueId());
-            muteManager.removeMute(mute);
-        }
-
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(stream);
-        try
-        {
-            String towrite = "&7The player &3" + target.getName() + "&7 has been un-muted.";
-
-            out.writeUTF("SendMessage");
-            out.writeUTF(towrite);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        sender.sendPluginMessage(API.getPlugin(), "SendMessage", stream.toByteArray());
+        muteManager.removeMute(target.getUniqueId());
+        API.sendBungeeMessage("&7The player &3" + target.getName() + "&7 has been un-muted.");
     }
 }

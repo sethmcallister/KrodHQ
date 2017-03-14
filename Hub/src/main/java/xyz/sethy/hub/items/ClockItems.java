@@ -44,7 +44,7 @@ public class ClockItems
 
         this.kitmap = new ItemStack(373, 1, (byte) 37);
         ItemMeta k = this.kitmap.getItemMeta();
-        k.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&5Click to queue for &3Kit Map&5."));
+        k.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3Click to join our &7Kits3 server."));
         this.kitmap.setItemMeta(k);
 
         this.soup = new ItemStack(Material.GOLDEN_APPLE, 1);
@@ -56,13 +56,23 @@ public class ClockItems
 
     public ItemStack getKitmap(Player player)
     {
-        return this.kitmap;
+        ItemStack itemStack = kitmap.clone();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7§m-----------------------");
+        lore.add("§310§7 man factions.");
+        lore.add("§3No§7 allies.");
+        lore.add("§7Protection 1, Sharpness 1.");
+        lore.add("§7§m-----------------------");
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
     public ItemStack getHcf(Player player)
     {
 
-        HCFUser hcfUser = API.getUserManager().findByUniqueId(player.getUniqueId()).getHCFUser();
+        HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(player.getUniqueId());
 
         ItemStack itemStack = hcf.clone();
         ItemMeta itemMeta = itemStack.getItemMeta();

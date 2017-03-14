@@ -17,13 +17,18 @@ public class SOTWCommand extends CommandBase
 {
     public SOTWCommand()
     {
-        super("sotw", Group.ADMIN, true);
+        super("sotw", Group.STAFF_MANAGER, true);
         Bukkit.getPluginCommand("sotw").setExecutor(this);
     }
 
     @Override
     public void execute(Player sender, Command command1, String label, String[] args)
     {
+        if(Factions.getInstance().isKitmap())
+        {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThis command is disabled during kitmap."));
+            return;
+        }
         if (args.length != 1)
         {
             handleUsage(sender);

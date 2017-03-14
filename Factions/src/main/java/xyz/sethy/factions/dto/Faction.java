@@ -1,12 +1,10 @@
 package xyz.sethy.factions.dto;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.user.User;
+import xyz.sethy.api.framework.user.hcf.HCFUser;
 import xyz.sethy.api.framework.user.kitmap.KitmapUser;
 import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.dto.claim.Claim;
@@ -258,7 +256,7 @@ public class Faction
             {
                 Player player = Bukkit.getPlayer(playerUUID);
 
-                User user = API.getUserManager().findByUniqueId(playerUUID);
+                HCFUser user = API.getUserManager().findHCFByUniqueId(playerUUID);
 
                 online.append(" &c");
                 if (isLeader(player))
@@ -270,7 +268,7 @@ public class Faction
                 online.append(player.getName())
                         .append("&7[")
                         .append("&c")
-                        .append(user.getHCFUser().getKills())
+                        .append(user.getKills())
                         .append("&7]&7,");
             }
 
@@ -286,7 +284,9 @@ public class Faction
             {
                 if (!this.getOnlineMembers().contains(playerUUID))
                 {
-                    User user = API.getUserManager().getTempUser(playerUUID);
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+
+                    HCFUser user = API.getUserManager().getTempHCFUser(playerUUID);
 
                     offline.append(" &c");
                     if (this.leader.equals(playerUUID))
@@ -295,10 +295,10 @@ public class Faction
                     if (this.captains.contains(playerUUID))
                         offline.append("*");
 
-                    offline.append(user.getName())
+                    offline.append(offlinePlayer.getName())
                             .append("&7[")
                             .append("&c")
-                            .append(user.getHCFUser().getKills())
+                            .append(user.getKills())
                             .append("&7]&7,");
                 }
             }

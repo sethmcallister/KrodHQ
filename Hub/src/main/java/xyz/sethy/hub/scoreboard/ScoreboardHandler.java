@@ -35,7 +35,7 @@ public class ScoreboardHandler implements Listener
         org.bukkit.scoreboard.Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         event.getPlayer().setScoreboard(scoreboard);
 
-        Scoreboard scoreboard1 = new Scoreboard(scoreboard, "&3&lKrodHQ");
+        Scoreboard scoreboard1 = new Scoreboard(scoreboard, "&cKrodHQ Network");
         scoreboards.put(event.getPlayer(), scoreboard1);
     }
 

@@ -65,6 +65,12 @@ public class CombatListener implements Listener
                 return;
             }
 
+            if(Factions.getInstance().getTimerHandler().hasTimer(damaged, TimerType.ARCHER_TAG))
+            {
+                double damage = event.getDamage();
+                event.setDamage(damage * 1.25);
+            }
+
             if (Factions.getInstance().getTimerHandler().hasTimer(damaged, TimerType.COMBAT_TAG))
             {
                 Timer toremove = Factions.getInstance().getTimerHandler().getTimer(damaged, TimerType.COMBAT_TAG);

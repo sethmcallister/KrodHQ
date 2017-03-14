@@ -84,4 +84,6 @@ public interface User
     void setBan(Ban ban);
 
     void setBlacklisted(boolean blacklisted);
+
+    void forceSave();
 }

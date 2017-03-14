@@ -28,7 +28,7 @@ public class RequestCommand extends CommandBase
         {
             if (API.getUserManager().findByUniqueId(player.getUniqueId()).getGroup().getPermission() >= Group.TRAIL_MOD.getPermission())
             {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7(Request) ") + message);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7(Request) &f" + sender.getName() + ": ") + message);
             }
         }
     }

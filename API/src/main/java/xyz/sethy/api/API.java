@@ -6,10 +6,12 @@ import xyz.sethy.api.framework.IFramework;
 import xyz.sethy.api.framework.ban.IBanManager;
 import xyz.sethy.api.framework.mute.IMuteManager;
 import xyz.sethy.api.framework.user.IUserManager;
+import xyz.sethy.api.framework.uuid.UUIDFetcher;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -37,6 +39,11 @@ public abstract class API
     public static IMuteManager getMuteManager()
     {
         return framework.getMuteManager();
+    }
+
+    public static UUIDFetcher getUUIDFetcher(List<String> names)
+    {
+        return new UUIDFetcher(names);
     }
 
     public static void setFramework(IFramework kadeFramework)

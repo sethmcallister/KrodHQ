@@ -1,5 +1,6 @@
 package xyz.sethy.core.framework.user;
 
+import xyz.sethy.api.API;
 import xyz.sethy.api.framework.ban.Ban;
 import xyz.sethy.api.framework.group.Group;
 import xyz.sethy.api.framework.user.User;
@@ -132,6 +133,7 @@ public class CoreUser implements User
         this.needsSave = false;
     }
 
+    @Deprecated
     public void loadFromString(String string)
     {
         if (string == null)
@@ -159,6 +161,7 @@ public class CoreUser implements User
         }
     }
 
+    @Deprecated
     public String saveToString()
     {
         StringBuilder string = new StringBuilder();
@@ -276,6 +279,13 @@ public class CoreUser implements User
     public void setBlacklisted(boolean blacklisted)
     {
         this.blacklisted.set(blacklisted);
+    }
+
+    @Override
+    public void forceSave()
+    {
+        UserManager userManager = (UserManager) API.getUserManager();
+        userManager.unloadUser(this);
     }
 
     public void setHcfUser(HCFUser hcfUser)

@@ -2,13 +2,16 @@ package xyz.sethy.api.framework.group;
 
 public enum Group
 {
-    OWNER(7, "&7[&3Owner&7]&4", 11, "Owner"),
-    CO_OWNER(7, "&7[&3Co Owner&7]&4", 10, "Co Owner"),
-    DEVELOPER(7, "&7[&bDeveloper&7]&b", 10, "Developer"),
-    PLATFORM_ADMIN(6, "&7[&cPlatform Admin&7]&c", 9, "Platform Admin"),
-    ADMIN(6, "&7[&cAdmin&7]&c", 8, "Admin"),
+    OWNER(12, "&7[&4Owner&7]&4", 11, "Owner"),
+    DEVELOPER(11, "&7[&bDeveloper&7]&b", 10, "Developer"),
+    OPERRATOR(10, "&f", 9, "Operator"),
+    STAFF_MANAGER(10, "&7[&4Staff Manager&7]&4", 9, "Staff Manager"),
+    PLATFORM_ADMIN(9, "&7[&cPlatform Admin&7]&c", 9, "Platform Admin"),
+    ADMIN(8, "&7[&cAdmin&7]&c", 8, "Admin"),
+    SR_MOD(7, "&7[&5Senior Mod&7]&5", 8, "Senior Mod"),
+    MOD_PLUS(7, "&7[&5Mod+&7]&5", 8, "Mod+"),
     MOD(6, "&7[&5Moderator&7]&5", 6, "Moderator"),
-    TRAIL_MOD(6, "&7[&eTrial Moderator&7]&e", 5, "Trail Moderator"),
+    TRAIL_MOD(6, "&7[&eTrial Moderator&7]&e", 5, "Trial Moderator"),
     FAMOUS(5, "&5\u262F&2", 3, "Famous"),
     YOUTUBE(5, "&d", 3, "YouTube"),
     KROD(3, "&3", 3, "Kord"),

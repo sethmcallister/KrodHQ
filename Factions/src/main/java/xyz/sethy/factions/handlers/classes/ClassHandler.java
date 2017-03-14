@@ -40,6 +40,7 @@ public class ClassHandler extends BukkitRunnable implements Listener
     {
         this.classes = new ConcurrentHashMap<>();
         this.classEffects = new ConcurrentHashMap<>();
+
         ArrayList<PotionEffect> archer = new ArrayList<>();
         archer.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
         archer.add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
@@ -50,6 +51,12 @@ public class ClassHandler extends BukkitRunnable implements Listener
         miner.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0));
         miner.add(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 1));
         this.classEffects.put(ClassType.MINER, miner);
+
+        ArrayList<PotionEffect> bard = new ArrayList<>();
+        bard.add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
+        bard.add(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 1));
+        bard.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2));
+        this.classEffects.put(ClassType.BARD, bard);
 
         Bukkit.getPluginManager().registerEvents(this, API.getPlugin());
         this.timers = new ConcurrentHashMap<>();
@@ -71,28 +78,212 @@ public class ClassHandler extends BukkitRunnable implements Listener
                 if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.MINER))
                     return;
 
-                this.classes.put(player, ClassType.MINER);
-                giveEffects(player, ClassType.MINER);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Miner class: &aEnabled"));
+                classes.put(player, ClassType.MINER);
+
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Miner class will be enabled in &310&7 seconds."));
+                new BukkitRunnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        giveEffects(player, ClassType.MINER);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Miner class: &aEnabled"));
+                    }
+                }.runTaskLater(API.getPlugin(), 10 * 20L);
             }
-            else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.ARCHER))
+            else if (inventory.getHelmet().getType().equals(Material.LEATHER_HELMET) && inventory.getChestplate().getType().equals(Material.LEATHER_CHESTPLATE) && inventory.getLeggings().getType().equals(Material.LEATHER_LEGGINGS) && inventory.getBoots().getType().equals(Material.LEATHER_BOOTS))
             {
-                removeEffects(player, ClassType.ARCHER);
-                this.classes.remove(player);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Archer class: &4Disabled"));
+                if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.ARCHER))
+                    return;
+
+                classes.put(player, ClassType.ARCHER);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Archer class will be enabled in &310&7 seconds."));
+                new BukkitRunnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        giveEffects(player, ClassType.ARCHER);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Archer class: &aEnabled"));
+                    }
+                }.runTaskLater(API.getPlugin(), 10 * 20L);
             }
+            else if (inventory.getHelmet().getType().equals(Material.GOLD_HELMET) && inventory.getChestplate().getType().equals(Material.GOLD_CHESTPLATE) && inventory.getLeggings().getType().equals(Material.GOLD_LEGGINGS) && inventory.getBoots().getType().equals(Material.GOLD_BOOTS))
+            {
+                if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.BARD))
+                {
+                    ItemStack hand = player.getItemInHand();
+                    if(hand == null)
+                        return;
+
+                    if(hand.getType().equals(Material.BLAZE_POWDER))
+                    {
+                        Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
+                        if(faction == null)
+                            return;
+
+                        for(UUID memberUUID : faction.getOnlineMembers())
+                        {
+                            if(memberUUID.equals(player.getUniqueId()))
+                                continue;
+
+                            Player member = Bukkit.getPlayer(memberUUID);
+
+                            if(player.getLocation().distanceSquared(player.getLocation()) >= 20)
+                                return;
+
+                            if(member.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE))
+                                member.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+
+                            member.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5 * 20, 0));
+                        }
+                        return;
+                    }
+
+                    if(hand.getType().equals(Material.IRON_INGOT))
+                    {
+                        Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
+                        if(faction == null)
+                            return;
+
+                        for(UUID memberUUID : faction.getOnlineMembers())
+                        {
+                            if(memberUUID.equals(player.getUniqueId()))
+                                continue;
+
+                            Player member = Bukkit.getPlayer(memberUUID);
+
+                            if(player.getLocation().distanceSquared(player.getLocation()) >= 20)
+                                return;
+
+                            if(member.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE))
+                                member.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+
+                            member.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5 * 20, 0));
+                        }
+                        return;
+                    }
+
+                    if(hand.getType().equals(Material.SUGAR))
+                    {
+                        Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
+                        if(faction == null)
+                            return;
+
+                        for(UUID memberUUID : faction.getOnlineMembers())
+                        {
+                            if(memberUUID.equals(player.getUniqueId()))
+                                continue;
+
+                            Player member = Bukkit.getPlayer(memberUUID);
+
+                            if(player.getLocation().distanceSquared(player.getLocation()) >= 20)
+                                return;
+
+                            if(member.hasPotionEffect(PotionEffectType.SPEED))
+                                member.removePotionEffect(PotionEffectType.SPEED);
+
+                            member.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 1));
+                        }
+                        return;
+                    }
+
+                    if(hand.getType().equals(Material.GHAST_TEAR))
+                    {
+                        Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
+                        if(faction == null)
+                            return;
+
+                        for(UUID memberUUID : faction.getOnlineMembers())
+                        {
+                            if(memberUUID.equals(player.getUniqueId()))
+                                continue;
+
+                            Player member = Bukkit.getPlayer(memberUUID);
+
+                            if(player.getLocation().distanceSquared(player.getLocation()) >= 20)
+                                return;
+
+                            if(member.hasPotionEffect(PotionEffectType.REGENERATION))
+                                member.removePotionEffect(PotionEffectType.REGENERATION);
+
+                            member.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0));
+                        }
+                        return;
+                    }
+
+                    if(hand.getType().equals(Material.FEATHER))
+                    {
+                        Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
+                        if(faction == null)
+                            return;
+
+                        for(UUID memberUUID : faction.getOnlineMembers())
+                        {
+                            if(memberUUID.equals(player.getUniqueId()))
+                                continue;
+
+                            Player member = Bukkit.getPlayer(memberUUID);
+                            if(member.hasPotionEffect(PotionEffectType.JUMP))
+                                member.removePotionEffect(PotionEffectType.JUMP);
+
+                            member.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5 * 20, 0));
+                        }
+                        return;
+                    }
+
+                    if(hand.getType().equals(Material.MAGMA_CREAM))
+                    {
+                        Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
+                        if(faction == null)
+                            return;
+
+                        for(UUID memberUUID : faction.getOnlineMembers())
+                        {
+                            if(memberUUID.equals(player.getUniqueId()))
+                                continue;
+
+                            Player member = Bukkit.getPlayer(memberUUID);
+                            if(member.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE))
+                                member.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+
+                            member.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5 * 20, 0));
+                        }
+                        return;
+                    }
+                    return;
+                }
+
+                classes.put(player, ClassType.BARD);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Bard class will be enabled in &310&7 seconds."));
+                new BukkitRunnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        giveEffects(player, ClassType.BARD);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Bard class: &aEnabled"));
+                    }
+                }.runTaskLater(API.getPlugin(), 10 * 20L);
+            }
+        }
+        else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.BARD))
+        {
+            removeEffects(player, ClassType.BARD);
+            this.classes.remove(player);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Bard class: &4Disabled"));
         }
         else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.ARCHER))
         {
             removeEffects(player, ClassType.ARCHER);
             this.classes.remove(player);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Archer class: &4Disabled"));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Archer class: &4Disabled"));
         }
         else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.MINER))
         {
             removeEffects(player, ClassType.MINER);
             this.classes.remove(player);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Miner class: &4Disabled"));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Miner class: &4Disabled"));
         }
     }
 
@@ -107,6 +298,9 @@ public class ClassHandler extends BukkitRunnable implements Listener
         {
             Player archer = event.getPlayer();
 
+            if(!this.classes.containsKey(archer) && !this.classes.get(archer).equals(ClassType.ARCHER))
+                return;
+
             if (this.timers.containsKey(archer) && this.timers.get(archer) > System.currentTimeMillis())
             {
                 long millisLeft = this.timers.get(archer) - System.currentTimeMillis();
@@ -117,7 +311,7 @@ public class ClassHandler extends BukkitRunnable implements Listener
             }
 
             this.timers.put(archer, 16000 + System.currentTimeMillis());
-            PotionEffect potionEffect = new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 4);
+            PotionEffect potionEffect = new PotionEffect(PotionEffectType.SPEED, 5 * 20, 4);
             event.getPlayer().addPotionEffect(potionEffect);
             Faction faction = Factions.getInstance().getFactionManager().findByPlayer(event.getPlayer());
             DefaultTimer defaultTimer = new DefaultTimer(TimerType.ARCHER_COOLDOWN, 16000 + System.currentTimeMillis(), archer);
@@ -133,7 +327,48 @@ public class ClassHandler extends BukkitRunnable implements Listener
                     if (archer.getLocation().distance(member.getLocation()) <= 20)
                     {
                         member.addPotionEffect(potionEffect);
-                        member.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have been given &7Speed 5&3 for &75&3 seconds."));
+                        member.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been given &3Speed 5&7 for &35&7 seconds."));
+                        archer.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have given &3" + member.getName() + " Speed 5&7 for &55&7 seconds."));
+                    }
+                }
+            }
+        }
+
+        if(hand.getType().equals(Material.FEATHER))
+        {
+            Player bard = event.getPlayer();
+
+            if(!this.classes.containsKey(bard) && !this.classes.get(bard).equals(ClassType.BARD))
+                return;
+
+            if (this.timers.containsKey(bard) && this.timers.get(bard) > System.currentTimeMillis())
+            {
+                long millisLeft = this.timers.get(bard) - System.currentTimeMillis();
+                double value = millisLeft / 1000.0D;
+                double sec = Math.round(10.0D * value) / 10.0D;
+                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Effect cooldown: &c" + sec + " seconds&7."));
+                return;
+            }
+
+            this.timers.put(bard, 16000 + System.currentTimeMillis());
+            PotionEffect potionEffect = new PotionEffect(PotionEffectType.JUMP, 5 * 20, 2);
+            event.getPlayer().addPotionEffect(potionEffect);
+            Faction faction = Factions.getInstance().getFactionManager().findByPlayer(event.getPlayer());
+            DefaultTimer defaultTimer = new DefaultTimer(TimerType.ARCHER_COOLDOWN, 16000 + System.currentTimeMillis(), bard);
+            Factions.getInstance().getTimerHandler().addTimer(bard, defaultTimer);
+            if (faction != null)
+            {
+                for (UUID uuid : faction.getOnlineMembers())
+                {
+                    Player member = Bukkit.getPlayer(uuid);
+                    if (member.equals(bard))
+                        continue;
+
+                    if (bard.getLocation().distance(member.getLocation()) <= 20)
+                    {
+                        member.addPotionEffect(potionEffect);
+                        member.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been given &3Jump Boost 3&7 for &35&7 seconds."));
+                        bard.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have given &3" + member.getName() + " Speed 5&7 for &55&7 seconds."));
                     }
                 }
             }
@@ -172,34 +407,21 @@ public class ClassHandler extends BukkitRunnable implements Listener
             return;
         }
 
-        ArcherTag archerTag = (ArcherTag) Factions.getInstance().getTimerHandler().getTimer(damaged, TimerType.ARCHER_TAG);
-        if (archerTag != null && archerTag.getTime() > 0L)
+        if(Factions.getInstance().getTimerHandler().hasTimer(damaged, TimerType.ARCHER_TAG))
         {
-            if (archerTag.getTagLevel() == 1)
-            {
-                damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 3 * 20, 1));
-                archerTag.setTagLevel(archerTag.getTagLevel() + 1);
-                archerTag.setTime(System.currentTimeMillis() + 30000L);
-                damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have been archer tagged with level&7 2&3."));
-                damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have archer tagged &7" + damaged.getName() + "&3 at level&7 2&3."));
-                return;
-            }
-            else if (archerTag.getTagLevel() == 2)
-            {
-                damaged.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 3 * 20, 1));
-                archerTag.setTagLevel(archerTag.getTagLevel() + 1);
-                archerTag.setTime(System.currentTimeMillis() + 30000L);
-                damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have been archer tagged with level&7 3&3."));
-                damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have archer tagged &7" + damaged.getName() + "&3 at level&7 3&3."));
-                return;
-            }
+            final ArcherTag archerTag = (ArcherTag) Factions.getInstance().getTimerHandler().getTimer(damaged, TimerType.ARCHER_TAG);
+            archerTag.setTime(30000L  + System.currentTimeMillis());
+            damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been archer tagged for &330 seconds&7."));
+            damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You will take an additional&3 25%&7 damage."));
+            damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have archer tagged &3" + damaged.getName() + "&7 for &330 seconds&7."));
             return;
         }
-        ArcherTag archerTagadd = new ArcherTag(TimerType.ARCHER_TAG, System.currentTimeMillis() + 30000L, damaged, 1);
-        damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 1));
-        Factions.getInstance().getTimerHandler().addTimer(damaged, archerTagadd);
-        damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have been archer tagged with level&7 1&3."));
-        damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have archer tagged &7" + damaged.getName() + "&3 at level&7 1&3."));
+
+        final ArcherTag archerTag = new ArcherTag(TimerType.ARCHER_TAG, 30000L  + System.currentTimeMillis(), damaged, 1);
+        damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been archer tagged for &330 seconds&7."));
+        damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You will take an additional&3 25%&7 damage."));
+        damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have archer tagged &3" + damaged.getName() + "&7 for &330 seconds&7."));
+        Factions.getInstance().getTimerHandler().addTimer(damaged, archerTag);
     }
 
     private void giveEffects(final Player player, final ClassType classType)

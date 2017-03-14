@@ -1,14 +1,15 @@
 package xyz.sethy.factions.managers;
 
+import com.google.gson.Gson;
+import com.lambdaworks.redis.RedisAsyncConnection;
+import com.lambdaworks.redis.RedisClient;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import redis.clients.jedis.Jedis;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.group.Group;
 import xyz.sethy.api.framework.user.User;
@@ -16,7 +17,10 @@ import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.dto.Faction;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Created by sethm on 26/11/2016.
@@ -24,16 +28,14 @@ import java.util.UUID;
 public class FactionManager implements Listener
 {
     private LinkedList<Faction> factions;
-    private Jedis jedis;
+    private final RedisClient redisClient = new RedisClient("localhost");
+    private final String factionKey = Factions.getInstance().isKitmap() ? "network.kitmap." : "network.factions.";
+    private final Gson gson = new Gson();
 
     public FactionManager()
     {
         this.factions = new LinkedList<>();
         Bukkit.getServer().getPluginManager().registerEvents(this, Factions.getInstance().getPlugin());
-
-        this.jedis = new Jedis("localhost");
-        this.jedis.connect();
-
 
         this.loadFactions();
 
@@ -42,6 +44,7 @@ public class FactionManager implements Listener
             @Override
             public void run()
             {
+                RedisAsyncConnection<String, String> connection = redisClient.connectAsync();
                 int i = 0;
                 long start = System.currentTimeMillis();
                 if (!factions.isEmpty())
@@ -50,8 +53,12 @@ public class FactionManager implements Listener
                     {
                         if (faction.needsSave())
                         {
-                            jedis.set("faction." + faction.getName().toLowerCase(), faction.saveString(true));
+                            String factionJson = gson.toJson(faction);
+
+                            Future future = connection.set(factionKey + faction.getName().toLowerCase(), factionJson);
+                            connection.awaitAll(future);
                             System.out.println("Saved faction: " + faction.getName());
+                            faction.setNeedsSave(false);
                             i++;
                         }
                     }
@@ -61,34 +68,57 @@ public class FactionManager implements Listener
                 for (Player player : Bukkit.getOnlinePlayers())
                 {
                     User user = API.getUserManager().findByUniqueId(player.getUniqueId());
-                    if (user.getGroup().getPermission() <= Group.TRAIL_MOD.getPermission())
+                    if (user.getGroup().getPermission() >= Group.TRAIL_MOD.getPermission())
                     {
                         player.sendMessage(ChatColor.DARK_PURPLE + "[Factions] Saved " + i + " Factions to Redis in " + time + "ms.");
                     }
                 }
+                connection.close();
             }
         }, 20L, 30 * 20L);
     }
 
     private void loadFactions()
     {
-        for (final String key : jedis.keys("faction.*"))
+
+        RedisAsyncConnection<String, String> connection = redisClient.connectAsync();
+        Future<List<String>> allFactions = connection.keys(factionKey + "*");
+        connection.awaitAll(allFactions);
+
+        try
         {
-            final String loadString = jedis.get(key);
-            final Faction faction = new Faction();
-            faction.loadFromString(loadString);
-            factions.add(faction);
-            System.out.println("Loaded faction: " + faction.getName());
+            for (final String key : allFactions.get())
+            {
+                Future<String> factionJson = connection.get(key);
+                connection.awaitAll(factionJson);
+
+                if(factionJson.get().equalsIgnoreCase("null"))
+                    return;
+
+                final Faction faction = gson.fromJson(factionJson.get(), Faction.class);
+                faction.getOnlineMembers().clear();
+                factions.add(faction);
+            }
         }
+        catch (InterruptedException | ExecutionException e)
+        {
+            e.printStackTrace();
+        }
+        connection.close();
     }
 
     public void saveFactions()
     {
-        for (final Faction faction : factions)
+        System.out.println("1");
+        RedisAsyncConnection<String, String> connection = redisClient.connectAsync();
+        for (Faction faction : factions)
         {
-            jedis.set("faction." + faction.getName().toLowerCase(), faction.saveString(true));
+            String factionJson = gson.toJson(faction);
+            Future future = connection.set(factionKey + faction.getName().toLowerCase(), factionJson);
+            connection.awaitAll(future);
             System.out.println("Saved faction: " + faction.getName());
         }
+        connection.close();
     }
 
     public LinkedList<Faction> getFactions()
@@ -148,8 +178,11 @@ public class FactionManager implements Listener
 
     public void removeFaction(Faction faction)
     {
+        RedisAsyncConnection<String, String> connection = redisClient.connectAsync();
+        connection.awaitAll(connection.set(factionKey + faction.getName(), null));
+        connection.close();
+
         this.factions.remove(faction);
-        jedis.del("faction." + faction.getName().toLowerCase());
         faction.setLeader(null);
         faction.setDtr(null);
         faction.getMembers().clear();
@@ -185,15 +218,5 @@ public class FactionManager implements Listener
             }
             faction.getInformation(event.getPlayer());
         }
-        if (Factions.getInstance().isKitmap())
-        {
-            if (!event.getPlayer().hasPlayedBefore())
-                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 0.5, 72, 0.5));
-        }
-    }
-
-    public Jedis getJedis()
-    {
-        return jedis;
     }
 }

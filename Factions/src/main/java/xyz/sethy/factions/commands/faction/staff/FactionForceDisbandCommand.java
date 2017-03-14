@@ -22,7 +22,7 @@ public class FactionForceDisbandCommand implements ICommand
     public void onCommand(Player sender, Command command, String label, String[] args)
     {
         User user = API.getUserManager().findByUniqueId(sender.getUniqueId());
-        if (user.getGroup().getPermission() < Group.ADMIN.getPermission())
+        if (user.getGroup().getPermission() < Group.PLATFORM_ADMIN.getPermission())
         {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You do not have permission to execute this command."));
             return;

@@ -33,18 +33,24 @@ public class UserLoggedInListener implements Listener
             return;
         }
 
+        if(event.getUser().getGroup().getPermission() >= Group.MOD.getPermission())
+        {
+            event.getPlayer().addAttachment(API.getPlugin(), "co.inspect", true);
+            event.getPlayer().addAttachment(API.getPlugin(), "co.lookup", true);
+            event.getPlayer().addAttachment(API.getPlugin(), "co.rollback", true);
+            event.getPlayer().addAttachment(API.getPlugin(), "co.restore", true);
+            event.getPlayer().addAttachment(API.getPlugin(), "co.help", true);
+            return;
+        }
+
         if(!event.getPlayer().isOnline())
         {
             return;
         }
 
         HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(event.getPlayer().getUniqueId());
-        if (hcfUser.deathbanTime() > System.currentTimeMillis())
-        {
-            event.getPlayer().kickPlayer(hcfUser.getDeathbanMessage() + "\n" + "&cYour deathban expires in &7" + getConvertedTime(hcfUser.deathbanTime()) + "&c." + "\n" + "&cThank you for playing &3KrodHq.com&c.");
-        }
 
-        if (event.getUser().getHCFUser().getPvPTimer() > System.currentTimeMillis())
+        if (hcfUser.getPvPTimer() > System.currentTimeMillis())
         {
             DefaultTimer defaultTimer = new DefaultTimer(TimerType.PVP_TIMER, event.getUser().getHCFUser().getPvPTimer(), event.getPlayer());
             Factions.getInstance().getTimerHandler().addTimer(event.getPlayer(), defaultTimer);
@@ -55,6 +61,9 @@ public class UserLoggedInListener implements Listener
 
         if(!event.getPlayer().hasPlayedBefore())
         {
+            if(Factions.getInstance().isKitmap())
+                return;
+
             DefaultTimer timer = new DefaultTimer(TimerType.PVP_TIMER, 1800000L + System.currentTimeMillis(), event.getPlayer());
             Factions.getInstance().getTimerHandler().addTimer(event.getPlayer(), timer);
             timer.freeze();

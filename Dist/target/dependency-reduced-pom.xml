@@ -35,6 +35,9 @@
                   <include>xyz.sethy:threads</include>
                   <include>com.google.guava:guava</include>
                   <include>org.apache.commons:commons-lang3</include>
+                  <include>com.lambdaworks:lettuce</include>
+                  <include>org.jboss.netty:netty</include>
+                  <include>com.google.code.gson:gson</include>
                 </includes>
               </artifactSet>
             </configuration>
@@ -65,12 +68,6 @@
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot</artifactId>
       <version>1.7.10-R0.1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.7</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

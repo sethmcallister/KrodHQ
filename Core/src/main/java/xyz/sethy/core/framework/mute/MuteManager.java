@@ -1,48 +1,75 @@
 package xyz.sethy.core.framework.mute;
 
-import redis.clients.jedis.Jedis;
+import com.google.gson.Gson;
+import com.lambdaworks.redis.RedisAsyncConnection;
+import com.lambdaworks.redis.RedisClient;
 import xyz.sethy.api.framework.mute.IMuteManager;
 import xyz.sethy.api.framework.mute.Mute;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Created by Seth on 22/01/2017.
  */
 public class MuteManager implements IMuteManager
 {
-    private Jedis jedis;
+    private final RedisClient redisClient = new RedisClient("localhost");
+    private final Gson gson;
     private String muteKey = "network.mutes.";
 
     public MuteManager()
     {
-        this.jedis = new Jedis();
+        this.gson = new Gson();
     }
 
     @Override
     public void addMute(Mute mute)
     {
-        jedis.connect();
-        CoreMute coreBan = new CoreMute(mute.getTarget(), mute.getType(), mute.getReason(), mute.getBannedBy());
-        this.jedis.set(muteKey + mute.getTarget(), coreBan.saveToString());
-        jedis.save();
+        CoreMute coreMute = (CoreMute) mute;
+        String muteJson = this.gson.toJson(coreMute);
+        RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
+        Future set = asyncConnection.set(muteKey + mute.getTarget(), muteJson);
+        asyncConnection.awaitAll(set);
+        asyncConnection.close();
     }
 
     @Override
     public void removeMute(Mute mute)
     {
-        jedis.connect();
-        this.jedis.del(muteKey + mute.getTarget());
-        jedis.save();
+
+    }
+
+    public void removeMute(UUID uuid)
+    {
+        RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
+        Future delete = asyncConnection.set(muteKey + uuid.toString(), "null");
+        asyncConnection.awaitAll(delete);
+        asyncConnection.close();
     }
 
     @Override
     public Mute getMute(UUID uuid)
     {
-        jedis.connect();
-        CoreMute coreMute = new CoreMute();
-        coreMute.loadFromString(jedis.get(muteKey + uuid.toString()));
-        if (coreMute.getType() != null)
+        RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
+        Future<String> muteJson = asyncConnection.get(muteKey + uuid);
+        asyncConnection.awaitAll(muteJson);
+
+        CoreMute coreMute;
+        try
+        {
+            coreMute = this.gson.fromJson(muteJson.get(), CoreMute.class);
+        }
+        catch (InterruptedException | ExecutionException e)
+        {
+            coreMute = null;
+            e.printStackTrace();
+        }
+
+        asyncConnection.close();
+
+        if (coreMute != null && coreMute.getType() != null)
             return coreMute;
         else
             return null;

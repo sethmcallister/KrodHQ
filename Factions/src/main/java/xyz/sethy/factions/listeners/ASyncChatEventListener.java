@@ -52,7 +52,7 @@ public class ASyncChatEventListener implements Listener
             for (Player player : event.getRecipients())
             {
                 if (faction == null)
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', user.getGroup().getName() + user.getName() + "&f: " + event.getMessage()));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', user.getGroup().getName() + user.getName() + "&f: ") + event.getMessage());
                 else
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3[" + faction.getName(player) + "&3]" + user.getGroup().getName() + user.getName() + "&f: ") + event.getMessage());
             }
@@ -60,7 +60,7 @@ public class ASyncChatEventListener implements Listener
             if (!event.getRecipients().contains(event.getPlayer()))
             {
                 if (faction == null)
-                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',user.getGroup().getName() + user.getName() + "&f: " + event.getMessage()));
+                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',user.getGroup().getName() + user.getName() + "&f: ") + event.getMessage());
                 else
                     event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&3[" + faction.getName(event.getPlayer()) + "&3]" + user.getGroup().getName() + user.getName() + "&f: ") + event.getMessage());
             }

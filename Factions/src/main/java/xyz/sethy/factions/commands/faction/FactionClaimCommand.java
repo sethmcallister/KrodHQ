@@ -49,7 +49,7 @@ public class FactionClaimCommand implements ICommand, Listener
             return;
         }
         sender.getInventory().addItem(Factions.getInstance().getItemHandler().selectionWand);
-        new VisualClaim(sender, VisualClaimType.CREATE, false).draw(false);
+        new VisualClaim(sender, VisualClaimType.CREATE, false).draw(true);
         if (!VisualClaim.getCurrentMaps().containsKey(sender.getName()))
         {
             new VisualClaim(sender, VisualClaimType.MAP, false).draw(true);

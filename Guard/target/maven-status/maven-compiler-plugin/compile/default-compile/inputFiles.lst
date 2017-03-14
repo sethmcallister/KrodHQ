@@ -94,6 +94,7 @@ C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwra
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayServerEntityEffect.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\xyz\sethy\guard\commands\CancelCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayServerUpdateTime.java
+C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\xyz\sethy\guard\Settings.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayClientChat.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayServerKeepAlive.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayServerEntityStatus.java
@@ -113,6 +114,7 @@ C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\xyz\sethy\guard\checks\
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\xyz\sethy\guard\checks\other\Crash.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayClientArmAnimation.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\xyz\sethy\guard\packets\events\PacketSwingArmEvent.java
+C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\xyz\sethy\guard\checks\movement\Phase.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayClientPositionLook.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\xyz\sethy\guard\checks\combat\FastBow.java
 C:\Users\Seth\IdeaProjects\KiharReal\Guard\src\main\java\com\comphenix\packetwrapper\WrapperPlayServerPlayerInfo.java

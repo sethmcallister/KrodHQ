@@ -17,7 +17,7 @@ public class SetBalanceCommand extends CommandBase
 {
     public SetBalanceCommand()
     {
-        super("setbalance", Group.ADMIN, true);
+        super("setbalance", Group.SR_MOD, true);
         Bukkit.getPluginCommand("setbalance").setExecutor(this);
     }
 

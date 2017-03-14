@@ -23,7 +23,7 @@ public class MuteCommand extends CommandBase
 {
     public MuteCommand()
     {
-        super("mute", Group.TRAIL_MOD, true);
+        super("mute", Group.ADMIN, true);
         Bukkit.getPluginCommand(this.getCommand()).setExecutor(this);
 
     }

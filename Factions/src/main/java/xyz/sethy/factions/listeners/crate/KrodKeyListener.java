@@ -54,22 +54,22 @@ public class KrodKeyListener implements Listener
         Random itemscoms = new Random();
         for (int i = 0; i < 3; i++)
         {
-            int itemscom = itemscoms.nextInt(15) + 1;
+            int itemscom = itemscoms.nextInt(13) + 1;
             if (itemscom == 1)
             {
                 player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL, 16));
             }
             else if (itemscom == 2)
             {
-                player.getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK, 20));
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK, 10));
             }
             else if (itemscom == 3)
             {
-                player.getInventory().addItem(new ItemStack(Material.IRON_BLOCK, 20));
+                player.getInventory().addItem(new ItemStack(Material.IRON_BLOCK, 10));
             }
             else if (itemscom == 4)
             {
-                player.getInventory().addItem(new ItemStack(Material.GOLD_BLOCK, 20));
+                player.getInventory().addItem(new ItemStack(Material.GOLD_BLOCK, 10));
             }
             else if (itemscom == 5)
             {
@@ -77,7 +77,7 @@ public class KrodKeyListener implements Listener
             }
             else if (itemscom == 6)
             {
-                player.getInventory().addItem(new ItemStack(Material.EXP_BOTTLE, 64));
+                player.getInventory().addItem(new ItemStack(Material.EXP_BOTTLE, 32));
             }
             else if (itemscom == 7)
             {
@@ -85,15 +85,15 @@ public class KrodKeyListener implements Listener
             }
             else if (itemscom == 8)
             {
-                player.getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK, 10));
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK, 16));
             }
             else if (itemscom == 9)
             {
-                player.getInventory().addItem(new ItemStack(Material.IRON_BLOCK, 10));
+                player.getInventory().addItem(new ItemStack(Material.IRON_BLOCK, 16));
             }
             else if (itemscom == 10)
             {
-                player.getInventory().addItem(new ItemStack(Material.GOLD_BLOCK, 10));
+                player.getInventory().addItem(new ItemStack(Material.GOLD_BLOCK, 16));
             }
             else if (itemscom == 11)
             {
@@ -101,24 +101,18 @@ public class KrodKeyListener implements Listener
             }
             else if (itemscom == 12)
             {
-                player.getInventory().addItem(new ItemStack(Material.EXP_BOTTLE, 128));
+                player.getInventory().addItem(new ItemStack(Material.EXP_BOTTLE, 32));
             }
             else if (itemscom == 13)
             {
-                ItemStack sharp1 = new ItemStack(Material.DIAMOND_SWORD, 2);
+                ItemStack sharp1 = new ItemStack(Material.DIAMOND_SWORD, 1);
                 sharp1.addEnchantment(Enchantment.DAMAGE_ALL, 1);
                 player.getInventory().addItem(sharp1);
             }
             else if (itemscom == 14)
             {
-                ItemStack sharp1 = new ItemStack(Material.DIAMOND_SWORD, 2);
+                ItemStack sharp1 = new ItemStack(Material.DIAMOND_SWORD, 1);
                 sharp1.addEnchantment(Enchantment.LOOT_BONUS_MOBS, 3);
-                player.getInventory().addItem(sharp1);
-            }
-            else if (itemscom == 15)
-            {
-                ItemStack sharp1 = new ItemStack(Material.DIAMOND_PICKAXE, 1);
-                sharp1.addEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 4);
                 player.getInventory().addItem(sharp1);
             }
         }

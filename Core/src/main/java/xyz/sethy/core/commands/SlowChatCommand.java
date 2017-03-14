@@ -16,7 +16,7 @@ public class SlowChatCommand extends CommandBase
 {
     public SlowChatCommand()
     {
-        super("slowchat", Group.TRAIL_MOD, true);
+        super("slowchat", Group.MOD, true);
         Bukkit.getPluginCommand(this.getCommand()).setExecutor(this);
     }
 

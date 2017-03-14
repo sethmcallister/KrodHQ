@@ -22,7 +22,7 @@ public class FactionForceJoinCommand implements ICommand
     public void onCommand(Player sender, Command command, String label, String[] args)
     {
         User user = API.getUserManager().findByUniqueId(sender.getUniqueId());
-        if (user.getGroup().getPermission() < Group.ADMIN.getPermission())
+        if (user.getGroup().getPermission() < Group.PLATFORM_ADMIN.getPermission())
         {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You do not have permission to execute this command."));
             return;
@@ -32,10 +32,10 @@ public class FactionForceJoinCommand implements ICommand
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Usage:&7 /faction join <factionName>"));
             return;
         }
-        Faction faction = Factions.getInstance().getFactionManager().findByName(args[1]);
+        Faction faction = Factions.getInstance().getFactionManager().findByAttribute(args[1]);
         if (faction == null)
         {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3No faction with with the name '" + args[1] + "' has been found."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3No faction with with the name or member '" + args[1] + "' has been found."));
             return;
         }
         faction.getOnlineMembers().add(sender.getUniqueId());

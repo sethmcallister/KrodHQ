@@ -15,7 +15,7 @@ public interface Ban
 
     String getBannedBy();
 
-    Date getExpireDate();
+    Long getExpireDate();
 
     Date getBanDate();
 

@@ -34,7 +34,7 @@ public class FactionKickCommand implements ICommand
 
         if (args.length != 2)
         {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cPlease specify what player you would like to invite."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cPlease specify what player you would like to kick."));
             return;
         }
 

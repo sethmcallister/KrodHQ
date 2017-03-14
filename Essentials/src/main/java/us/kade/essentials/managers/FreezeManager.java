@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import us.kade.essentials.Essentials;
 
@@ -53,6 +54,21 @@ public class FreezeManager implements Listener
             player.sendMessage(ChatColor.RED + "▇" + ChatColor.GOLD + "▇▇▇" + ChatColor.BLACK + "▇" + ChatColor.GOLD + "▇▇▇" + ChatColor.RED + "▇" + ChatColor.WHITE);
             player.sendMessage(ChatColor.RED + "▇▇▇▇▇▇▇▇▇");
             player.sendMessage(ChatColor.WHITE + "▇▇▇▇▇▇▇▇▇");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageByEntityEvent event)
+    {
+        if(event.getEntity() instanceof Player)
+        {
+            if(this.players.contains(event.getEntity()))
+                event.setCancelled(true);
+        }
+        if(event.getDamager() instanceof Player)
+        {
+            if(this.players.contains(event.getDamager()))
+                event.setCancelled(true);
         }
     }
 }

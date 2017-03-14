@@ -32,7 +32,7 @@ public class ListCommand extends CommandBase
     private void showList(CommandSender sender)
     {
         sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------------------------------------------");
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Owner&f, &bDeveloper&f, &c&oPlatform Admin&f, &cAdmin&f, &5Mod&f, &eTrail Mod&f, &5\u262F&2Famous&f, " +
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Owner&f, &bDeveloper&f, &c&oPlatform Admin&f, &cAdmin&f, &5Mod&f, &eTrial Mod&f, &5\u262F&2Famous&f, " +
                 "&dYouTube&f, &3Krod&f, &7Elaph&f, &6Ant&f, &fDefault"));
         handleList(sender);
         sender.sendMessage(ChatColor.YELLOW + "If you require support, please join " + ChatColor.GOLD + "ts.KrodHQ.com" + ChatColor.YELLOW + ".");

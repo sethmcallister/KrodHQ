@@ -5,6 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import xyz.sethy.factions.Factions;
+import xyz.sethy.factions.dto.Faction;
+import xyz.sethy.factions.dto.claim.Claim;
 import xyz.sethy.factions.support.Region;
 import xyz.sethy.factions.support.RegionSupport;
 import xyz.sethy.factions.timers.Timer;
@@ -13,6 +15,7 @@ import xyz.sethy.factions.timers.TimerType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -32,6 +35,7 @@ public class GlassWallListener
             {
                 for (Player player : Bukkit.getOnlinePlayers())
                 {
+                    removeGlass(player);
                     Location location = player.getLocation();
                     if (timerHandler.hasTimer(player, TimerType.COMBAT_TAG))
                     {
@@ -42,19 +46,26 @@ public class GlassWallListener
                             {
                                 for (Region region : support.getNearByRegion(location))
                                 {
-                                    removeGlass(player);
                                     renderGlass(region, player, location);
                                 }
                             }
                         }
-                        else
-                            removeGlass(player);
                     }
-                    else
-                        removeGlass(player);
+
+                    if(timerHandler.hasTimer(player, TimerType.PVP_TIMER))
+                    {
+                        Timer defaultTimer = timerHandler.getTimer(player, TimerType.PVP_TIMER);
+                        if(defaultTimer.getTime() > 0)
+                        {
+                            for(Map.Entry<Claim, Faction> claimMap : Factions.getInstance().getLandBoard().getRegionData(player.getLocation(), 10, 10, 10))
+                            {
+                                renderGlass(claimMap.getKey(), player, location);
+                            }
+                        }
+                    }
                 }
             }
-        }, 2 * 20L, 6L);
+        }, 2 * 20L, 10L);
     }
 
 
@@ -78,7 +89,55 @@ public class GlassWallListener
         return numbers[idx];
     }
 
-    public boolean renderGlass(Region spawn, Player player, Location to)
+    private boolean renderGlass(Claim claim, Player player, Location to)
+    {
+        if(claim == null)
+            return false;
+
+        int x;
+        int y;
+        Location location;
+        boolean updateZ;
+
+        int closerx = closestNumber(to.getBlockX(), claim.getMinimumPoint().getBlockX(), claim.getMaximumPoint().getBlockX());
+        int closerz = closestNumber(to.getBlockZ(), claim.getMinimumPoint().getBlockZ(), claim.getMaximumPoint().getBlockZ());
+        boolean updateX = Math.abs(to.getX() - (double) closerx) < 10.0;
+        boolean bl = updateZ = Math.abs(to.getZ() - (double) closerz) < 10.0;
+        if (!updateX && !updateZ)
+        {
+            return false;
+        }
+        ArrayList<Location> toUpdate = new ArrayList<>();
+        if (updateX)
+        {
+            for (y = -2; y < 3; ++y)
+            {
+                for (x = -4; x < 4; ++x)
+                {
+                    if (!isInBetween(claim.getMinimumPoint().getBlockZ(), claim.getMaximumPoint().getBlockZ(), to.getBlockZ() + x) || toUpdate.contains(location = new Location(to.getWorld(), (double) closerx, (double) (to.getBlockY() + y), (double) (to.getBlockZ() + x))) || location.getBlock().getType().isOccluding())
+                        continue;
+
+                    toUpdate.add(location);
+                }
+            }
+        }
+        if (updateZ)
+        {
+            for (y = -2; y < 3; ++y)
+            {
+                for (x = -4; x < 4; ++x)
+                {
+                    if (!isInBetween(claim.getMinimumPoint().getBlockX(), claim.getMaximumPoint().getBlockX(), to.getBlockX() + x) || toUpdate.contains((location = new Location(to.getWorld(), (double) (to.getBlockX() + x), (double) (to.getBlockY() + y), (double) closerz))) || location.getBlock().getType().isOccluding())
+                        continue;
+                    toUpdate.add(location);
+                }
+            }
+        }
+        this.update(player, toUpdate);
+        return true;
+    }
+
+    private boolean renderGlass(Region spawn, Player player, Location to)
     {
         int x;
         int y;

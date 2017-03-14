@@ -28,7 +28,7 @@ public class CrateCommand implements CommandExecutor
         if(sender instanceof Player)
         {
             Player player = (Player)sender;
-            if(API.getUserManager().findByUniqueId(player.getUniqueId()).getGroup().getPermission() >= Group.MOD.getPermission())
+            if(API.getUserManager().findByUniqueId(player.getUniqueId()).getGroup().getPermission() >= Group.PLATFORM_ADMIN.getPermission())
             {
                 handleArguments(sender, args);
                 return true;

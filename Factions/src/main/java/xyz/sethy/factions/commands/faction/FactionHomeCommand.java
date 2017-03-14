@@ -118,13 +118,8 @@ public class FactionHomeCommand implements ICommand, Listener
             int runnable = teleporting.get(player);
             Bukkit.getScheduler().cancelTask(runnable);
             teleporting.remove(player);
-            for (Timer defaultTimer : Factions.getInstance().getTimerHandler().getPlayerTimers(player))
-            {
-                if (defaultTimer.getTimerType().equals(TimerType.TELEPORT))
-                {
-                    Factions.getInstance().getTimerHandler().getPlayerTimers(player).remove(defaultTimer);
-                }
-            }
+            Timer timer = Factions.getInstance().getTimerHandler().getTimer(player, TimerType.TELEPORT);
+            Factions.getInstance().getTimerHandler().getPlayerTimers(player).remove(timer);
         }
     }
 }

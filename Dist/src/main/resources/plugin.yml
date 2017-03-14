@@ -1,4 +1,4 @@
-name: Kihar
+name: KrodHQ
 main: xyz.sethy.core.Core
 load: startup
 version: 0.0.1
@@ -8,21 +8,23 @@ commands:
   setrank:
   help:
   coords:
-  forcestart:
-  suspendgame:
   ping:
   sotw:
+  broadcast:
+  alert:
+  warn:
   setbalance:
     aliases: [setbal, secmoney, seteco, setecon]
   balance:
     aliases: [bal, money, econ, eco]
   message:
-    aliases: [m, msg, tell, wisper, tellraw]
+    aliases: [m, msg, tell, wisper]
   reply:
     aliases: [r]
   setkb:
   refund:
   addlives:
+  tempmute:
   safeshutdown:
   redeem:
   crate:
@@ -34,6 +36,7 @@ commands:
   givebal:
   mutechat:
   request:
+    aliases: [helpop]
   sounds:
     aliases: [pmsounds, togglepmsounds]
   autoban:
@@ -44,7 +47,6 @@ commands:
     aliases: [v, hide]
   unmute:
   unban:
-  sbtype:
   cancel:
   information:
   teleport:
@@ -64,4 +66,4 @@ commands:
   tempban:
   blacklist:
   faction:
-    aliases: [f, factions, fac, facs, team, teams, t]
+    aliases: [f, factions, fac, facs]

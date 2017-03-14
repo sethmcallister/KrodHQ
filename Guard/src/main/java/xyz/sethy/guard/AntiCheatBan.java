@@ -16,7 +16,7 @@ public class AntiCheatBan implements Ban
     private SimplifiedBanType simplifiedType;
     private String reason;
     private String bannedBy;
-    private Date expireDate;
+    private Long expireDate;
     private Date banDate;
     private boolean isActive;
 
@@ -28,64 +28,8 @@ public class AntiCheatBan implements Ban
         this.simplifiedType = type == BanType.IP_PERMANENT || type == BanType.NORMAL_PERMANENT ? SimplifiedBanType.PERMANENT : SimplifiedBanType.TEMPORARILY;
         this.reason = reason;
         this.bannedBy = bannedBy;
-        this.expireDate = new Date();
+        this.expireDate = new Date().getTime();
         this.banDate = new Date();
-    }
-
-    public void loadFromString(String string)
-    {
-        if (string == null)
-        {
-            return;
-        }
-
-        String[] strings = string.split("\n");
-        System.out.println(string);
-        for (String line : strings)
-        {
-            String identifier = line.substring(0, line.indexOf(58));
-            String[] lineParts = line.substring(line.indexOf(58)).split(",");
-            if (identifier.equalsIgnoreCase("Target"))
-            {
-                this.target = lineParts[0].replace(":", "");
-            }
-            if (identifier.equalsIgnoreCase("Type"))
-            {
-                this.type = BanType.valueOf(lineParts[0].replace(":", ""));
-            }
-            if (identifier.equalsIgnoreCase("SimpleType"))
-            {
-                this.simplifiedType = SimplifiedBanType.valueOf(lineParts[0].replace(":", ""));
-            }
-            if (identifier.equalsIgnoreCase("Reason"))
-            {
-                this.reason = lineParts[0].replace(":", "");
-            }
-            if (identifier.equalsIgnoreCase("ExpireDate"))
-            {
-                this.expireDate = new Date(Long.valueOf(lineParts[0].replace(":", "")));
-            }
-            if (identifier.equalsIgnoreCase("BanDate"))
-            {
-                this.banDate = new Date(Long.valueOf(lineParts[0].replace(":", "")));
-            }
-            if (identifier.equalsIgnoreCase("Active"))
-                this.isActive = Boolean.valueOf(lineParts[0].replace(":", ""));
-        }
-    }
-
-
-    public String saveToString()
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Target:").append(this.target).append("\n");
-        stringBuilder.append("Type:").append(this.type.toString()).append("\n");
-        stringBuilder.append("SimpleType:").append(this.simplifiedType.toString()).append("\n");
-        stringBuilder.append("Reason:").append(this.reason).append("\n");
-        stringBuilder.append("ExpireDate:").append(this.expireDate.getTime()).append("\n");
-        stringBuilder.append("BanDate:").append(this.banDate.getTime()).append("\n");
-        stringBuilder.append("Active:").append(this.isActive).append("\n");
-        return stringBuilder.toString();
     }
 
     public AntiCheatBan(String target, BanType type, String reason, String bannedBy, Date expireDate)
@@ -95,7 +39,7 @@ public class AntiCheatBan implements Ban
         this.type = type;
         this.reason = reason;
         this.bannedBy = bannedBy;
-        this.expireDate = expireDate;
+        this.expireDate = expireDate.getTime();
         this.banDate = new Date();
     }
 
@@ -124,7 +68,7 @@ public class AntiCheatBan implements Ban
     }
 
     @Override
-    public Date getExpireDate()
+    public Long getExpireDate()
     {
         return this.expireDate;
     }

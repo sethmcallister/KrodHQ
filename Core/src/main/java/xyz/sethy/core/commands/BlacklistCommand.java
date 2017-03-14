@@ -3,6 +3,7 @@ package xyz.sethy.core.commands;
 import net.minecraft.util.org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -54,6 +55,14 @@ public class BlacklistCommand implements CommandExecutor
         Player player = Bukkit.getPlayer(args[0]);
         if (player == null)
         {
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+            if(offlinePlayer != null)
+            {
+                CoreBan ban = new CoreBan(offlinePlayer.getUniqueId().toString(), BanType.NORMAL_PERMANENT, reason, sender.getName());
+                API.getBanManager().addBan(ban);
+                API.sendBungeeMessage("&7The player &7" + offlinePlayer.getName() + "&7 has been permanently banned from &3KrodHQ&7.");
+                return;
+            }
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3No player with that name or UUID has been found."));
             return;
         }

@@ -13,6 +13,7 @@ import xyz.sethy.api.framework.group.Group;
 import xyz.sethy.api.framework.user.User;
 import xyz.sethy.guard.checks.Check;
 import xyz.sethy.guard.checks.combat.*;
+import xyz.sethy.guard.checks.movement.Phase;
 import xyz.sethy.guard.checks.movement.Speed;
 import xyz.sethy.guard.checks.other.Crash;
 import xyz.sethy.guard.checks.other.MorePackets;
@@ -42,6 +43,7 @@ public class Guard implements Listener
     private LinkedList<Check> checks;
     private Map<UUID, Map.Entry<Long, Vector>> lastVelocity;
     private LinkedList<Player> toCancel;
+    private Settings settings;
 
     public Guard(Plugin plugin)
     {
@@ -54,6 +56,7 @@ public class Guard implements Listener
         this.packetHandler = new PacketHandler(plugin);
         this.lastVelocity = new ConcurrentHashMap<>();
         this.toCancel = new LinkedList<>();
+        this.settings = new Settings();
 
         this.checks = new LinkedList<>();
         this.checks.add(new AttackSpeed(plugin));
@@ -68,6 +71,7 @@ public class Guard implements Listener
         this.checks.add(new Reach(plugin));
 
         this.checks.add(new Speed(plugin));
+        this.checks.add(new Phase(plugin));
 
         this.checks.add(new MorePackets(plugin));
         this.checks.add(new Sneak(plugin));
@@ -198,17 +202,6 @@ public class Guard implements Listener
         }
     }
 
-    public void setViolationResetTime(Player player, Check check, long time)
-    {
-        Map map = new ConcurrentHashMap<>();
-        if (this.violations.containsKey(player.getUniqueId()))
-        {
-            map = this.violations.get(player.getUniqueId());
-        }
-        map.put(check, time);
-
-        this.violationReset.put(player.getUniqueId(), map);
-    }
 
     public void logCheat(Check check, Player player, String hoverabletext, String... identifiers)
     {
@@ -224,8 +217,34 @@ public class Guard implements Listener
             }
         }
 
-        addViolation(player, check);
+        if(!this.violationReset.containsKey(player.getUniqueId()))
+        {
+            this.violationReset.put(player.getUniqueId(), new HashMap<>());
+        }
+        if(!this.violationReset.get(player.getUniqueId()).containsKey(check))
+        {
+            this.violationReset.get(player.getUniqueId()).put(check, check.getViolationResetTime() + System.currentTimeMillis());
 
+        }
+        if(this.violationReset.get(player.getUniqueId()).get(check) < System.currentTimeMillis())
+        {
+            this.violations.get(player.getUniqueId()).put(check, 0);
+            this.violationReset.get(player.getUniqueId()).put(check, check.getViolationResetTime() + System.currentTimeMillis());
+        }
+
+        if(!this.violations.containsKey(player.getUniqueId()))
+        {
+            this.violations.put(player.getUniqueId(), new HashMap<>());
+            this.violations.get(player.getUniqueId()).put(check, 1);
+        }
+
+        if(!this.violations.get(player.getUniqueId()).containsKey(check))
+            this.violations.get(player.getUniqueId()).put(check, 1);
+        else
+            this.violations.get(player.getUniqueId()).put(check, this.violations.get(player.getUniqueId()).get(check) + 1);
+
+
+//        addViolation(player, check);
         FancyMessage message = new FancyMessage();
         message.text("[KAC]").color(ChatColor.GOLD)
                 .then(player.getName()).color(ChatColor.WHITE)
@@ -234,7 +253,9 @@ public class Guard implements Listener
                         .then(".").color(ChatColor.GOLD))
                 .then(" might be using ").color(ChatColor.GRAY)
                 .then(check.getName()).color(ChatColor.AQUA)
-                .then("[" + getViolations(player, check) + "]")
+                .then("[").color(ChatColor.RED)
+                .then(String.valueOf(this.violations.get(player.getUniqueId()).get(check))).color(ChatColor.WHITE)
+                .then("VL]").color(ChatColor.RED)
                 .then(".").color(ChatColor.GRAY);
 
         if (getViolations(player, check) % check.getViolationsToNotify() == 0)
@@ -242,14 +263,13 @@ public class Guard implements Listener
             for (Player staff : Bukkit.getOnlinePlayers())
             {
                 User user = API.getUserManager().findByUniqueId(staff.getUniqueId());
-                if (user.getGroup().getPermission() > Group.TRAIL_MOD.getPermission())
+                if (user.getGroup().getPermission() >= Group.TRAIL_MOD.getPermission())
                 {
                     message.send(staff);
                 }
             }
         }
         System.out.println("[" + player.getUniqueId().toString() + "] " + player.getName() + " failed " + check.getName() + a + ".");
-        setViolationResetTime(player, check, System.currentTimeMillis() + check.getViolationResetTime());
         if ((getViolations(player, check) >= check.getMaxViolations()) && (check.isBannable()))
         {
             autoban(check, player);
@@ -274,5 +294,10 @@ public class Guard implements Listener
     public LinkedList<Player> getToCancel()
     {
         return toCancel;
+    }
+
+    public Settings getSettings()
+    {
+        return settings;
     }
 }

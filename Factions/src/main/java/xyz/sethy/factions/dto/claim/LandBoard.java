@@ -129,7 +129,7 @@ public class LandBoard
         {
             return false;
         }
-        final int radius = 300;
+        final int radius = 150;
         final int x = loc.getBlockX();
         final int z = loc.getBlockZ();
         return x < radius && x > -radius && z < radius && z > -radius;

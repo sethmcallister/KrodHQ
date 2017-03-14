@@ -112,10 +112,6 @@ public class Core extends JavaPlugin implements Listener
 
     public void onDisable()
     {
-        if (this.fileHandler.getModulesFile().getBoolean("MODULES.SG"))
-        {
-            SG.getInstance().disable();
-        }
         if (this.fileHandler.getModulesFile().getBoolean("MODULES.HCF") || this.fileHandler.getModulesFile().getBoolean("MODULES.KITMAP"))
         {
             Factions.getInstance().onDisable();
@@ -128,8 +124,8 @@ public class Core extends JavaPlugin implements Listener
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerQuitListner(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new AsyncPlayerChatListener(), this);
 
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "SendMessage");
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "SendMessage");
     }
 
     private void setupCommands()
@@ -148,11 +144,14 @@ public class Core extends JavaPlugin implements Listener
         new MuteCommand();
         new UnmuteCommand();
         new InformationCommand();
-        new SBTypeCommand();
         new SetKBCommand();
         new TempBanCommand();
         new SafeShutdownCommand();
         new PingCommand();
+        new BroadcastCommand();
+        new AlertCommand();
+        new WarnCommand();
+        new TempMuteCommand();
     }
 
     public Framework getFramework()

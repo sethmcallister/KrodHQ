@@ -1,7 +1,9 @@
 package xyz.sethy.core.framework.user.hcf;
 
+import xyz.sethy.api.API;
 import xyz.sethy.api.framework.user.User;
 import xyz.sethy.api.framework.user.hcf.HCFUser;
+import xyz.sethy.core.framework.user.UserManager;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -14,6 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class CoreHCFUser implements HCFUser
 {
+    private UUID uuid;
     private AtomicInteger kills;
     private AtomicInteger deaths;
     private AtomicInteger lives;
@@ -24,11 +27,9 @@ public class CoreHCFUser implements HCFUser
     private AtomicBoolean joinedSinceSOTW;
     private AtomicBoolean redeemedRank;
 
-    private User user;
-
-    public CoreHCFUser(User user)
+    public CoreHCFUser(UUID uuid)
     {
-        this.user = user;
+        this.uuid = uuid;
         this.kills = new AtomicInteger(0);
         this.deaths = new AtomicInteger(0);
         this.lives = new AtomicInteger(0);
@@ -40,57 +41,10 @@ public class CoreHCFUser implements HCFUser
         this.redeemedRank = new AtomicBoolean();
     }
 
-    public String saveToString()
-    {
-        StringBuilder string = new StringBuilder();
-        string.append("UUID:").append(this.user.getUniqueId().toString()).append("\n");
-        string.append("Kills:").append(this.getKills()).append("\n");
-        string.append("Deaths:").append(this.getDeaths()).append("\n");
-        string.append("Lives:").append(this.getLives()).append("\n");
-        string.append("Deathban:").append(this.deathbanTime()).append("\n");
-        string.append("Balance:").append(balance.get()).append("\n");
-        string.append("PvPTimer:").append(this.getPvPTimer()).append("\n");
-        string.append("DeathMessage:").append(this.getDeathbanMessage()).append("\n");
-        string.append("JoinedSinceSOTW:").append(this.hasJoinedSinceSOTW()).append("\n");
-        string.append("RedeemedRank:").append(this.redeemedRank.get()).append("\n");
-        return string.toString();
-    }
-
-    public void loadFromString(String string)
-    {
-        if (string == null)
-            return;
-
-        final String[] strings = string.split("\n");
-        for (String line : strings)
-        {
-            final String identifier = line.substring(0, line.indexOf(58));
-            final String[] lineParts = line.substring(line.indexOf(58)).split(",");
-            if (identifier.equalsIgnoreCase("Kills"))
-                this.kills.set(Integer.valueOf(lineParts[0].replace(":", "")));
-            else if (identifier.equalsIgnoreCase("Deaths"))
-                this.deaths.set(Integer.valueOf(lineParts[0].replace(":", "")));
-            else if (identifier.equalsIgnoreCase("Lives"))
-                this.lives.set(Integer.valueOf(lineParts[0].replace(":", "")));
-            else if (identifier.equalsIgnoreCase("Deathban"))
-                this.deathban.set(Long.valueOf(lineParts[0].replace(":", "")));
-            else if (identifier.equalsIgnoreCase("Balance"))
-                this.balance.set(Double.valueOf(lineParts[0].replace(":", "")));
-            else if (identifier.equalsIgnoreCase("PvPTimer"))
-                this.pvpTimer.set(Long.valueOf(lineParts[0].replace(":", "")));
-            else if (identifier.equalsIgnoreCase("DeathMessage"))
-                this.deathMessage.set(lineParts[0].replace(":", ""));
-            else if (identifier.equalsIgnoreCase("JoinedSinceSOTW"))
-                this.joinedSinceSOTW.set(Boolean.valueOf(lineParts[0].replace(":", "")));
-            else if(identifier.equalsIgnoreCase("RedeemedRank"))
-                this.redeemedRank.set(Boolean.valueOf(lineParts[0].replace(":", "")));
-        }
-    }
-
     @Override
     public UUID getUUID()
     {
-        return user.getUniqueId();
+        return uuid;
     }
 
     @Override
@@ -201,8 +155,10 @@ public class CoreHCFUser implements HCFUser
         this.redeemedRank.set(result);
     }
 
-    public User getUser()
+    @Override
+    public void forceSave()
     {
-        return user;
+        UserManager userManager = (UserManager) API.getUserManager();
+        userManager.unloadUser((User) this);
     }
 }

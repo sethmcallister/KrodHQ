@@ -24,10 +24,13 @@ public class FactionListCommand implements ICommand
 
         for (Faction faction : Factions.getInstance().getFactionManager().getFactions())
         {
-            if (faction.getLeader() != null)
+            if(faction != null)
             {
-                if (faction.getOnlineMembers().size() > 0)
-                    factions.add(faction);
+                if (faction.getLeader() != null)
+                {
+                    if (faction.getOnlineMembers().size() > 0)
+                        factions.add(faction);
+                }
             }
         }
 
@@ -93,9 +96,9 @@ public class FactionListCommand implements ICommand
         public int compare(Faction o1, Faction o2)
         {
             if (o1.getOnlineMembers().size() < o2.getOnlineMembers().size())
-                return 1;
-            else
                 return -1;
+            else
+                return 1;
         }
     }
 }

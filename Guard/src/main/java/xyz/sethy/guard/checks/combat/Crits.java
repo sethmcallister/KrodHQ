@@ -23,8 +23,8 @@ import java.util.UUID;
  */
 public class Crits extends Check
 {
-    private Map<UUID, Map.Entry<Integer, Long>> CritTicks = new HashMap();
-    private Map<UUID, Double> FallDistance = new HashMap();
+    private Map<UUID, Map.Entry<Integer, Long>> CritTicks = new HashMap<>();
+    private Map<UUID, Double> FallDistance = new HashMap<>();
 
     public Crits(Plugin plugin)
     {
@@ -87,9 +87,9 @@ public class Crits extends Check
         {
             Count = 0;
 
-            Guard.getInstance().logCheat(this, player, null, new String[0]);
+            Guard.getInstance().logCheat(this, player, null);
         }
-        this.CritTicks.put(player.getUniqueId(), new AbstractMap.SimpleEntry(Integer.valueOf(Count), Long.valueOf(Time)));
+        this.CritTicks.put(player.getUniqueId(), new AbstractMap.SimpleEntry<>(Count, Time));
     }
 
     @EventHandler

@@ -11,6 +11,7 @@ import xyz.sethy.api.API;
 import xyz.sethy.api.framework.commands.CommandBase;
 import xyz.sethy.api.framework.group.Group;
 import xyz.sethy.api.framework.user.User;
+import xyz.sethy.api.framework.user.hcf.HCFUser;
 import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.timers.Timer;
 import xyz.sethy.factions.timers.TimerHandler;
@@ -37,6 +38,12 @@ public class PvPCommand extends CommandBase
     @Override
     public void execute(Player sender, Command command1, String label, String[] args)
     {
+        if(Factions.getInstance().isKitmap())
+        {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThis command is disabled during kitmap."));
+            return;
+        }
+
         User user = API.getUserManager().findByUniqueId(sender.getUniqueId());
         if (args.length == 0)
         {
@@ -70,12 +77,13 @@ public class PvPCommand extends CommandBase
 
     private void handleEnable(Player sender, User user)
     {
-        if (user.getHCFUser().getPvPTimer() > 0)
+        HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(user.getUniqueId());
+        if (hcfUser.getPvPTimer() > 0)
         {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have PvP Protection."));
             return;
         }
-        user.getHCFUser().setPvPTimer(0L);
+        hcfUser.setPvPTimer(0L);
         Factions.getInstance().getTimerHandler().getPlayerTimers(sender).remove(Factions.getInstance().getTimerHandler().getTimer(sender, TimerType.PVP_TIMER));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have disabled your PvP Protection."));
     }
@@ -99,6 +107,7 @@ public class PvPCommand extends CommandBase
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
             User user1 = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
             user1.getHCFUser().setLives(amount);
+            user1.forceSave();
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have set &7" + user1.getName() + "&7's lives to &c" + amount + "&7."));
             return;
         }
@@ -128,6 +137,7 @@ public class PvPCommand extends CommandBase
             User user1 = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
             user.getHCFUser().setLives(user.getHCFUser().getLives() - amount);
             user1.getHCFUser().setLives(user1.getHCFUser().getLives() + amount);
+            user1.forceSave();
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have sent &c" + user1.getName() + " " + amount + "&7 lives."));
             return;
         }
@@ -157,8 +167,8 @@ public class PvPCommand extends CommandBase
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You do not have enough lives to revive this player."));
                     return;
                 }
-                user.getHCFUser().setLives(user.getHCFUser().getLives() - 1);
                 user1.getHCFUser().setDeathbanTime(0L);
+                user1.forceSave();
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have successfully revived &7" + user1.getName() + "&3."));
                 return;
             }

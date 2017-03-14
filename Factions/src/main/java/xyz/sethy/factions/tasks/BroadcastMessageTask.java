@@ -18,10 +18,11 @@ public class BroadcastMessageTask
     public BroadcastMessageTask()
     {
         this.broadcasts = new ConcurrentLinkedQueue<>();
-        this.broadcasts.add("&7(&3&lKrodHQ&7)&7 There is currently a &350%&7 off SOTW sale.");
-        this.broadcasts.add("&7(&3&lKrodHQ&7)&7 To obtain perks and ranks check our store; store.KrodHQ.com");
+//        this.broadcasts.add("&7(&cKrodHQ&7)&7 There is currently a &350%&7 off SOTW sale.");
+        this.broadcasts.add("&7(&cKrodHQ&7)&7 To obtain perks and ranks check our store; store.KrodHQ.com");
 //        this.broadcasts.add("&7(&3&lKrodHQ&7)&7 Subscribe to our Reddit; &bhttps://reddit.com/r/KrodHQ&7 to stay up-to-date.");
-        this.broadcasts.add("&7(&3&lKrodHQ&7)&7 Follow our Twitter; &bhttps://twitter.com/KrodHQ&7 to stay up-to-date.");
+        this.broadcasts.add("&7(&cKrodHQ&7)&7 Follow our Twitter; &bhttps://twitter.com/KrodHQ&7 to stay up-to-date.");
+        this.broadcasts.add("&7(&cKrodHQ&7)&7 Make sure to report all bugs and issues @ http://bit.ly/2ntynj9");
 
         Bukkit.getScheduler().scheduleAsyncRepeatingTask(Factions.getInstance().getPlugin(), new BukkitRunnable()
         {

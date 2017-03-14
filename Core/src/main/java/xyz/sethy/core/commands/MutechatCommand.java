@@ -15,7 +15,7 @@ public class MutechatCommand extends CommandBase
 {
     public MutechatCommand()
     {
-        super("mutechat", Group.TRAIL_MOD, false);
+        super("mutechat", Group.MOD_PLUS, false);
         Bukkit.getPluginCommand(this.getCommand()).setExecutor(this);
     }
 

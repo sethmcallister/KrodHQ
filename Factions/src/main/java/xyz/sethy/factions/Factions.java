@@ -2,6 +2,8 @@ package xyz.sethy.factions;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import xyz.sethy.factions.combatlog.CombatEntryListener;
+import xyz.sethy.factions.combatlog.CombatLoggerManager;
 import xyz.sethy.factions.commands.essentials.core.*;
 import xyz.sethy.factions.commands.essentials.core.admin.*;
 import xyz.sethy.factions.commands.essentials.koth.KothCommand;
@@ -21,6 +23,7 @@ import xyz.sethy.factions.listeners.crate.CrateKeyPlaceListener;
 import xyz.sethy.factions.listeners.crate.ElaphKeyListener;
 import xyz.sethy.factions.listeners.crate.KrodKeyListener;
 import xyz.sethy.factions.listeners.crate.StarterKeyListener;
+import xyz.sethy.factions.listeners.fixes.CombatWallFix;
 import xyz.sethy.factions.managers.CrateManager;
 import xyz.sethy.factions.managers.DeathbanManager;
 import xyz.sethy.factions.managers.EnchantmentManager;
@@ -55,6 +58,7 @@ public class Factions
     private EnchantmentManager enchantmentManager;
     private GlassWallListener glassWallListener;
     private KothHandler kothHandler;
+    private CombatLoggerManager combatLoggerManager;
     private CrateManager crateManager;
     private DeathbanManager deathbanManager;
     private final int map = 1;
@@ -84,6 +88,7 @@ public class Factions
         this.deathbanManager = new DeathbanManager();
         this.crateManager = new CrateManager();
         this.inventoryManager = new InventoryManager();
+        this.combatLoggerManager = new CombatLoggerManager();
 
         this.regionSupports = new ArrayList<>();
         this.regionSupports.add(new WorldGuardRegionSupport());
@@ -140,7 +145,9 @@ public class Factions
         new FastTileListener();
         new WorldSwitchListener();
         new BuySignListener();
-
+        new CombatEntryListener();
+        new CombatWallFix();
+        new WeatherListener();
         new UserLogoutListener();
         new UserLoggedInListener();
 
@@ -174,6 +181,10 @@ public class Factions
         handler.register("c", new FactionChatCommand());
         handler.register("kick", new FactionKickCommand());
         handler.register("stuck", new FactionStuckCommand());
+        handler.register("widthdraw", new FactionWidthdrawCommand());
+        handler.register("w", new FactionWidthdrawCommand());
+        handler.register("leader", new FactionLeaderCommand());
+        handler.register("promote", new FactionPromoteCommand());
 
         handler.register("forceleave", new FactionForceLeaveCommand());
         handler.register("type", new FactionSetDTRBitmaskCommand());
@@ -182,6 +193,7 @@ public class Factions
         handler.register("createkoth", new FactionCreateKoTHCommand());
         handler.register("forcejoin", new FactionForceJoinCommand());
         handler.register("forceleader", new FactionForceLeaderCommand());
+        handler.register("setdtr", new FactionSetDTRCommand());
 
         Bukkit.getPluginCommand("faction").setExecutor(handler);
 
@@ -284,5 +296,10 @@ public class Factions
     public Integer getMaxFactionSize()
     {
         return maxFactionSize;
+    }
+
+    public CombatLoggerManager getCombatLoggerManager()
+    {
+        return combatLoggerManager;
     }
 }

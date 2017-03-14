@@ -195,6 +195,7 @@ public class KitSignListener implements Listener
                     player.getInventory().setItem(15, new ItemStack(Material.WATER_BUCKET, 4));
 
                     this.cooldowns.put(player, 15000L + System.currentTimeMillis());
+                    player.updateInventory();
                     return;
                 }
                 else if (sign.getLine(2).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', "&4Archer")))

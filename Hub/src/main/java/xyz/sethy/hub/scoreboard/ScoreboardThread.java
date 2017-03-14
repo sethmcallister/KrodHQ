@@ -33,11 +33,11 @@ public class ScoreboardThread extends BukkitRunnable
 
             scoreboard.add(translateString("&7&m-----------"), translateString("&7&m-----------"));
 
-            scoreboard.add(translateString("&3&lOnline&7:&f "), "");
+            scoreboard.add(translateString("&cOnline&7:&f "), "");
             scoreboard.add(Hub.getInstance().getHcfOnline().toString(), "");
 
             scoreboard.add("", "");
-            scoreboard.add(translateString("&3&lRank&7: "), "");
+            scoreboard.add(translateString("&cRank&7: "), "");
             if (user.getGroup().getScoreboard().length() > 15)
                 scoreboard.add(translateString(user.getGroup().getScoreboard().substring(0, 15)), user.getGroup().getScoreboard().substring(15));
             else
@@ -46,12 +46,12 @@ public class ScoreboardThread extends BukkitRunnable
             if (playerQueue.isQueueing(player) || playerQueue.whatServer(player) != null)
             {
                 Server server = playerQueue.whatServer(player);
-                scoreboard.add(translateString("&3&lQueued For"), translateString("&7:"));
-                scoreboard.add(translateString(" &3Server&7:"), translateString(" " + server.getScoreboardName()));
-                scoreboard.add(translateString(" &3Position&7: "), translateString("&f#" + playerQueue.getPos(player) + "/" + playerQueue.getQueueSize(server)));
+                scoreboard.add(translateString("&cQueued For"), translateString("&7:"));
+                scoreboard.add(translateString(" &cServer&7:"), translateString(" " + server.getScoreboardName()));
+                scoreboard.add(translateString(" &cPosition&7: "), translateString("&f#" + playerQueue.getPos(player) + "/" + playerQueue.getQueueSize(server)));
                 scoreboard.add("", "");
             }
-            scoreboard.add(translateString("&3store."), translateString("&3KrodHQ.com"));
+            scoreboard.add(translateString("&cstore."), translateString("&cKrodHQ.com"));
             scoreboard.add(translateString("&7&m-----------"), translateString("&7&m-----------"));
             scoreboard.update();
         }

@@ -106,18 +106,27 @@ public class ClaimListener implements Listener
                 return;
             }
 
+            if(to.getData().hasDTRBitmask(DTRType.SAFEZONE))
+            {
+                Timer timer = timerHandler.getTimer(event.getPlayer(), TimerType.COMBAT_TAG);
+                if(timer.getTime() > 0)
+                {
+                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You cannot enter spawn while combat tagged."));
+                    event.setTo(event.getFrom());
+                    return;
+                }
+            }
+
             if (from.getRegionType().equals(RegionType.SPAWN) && timerHandler.hasTimer(event.getPlayer(), TimerType.PVP_TIMER))
             {
                 Timer defaultTimer = timerHandler.getTimer(event.getPlayer(), TimerType.PVP_TIMER);
                 defaultTimer.unfreeze();
-                String time = setLongFormat(defaultTimer.getTime());
                 event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Your &aPvP Timer&3 has been unfrozen."));
             }
             if (to.getRegionType().equals(RegionType.SPAWN) && timerHandler.hasTimer(event.getPlayer(), TimerType.PVP_TIMER))
             {
                 Timer defaultTimer = timerHandler.getTimer(event.getPlayer(), TimerType.PVP_TIMER);
                 defaultTimer.freeze();
-                String time = setLongFormat(defaultTimer.getTime());
                 event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Your &aPvP Timer&3 has been frozen."));
             }
 

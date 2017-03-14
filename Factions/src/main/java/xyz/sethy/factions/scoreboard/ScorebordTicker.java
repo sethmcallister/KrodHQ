@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.user.User;
+import xyz.sethy.api.framework.user.kitmap.KitmapUser;
 import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.koth.dto.Koth;
 import xyz.sethy.factions.timers.Timer;
@@ -103,6 +104,25 @@ public class ScorebordTicker implements Runnable
                     scoreboard.add(translateString(" &9Chat Mode: "), translateString(user.isStaffChat() ? "&cStaff Chat" : "&cPublic Chat"));
                 }
 
+                if(Factions.getInstance().isKitmap())
+                {
+                    KitmapUser kitmapUser = API.getUserManager().findKitmapByUniqueId(player.getUniqueId());
+                    int kills = kitmapUser.getKills();
+                    int deaths = kitmapUser.getDeaths();
+                    double kd;
+                    if(kills == 0)
+                        kd = 0.0D;
+                    else if(deaths == 0)
+                        kd = kills;
+                    else
+                        kd = kills/deaths;
+
+                    scoreboard.add(translateString("&eKills&7: "), String.valueOf(kills));
+                    scoreboard.add(translateString("&eDeaths&7: "), String.valueOf(deaths));
+                    scoreboard.add(translateString("&eK/D Ratio&7: "), String.valueOf(kd));
+                    scoreboard.add(translateString("&eBalance&7: "), String.valueOf(kitmapUser.getBalance()));
+                }
+
                 if(timerHandler.getSotwTime() > System.currentTimeMillis())
                 {
                     String right = translateString("&3&lSOTW&7: ");
@@ -150,7 +170,10 @@ public class ScorebordTicker implements Runnable
                         {
                             if(!timer.isFrozen())
                             {
-                                this.lastPvPTime.put(player, timer.getTime());
+                                if(this.lastPvPTime.containsKey(player))
+                                    this.lastPvPTime.put(player, timer.getTime());
+                                else
+                                    this.lastPvPTime.put(player, 1800000L + System.currentTimeMillis());
                             }
                         }
 
@@ -163,6 +186,7 @@ public class ScorebordTicker implements Runnable
                         }
                         else
                             right = translateString("&7:&f ") + formatTime(timer.getTime());
+
                         scoreboard.add(left, right);
                     }
                 }
@@ -176,6 +200,9 @@ public class ScorebordTicker implements Runnable
     private boolean hasAnyTimers(Player player)
     {
         if(Factions.getInstance().getKothHandler().getActiveKoths().size() > 0)
+            return true;
+
+        if(Factions.getInstance().isKitmap())
             return true;
 
         ArrayList<Timer> defaultTimers = timerHandler.getPlayerTimers(player);

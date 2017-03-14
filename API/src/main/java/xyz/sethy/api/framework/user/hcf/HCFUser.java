@@ -41,4 +41,6 @@ public interface HCFUser
 
     boolean hasRedeemedRank();
     void setRedeemedRank(boolean result);
+
+    void forceSave();
 }

@@ -59,7 +59,7 @@ public class ElaphKeyListener implements Listener
             int itemscom = itemscoms.nextInt(14) + 1;
             if (itemscom == 1)
             {
-                player.getInventory().addItem(new ItemStack(Material.SULPHUR, 24));
+                player.getInventory().addItem(new ItemStack(Material.SULPHUR, 12));
             }
             else if (itemscom == 2)
             {
@@ -75,19 +75,19 @@ public class ElaphKeyListener implements Listener
             }
             else if (itemscom == 5)
             {
-                player.getInventory().addItem(new ItemStack(Material.GOLD_BLOCK, 16));
+                player.getInventory().addItem(new ItemStack(Material.GOLD_BLOCK, 5));
             }
             else if (itemscom == 6)
             {
-                player.getInventory().addItem(new ItemStack(Material.IRON_BLOCK, 16));
+                player.getInventory().addItem(new ItemStack(Material.IRON_BLOCK, 5));
             }
             else if (itemscom == 7)
             {
-                player.getInventory().addItem(new ItemStack(Material.EMERALD_BLOCK, 16));
+                player.getInventory().addItem(new ItemStack(Material.EMERALD_BLOCK, 5));
             }
             else if (itemscom == 8)
             {
-                player.getInventory().addItem(new ItemStack(Material.DIAMOND_BARDING, 16));
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK, 5));
             }
             else if (itemscom == 9)
             {
@@ -101,7 +101,7 @@ public class ElaphKeyListener implements Listener
             }
             else if (itemscom == 11)
             {
-                player.getInventory().addItem(new ItemStack(Material.EXP_BOTTLE, 24));
+                player.getInventory().addItem(new ItemStack(Material.EXP_BOTTLE, 12));
             }
             else if (itemscom == 12)
             {

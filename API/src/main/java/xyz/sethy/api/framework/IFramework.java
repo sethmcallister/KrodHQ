@@ -5,7 +5,7 @@ import xyz.sethy.api.framework.ban.IBanManager;
 import xyz.sethy.api.framework.mute.IMuteManager;
 import xyz.sethy.api.framework.user.IUserManager;
 
-public abstract interface IFramework
+public interface IFramework
 {
     Plugin getPlugin();
 

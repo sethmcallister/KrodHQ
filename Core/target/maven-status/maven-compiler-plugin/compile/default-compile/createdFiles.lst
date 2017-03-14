@@ -1,5 +1,6 @@
 xyz\sethy\core\files\FileHandler.class
 xyz\sethy\core\framework\mute\CoreMute.class
+xyz\sethy\core\framework\user\UserManager$1.class
 xyz\sethy\core\commands\SafeShutdownCommand.class
 xyz\sethy\core\commands\SetGroupCommand.class
 xyz\sethy\core\commands\BlacklistCommand.class
@@ -14,12 +15,15 @@ xyz\sethy\core\listeners\AsyncPlayerPreLoginListener.class
 xyz\sethy\core\commands\BanCommand.class
 xyz\sethy\core\framework\user\kitmap\CoreKitmapUser.class
 xyz\sethy\core\listeners\PlayerQuitListner.class
+xyz\sethy\core\commands\TempMuteCommand.class
 xyz\sethy\core\fixes\KnockbackFix.class
 xyz\sethy\core\framework\ban\BanManager.class
-xyz\sethy\core\framework\data\a.class
+xyz\sethy\core\commands\AlertCommand.class
+xyz\sethy\core\commands\BroadcastCommand.class
 xyz\sethy\core\commands\UnbanCommand.class
 xyz\sethy\core\Core.class
 xyz\sethy\core\commands\SBTypeCommand.class
+xyz\sethy\core\commands\WarnCommand.class
 xyz\sethy\core\commands\ClearChatCommand.class
 xyz\sethy\core\utils\DateUtils.class
 xyz\sethy\core\framework\user\CoreUser.class
@@ -27,7 +31,6 @@ xyz\sethy\core\framework\ban\CoreBan.class
 xyz\sethy\core\commands\TempBanCommand.class
 xyz\sethy\core\framework\user\UserManager.class
 xyz\sethy\core\commands\SetKBCommand.class
-xyz\sethy\core\framework\data\serializer\UserSerialzier.class
 xyz\sethy\core\commands\MutechatCommand.class
 xyz\sethy\core\commands\PingCommand.class
 xyz\sethy\core\commands\SlowChatCommand.class

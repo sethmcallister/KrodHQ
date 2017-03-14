@@ -35,7 +35,7 @@ public class ScoreHandler implements Listener
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         event.getPlayer().setScoreboard(scoreboard);
 
-        FScoreboard fScoreboard = Factions.getInstance().isKitmap() ? new FScoreboard(scoreboard, "&3&lKrodHQ &7Kits") : new FScoreboard(scoreboard, "&3KrodHQ &7(Map 1)");
+        FScoreboard fScoreboard = Factions.getInstance().isKitmap() ? new FScoreboard(scoreboard, "&cKrodHQ &7(Kits)") : new FScoreboard(scoreboard, "&cKrodHQ &7(Map 1)");
         scoreboards.put(event.getPlayer(), fScoreboard);
     }
 

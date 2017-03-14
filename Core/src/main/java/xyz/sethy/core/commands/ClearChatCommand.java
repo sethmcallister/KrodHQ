@@ -14,7 +14,7 @@ public class ClearChatCommand extends CommandBase
 {
     public ClearChatCommand()
     {
-        super("clearchat", Group.TRAIL_MOD, true);
+        super("clearchat", Group.MOD_PLUS, true);
         Bukkit.getPluginCommand(this.getCommand()).setExecutor(this);
     }
 

@@ -1,4 +1,4 @@
-package xyz.sethy.factions.commands.essentials.core;
+package xyz.sethy.factions.commands.essentials.core.admin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

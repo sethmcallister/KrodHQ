@@ -28,7 +28,7 @@ public class StaffChatManager implements Listener
     {
         if (staffChat.contains(event.getPlayer()))
         {
-            MessageUtil.sendStaffMessage("&7[&bSC&7] " + event.getPlayer().getName() + ": &f" + event.getMessage());
+            MessageUtil.sendStaffMessage("&7[&bSC&7] " + event.getPlayer().getName() + ": &b" + event.getMessage());
             event.setCancelled(true);
         }
     }

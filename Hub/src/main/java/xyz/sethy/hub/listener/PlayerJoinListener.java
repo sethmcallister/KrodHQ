@@ -24,7 +24,7 @@ public class PlayerJoinListener implements Listener
         player.updateInventory();
 
         Hub.getInstance().getPlayers().add(player);
-        player.teleport(new Location(Bukkit.getWorld("world"), -112.5, 10, 55.5));
+        player.teleport(new Location(Bukkit.getWorld("world"), 20.5, 31, -21.5));
 
         for (Player player1 : PlayerInteractListener.hidingPlayers)
         {

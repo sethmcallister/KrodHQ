@@ -8,7 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.sethy.api.API;
-import xyz.sethy.api.framework.ban.Ban;
 import xyz.sethy.api.framework.group.Group;
 import xyz.sethy.core.framework.ban.BanManager;
 
@@ -65,7 +64,7 @@ public class UnbanCommand implements CommandExecutor
         if(sender instanceof Player)
         {
             Player player = (Player)sender;
-            if(API.getUserManager().findByUniqueId(player.getUniqueId()).getGroup().getPermission() >= Group.MOD.getPermission())
+            if(API.getUserManager().findByUniqueId(player.getUniqueId()).getGroup().getPermission() >= Group.MOD_PLUS.getPermission())
             {
                 handleBan(sender, args);
                 return true;
@@ -92,11 +91,7 @@ public class UnbanCommand implements CommandExecutor
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThat player has not been banned."));
             return;
         }
-        while (banManager.getBan(target.getUniqueId()) != null)
-        {
-            Ban ban = banManager.getBan(target.getUniqueId());
-            banManager.removeBan(ban);
-        }
+        banManager.removeBan(target.getUniqueId());
         API.sendBungeeMessage("&7The player &3" + target.getName() + "&7 has been unbanned from &3&lKrodHQ&7.");
     }
 }
