@@ -14,6 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionType;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.user.hcf.HCFUser;
 import xyz.sethy.api.framework.user.kitmap.KitmapUser;
@@ -62,9 +65,11 @@ public class PlayerDeathEventListener implements Listener
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
+        event.setDeathMessage(null);
+
         Player killer = event.getEntity().getKiller();
         Player killed = event.getEntity();
 
@@ -82,9 +87,27 @@ public class PlayerDeathEventListener implements Listener
         {
             KitmapUser fKiller = API.getUserManager().findKitmapByUniqueId(killer.getUniqueId());
             KitmapUser fKilled = API.getUserManager().findKitmapByUniqueId(killed.getUniqueId());
+
             fKiller.setKills(fKiller.getKills() + 1);
             fKilled.setDeaths(fKilled.getDeaths() + 1);
             fKiller.setBalance(fKiller.getBalance() + 75);
+
+            fKiller.setKillStreak(fKiller.getCurrentKillStreak() + 1);
+            if(fKiller.getCurrentKillStreak() == 3)
+            {
+                Potion invis = new Potion(PotionType.INVISIBILITY);
+                invis.setLevel(1);
+                invis.setHasExtendedDuration(true);
+                killer.getInventory().addItem(invis.toItemStack(1));
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&3" + killer.getName() + "&7 has unlocked &31x Invisibility Potion&7 with their&3 3 Kill Streak&7."));
+            }
+            else if(fKiller.getCurrentKillStreak() == 5)
+            {
+                ItemStack crapple = new ItemStack(Material.GOLDEN_APPLE, 1);
+                crapple.setAmount(3);
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&3" + killer.getName() + "&7 has unlocked &33x Golden Apple&7 with their&3 5 Kill Streak&7."));
+            }
+            fKilled.setKillStreak(0);
 
             Bukkit.getServer().getWorld(killed.getWorld().getUID()).strikeLightningEffect(killed.getLocation());
             killed.teleport(new Location(Bukkit.getWorld("world"), 0.5, 72, 0.5));
@@ -116,9 +139,11 @@ public class PlayerDeathEventListener implements Listener
         else
         {
             HCFUser fKilled = API.getUserManager().findHCFByUniqueId(killed.getUniqueId());
-            HCFUser fKiller = API.getUserManager().findByUniqueId(killer.getUniqueId()).getHCFUser();
+            HCFUser fKiller = API.getUserManager().findHCFByUniqueId(killer.getUniqueId());
             fKiller.setKills(fKiller.getKills() + 1);
             fKilled.setDeaths(fKilled.getDeaths() + 1);
+            Factions.getInstance().getInventoryManager().getPlayerArmor().put(killed, killed.getInventory().getArmorContents());
+            Factions.getInstance().getInventoryManager().getPlayerInventory().put(killed, killed.getInventory().getContents());
 
             Faction faction = Factions.getInstance().getFactionManager().findByPlayer(killed);
             if (faction != null)
@@ -143,10 +168,10 @@ public class PlayerDeathEventListener implements Listener
             fKilled.setDeathbanTime(deathbanTime + System.currentTimeMillis());
             String deathMessage = ChatColor.translateAlternateColorCodes('&', "&c" + killed.getName() + "&4[" + fKilled.getKills() + "]&7 was slain by &c" + killer.getName() + "&4[" + fKiller.getKills() + "]&7 using &c" + itemName + "&7.");
             fKilled.setDeathbanMessage(deathMessage);
-            killed.kickPlayer(ChatColor.translateAlternateColorCodes('&', deathMessage + "\n" + "&cYour deathban expires in &7" + formatTime(deathbanTime) + "&c." + "\n" + "&cThank you for playing &3KrodHQ.com&c."));
+            killed.setMetadata("SageLogout", new FixedMetadataValue(API.getPlugin(), true));
+            killed.kickPlayer(ChatColor.translateAlternateColorCodes('&', deathMessage + "\n" + "&cYour deathban expires in &7" + formatTime(deathbanTime - System.currentTimeMillis()) + "&c." + "\n" + "&cThank you for playing &3KrodHQ.com&c."));
             Bukkit.broadcastMessage(deathMessage);
         }
-        event.setDeathMessage(null);
     }
 
     private static String getItemName(final ItemStack i)

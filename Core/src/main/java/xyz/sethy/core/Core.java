@@ -42,6 +42,8 @@ public class Core extends JavaPlugin implements Listener
     private AtomicBoolean chatMuted;
     private AtomicInteger slowTime;
     private DateUtils dateUtils;
+    private boolean hcf = false;
+    private boolean kitmap = false;
 
     public static String getVersion()
     {
@@ -94,6 +96,7 @@ public class Core extends JavaPlugin implements Listener
         }
         if (this.fileHandler.getModulesFile().getBoolean("MODULES.HCF"))
         {
+            this.hcf = true;
             new Factions(this, false);
             getLogger().info("Enabling server as HCF instance.");
         }
@@ -105,6 +108,7 @@ public class Core extends JavaPlugin implements Listener
         }
         if (this.fileHandler.getModulesFile().getBoolean("MODULES.KITMAP"))
         {
+            this.kitmap = true;
             new Factions(this, true);
             getLogger().info("Enabling server as Kitmap instance.");
         }
@@ -124,6 +128,7 @@ public class Core extends JavaPlugin implements Listener
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerQuitListner(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new AsyncPlayerChatListener(), this);
 
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "SetMOTD");
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "SendMessage");
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
@@ -152,6 +157,7 @@ public class Core extends JavaPlugin implements Listener
         new AlertCommand();
         new WarnCommand();
         new TempMuteCommand();
+        new CheckBanCommand();
     }
 
     public Framework getFramework()
@@ -217,5 +223,15 @@ public class Core extends JavaPlugin implements Listener
     public DateUtils getDateUtils()
     {
         return dateUtils;
+    }
+
+    public boolean isHcf()
+    {
+        return hcf;
+    }
+
+    public boolean isKitmap()
+    {
+        return kitmap;
     }
 }

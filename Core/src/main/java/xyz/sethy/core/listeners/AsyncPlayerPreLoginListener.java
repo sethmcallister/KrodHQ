@@ -1,6 +1,8 @@
 package xyz.sethy.core.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -8,6 +10,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.ban.Ban;
 import xyz.sethy.api.framework.ban.SimplifiedBanType;
+import xyz.sethy.api.framework.user.hcf.HCFUser;
+import xyz.sethy.core.Core;
 import xyz.sethy.core.framework.user.CoreUser;
 import xyz.sethy.core.framework.user.UserManager;
 
@@ -94,6 +98,17 @@ public class AsyncPlayerPreLoginListener implements Listener
         assert user != null;
         user.setName(event.getPlayer().getName());
         user.setLastIP(event.getPlayer().getAddress().toString());
+
+        if(Core.getInstance().isHcf())
+        {
+            HCFUser coreHCFUser = API.getUserManager().getTempHCFUser(event.getPlayer().getUniqueId());
+            if(coreHCFUser.hasForceUndeathbanned())
+            {
+                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 0.5, 77, 0.5));
+                event.getPlayer().getInventory().clear();
+                event.getPlayer().updateInventory();
+            }
+        }
     }
 
     private String getConvertedTime(long i)

@@ -44,6 +44,7 @@ public class JoinListener implements Listener
                         player.hidePlayer(event.getPlayer());
                 }
             }
+
             Essentials.getInstance().getStaffModeManager().getStaffModes().add(event.getPlayer());
             user.setStaffMode(true);
             user.setVansihed(true);
@@ -52,6 +53,17 @@ public class JoinListener implements Listener
             event.getPlayer().setGameMode(GameMode.CREATIVE);
             Essentials.getInstance().setOnlineStaff(Essentials.getInstance().getOnlineStaff() + 1);
             StaffmodeInventory.uploadOnline();
+        }
+
+        if(user.isStaffMode() && user.getGroup().getPermission() <= Group.TRAIL_MOD.getPermission())
+        {
+            user.setVansihed(false);
+            user.setStaffMode(false);
+            for (Player player : Bukkit.getOnlinePlayers())
+            {
+                if (!player.canSee(event.getPlayer()))
+                    player.showPlayer(event.getPlayer());
+            }
         }
     }
 }

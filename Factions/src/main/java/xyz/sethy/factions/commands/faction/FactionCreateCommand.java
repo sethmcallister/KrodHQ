@@ -27,14 +27,14 @@ public class FactionCreateCommand implements ICommand
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You are already in a faction."));
             return;
         }
-        if (ALPHA_NUMERIC.matcher(args[1]).find())
-        {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cFaction name must be alphanumeric."));
-            return;
-        }
         if (args.length != 2)
         {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Please specify a faction name."));
+            return;
+        }
+        if (ALPHA_NUMERIC.matcher(args[1]).find())
+        {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cFaction name must be alphanumeric."));
             return;
         }
         if (StringUtils.length(args[1]) > 16)

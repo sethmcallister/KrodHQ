@@ -20,4 +20,7 @@ public interface KitmapUser
     void setDeaths(int deaths);
 
     void setBalance(double balance);
+
+    Integer getCurrentKillStreak();
+    void setKillStreak(int killStreak);
 }

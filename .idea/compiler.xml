@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="API" />
+        <module name="Bungee" />
         <module name="Core" />
         <module name="Dist" />
         <module name="Essentials" />
@@ -20,6 +21,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="API" target="1.8" />
+      <module name="Bungee" target="1.5" />
       <module name="Core" target="1.8" />
       <module name="Dist" target="1.8" />
       <module name="Essentials" target="1.8" />
@@ -27,8 +29,8 @@
       <module name="Guard" target="1.8" />
       <module name="HCFCore" target="1.8" />
       <module name="Hub" target="1.8" />
-      <module name="Network" target="1.5" />
       <module name="network" target="1.5" />
+      <module name="Network" target="1.5" />
       <module name="SurvivalGames" target="1.8" />
       <module name="SurvivalGamesLobby" target="1.8" />
     </bytecodeTargetLevel>

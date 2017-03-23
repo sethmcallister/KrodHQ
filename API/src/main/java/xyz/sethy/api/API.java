@@ -68,5 +68,4 @@ public abstract class API
         int i = random.nextInt(Bukkit.getOnlinePlayers().length);
         Bukkit.getOnlinePlayers()[i].sendPluginMessage(API.getPlugin(), "SendMessage", stream.toByteArray());
     }
-
 }

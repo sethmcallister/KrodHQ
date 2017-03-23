@@ -60,7 +60,7 @@ public class BlacklistCommand implements CommandExecutor
             {
                 CoreBan ban = new CoreBan(offlinePlayer.getUniqueId().toString(), BanType.NORMAL_PERMANENT, reason, sender.getName());
                 API.getBanManager().addBan(ban);
-                API.sendBungeeMessage("&7The player &7" + offlinePlayer.getName() + "&7 has been permanently banned from &3KrodHQ&7.");
+                API.sendBungeeMessage("&7The player &3" + offlinePlayer.getName() + "&7 has been blacklisted from &3KrodHQ&7.");
                 return;
             }
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3No player with that name or UUID has been found."));

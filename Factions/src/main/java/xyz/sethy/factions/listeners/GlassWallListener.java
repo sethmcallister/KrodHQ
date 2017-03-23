@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.dto.Faction;
 import xyz.sethy.factions.dto.claim.Claim;
+import xyz.sethy.factions.handlers.dtr.DTRType;
 import xyz.sethy.factions.support.Region;
 import xyz.sethy.factions.support.RegionSupport;
 import xyz.sethy.factions.timers.Timer;
@@ -59,6 +60,9 @@ public class GlassWallListener
                         {
                             for(Map.Entry<Claim, Faction> claimMap : Factions.getInstance().getLandBoard().getRegionData(player.getLocation(), 10, 10, 10))
                             {
+                                if(claimMap.getValue().hasDTRBitmask(DTRType.SAFEZONE) || claimMap.getValue().hasDTRBitmask(DTRType.ROAD))
+                                    continue;
+
                                 renderGlass(claimMap.getKey(), player, location);
                             }
                         }

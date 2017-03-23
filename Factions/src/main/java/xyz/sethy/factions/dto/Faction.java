@@ -1,19 +1,16 @@
 package xyz.sethy.factions.dto;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import xyz.sethy.api.API;
-import xyz.sethy.api.framework.user.User;
-import xyz.sethy.api.framework.user.hcf.HCFUser;
-import xyz.sethy.api.framework.user.kitmap.KitmapUser;
 import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.dto.claim.Claim;
 import xyz.sethy.factions.handlers.dtr.DTRType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
@@ -31,7 +28,7 @@ public class Faction
     private final ConcurrentSkipListSet<UUID> allMembers;
     private final ConcurrentSkipListSet<UUID> onlineMembers;
     private final ConcurrentSkipListSet<UUID> invites;
-    private final ArrayList<Claim> claims;
+    private Claim claim;
     private boolean needsSave;
     private Double dtr;
     private Double maxDtr;
@@ -64,7 +61,7 @@ public class Faction
         this.onlineMembers = new ConcurrentSkipListSet<>();
         this.onlineMembers.add(leader);
         this.invites = new ConcurrentSkipListSet<>();
-        this.claims = new ArrayList<>();
+        this.claim = null;
         this.balance = 0;
         this.dtr = 1.01;
         this.maxDtr = 1.01;
@@ -79,7 +76,7 @@ public class Faction
         this.allMembers = new ConcurrentSkipListSet<>();
         this.onlineMembers = new ConcurrentSkipListSet<>();
         this.invites = new ConcurrentSkipListSet<>();
-        this.claims = new ArrayList<>();
+        this.claim = null;
         Bukkit.getLogger().log(Level.INFO, "Loading from redis");
     }
 
@@ -125,7 +122,7 @@ public class Faction
                 }
             }
             else if (this.hasDTRBitmask(DTRType.ROAD))
-                return ChatColor.GOLD + "Road";
+                return ChatColor.GOLD + this.name.replace("Road", "") + " Road";
             else if (this.hasDTRBitmask(DTRType.KOTH))
                 return ChatColor.GOLD + this.name + " KoTH";
         }
@@ -208,9 +205,9 @@ public class Faction
         return balance;
     }
 
-    public List<Claim> getClaims()
+    public Claim getClaims()
     {
-        return claims;
+        return claim;
     }
 
     public boolean isLeader(Player player)
@@ -230,144 +227,99 @@ public class Faction
 
     public boolean ownsClaim(final Claim claim)
     {
-        return this.claims.contains(claim);
+        if(this.claim == null)
+            return false;
+
+        return this.claim == claim;
     }
 
     public void getInformation(final Player sender)
     {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3&m--------------&7[" + this.getName(sender) + "&7]&3&m--------------"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3DTR: &7" + getDTR() + " / " + getMaxDTR() + (isRaidable() ? "&c(RAIDABLE)" : "")));
-        if (this.deathCooldown > System.currentTimeMillis())
-        {
-            final long till = Math.max(this.getRaidableCooldown(), this.getDeathCooldown());
-            final int seconds = (int) (till - System.currentTimeMillis()) / 1000;
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3DTR freeze: &7" + getConvertedTime(seconds)));
-        }
-        final String homestr = (this.home == null) ? "None" : (this.home.getBlockX() + ", " + this.home.getBlockY() + ", " + this.home.getBlockZ());
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Faction home: &7" + homestr));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Balance &7$" + balance));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Members: &7" + getAllMembers().size() + " / 10"));
-
-
-        if (!Factions.getInstance().isKitmap())
-        {
-            StringBuilder online = new StringBuilder();
-            for (UUID playerUUID : getOnlineMembers())
-            {
-                Player player = Bukkit.getPlayer(playerUUID);
-
-                HCFUser user = API.getUserManager().findHCFByUniqueId(playerUUID);
-
-                online.append(" &c");
-                if (isLeader(player))
-                    online.append("**");
-
-                if (getCaptains().contains(player.getUniqueId()))
-                    online.append("*");
-
-                online.append(player.getName())
-                        .append("&7[")
-                        .append("&c")
-                        .append(user.getKills())
-                        .append("&7]&7,");
-            }
-
-            String onlineString = online.toString();
-            if (onlineString.endsWith(","))
-            {
-                onlineString = onlineString.substring(0, onlineString.length() - 1);
-            }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Members online(" + getOnlineMembers().size() + "):" + onlineString));
-
-            StringBuilder offline = new StringBuilder();
-            for (UUID playerUUID : getAllMembers())
-            {
-                if (!this.getOnlineMembers().contains(playerUUID))
-                {
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-
-                    HCFUser user = API.getUserManager().getTempHCFUser(playerUUID);
-
-                    offline.append(" &c");
-                    if (this.leader.equals(playerUUID))
-                        offline.append("**");
-
-                    if (this.captains.contains(playerUUID))
-                        offline.append("*");
-
-                    offline.append(offlinePlayer.getName())
-                            .append("&7[")
-                            .append("&c")
-                            .append(user.getKills())
-                            .append("&7]&7,");
-                }
-            }
-            String offlineString = offline.toString();
-            if (offlineString.endsWith(","))
-            {
-                offlineString = offlineString.substring(0, offlineString.length() - 1);
-            }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Members offline(" + (getAllMembers().size() - getAllMembers().size()) + "):" + offlineString));
-        }
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&m----------------------------------------------------"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9" + getName() + "&7[" + onlineMembers.size() + "/" + allMembers.size() + "]" + "&3 &eHome: &f" +
+                (home == null ? "None" : home.getX() + ", " + home.getZ())));
+        String leader;
+        if(Bukkit.getPlayer(getLeader()) != null)
+            leader = "4" + Bukkit.getPlayer(getLeader()).getName() + "&e[&a" + API.getUserManager().getTempHCFUser(getLeader()).getKills() + "&e]";
         else
         {
-            StringBuilder online = new StringBuilder();
-            for (UUID playerUUID : getOnlineMembers())
+            if(Factions.getInstance().isKitmap())
+                leader = "&f" + Bukkit.getOfflinePlayer(getLeader()).getName() + "&e[&a" + API.getUserManager().getTempHCFUser(getLeader()).getKills() + "&e]";
+            else
             {
-                Player player = Bukkit.getPlayer(playerUUID);
-                KitmapUser kitmapUser = API.getUserManager().findKitmapByUniqueId(playerUUID);
-
-                online.append(" &c");
-                if (isLeader(player))
-                    online.append("**");
-
-                if (getCaptains().contains(player.getUniqueId()))
-                    online.append("*");
-
-                online.append(player.getName())
-                        .append("&7[")
-                        .append("&c")
-                        .append(kitmapUser.getKills())
-                        .append("&7]&7,");
+                if(API.getUserManager().getTempHCFUser(getLeader()).deathbanTime() > System.currentTimeMillis())
+                    leader = "&c" + Bukkit.getOfflinePlayer(getLeader()).getName() + "&e[&a" + API.getUserManager().getTempHCFUser(getLeader()).getKills() + "&e]";
+                else
+                    leader = "&f" + Bukkit.getOfflinePlayer(getLeader()).getName() + "&e[&a" + API.getUserManager().getTempHCFUser(getLeader()).getKills() + "&e]";
             }
-
-            String onlineString = online.toString();
-            if (onlineString.endsWith(","))
-            {
-                onlineString = onlineString.substring(0, onlineString.length() - 1);
-            }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Members online(" + getOnlineMembers().size() + "):" + onlineString));
-
-            StringBuilder offline = new StringBuilder();
-            for (UUID playerUUID : getAllMembers())
-            {
-                if (!this.getOnlineMembers().contains(playerUUID))
-                {
-                    User user = API.getUserManager().getTempUser(playerUUID);
-                    KitmapUser kitmapUser = API.getUserManager().findKitmapByUniqueId(playerUUID);
-
-                    offline.append(" &c");
-                    if (this.leader.equals(playerUUID))
-                        offline.append("**");
-
-                    if (this.captains.contains(playerUUID))
-                        offline.append("*");
-
-                    offline.append(user.getName())
-                            .append("&7[")
-                            .append("&c")
-                            .append(kitmapUser.getKills())
-                            .append("&7]&7,");
-                }
-            }
-            String offlineString = offline.toString();
-            if (offlineString.endsWith(","))
-            {
-                offlineString = offlineString.substring(0, offlineString.length() - 1);
-            }
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Members offline(" + (getAllMembers().size() - getAllMembers().size()) + "):" + offlineString));
         }
 
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Leader: &f" + leader));
+
+        if(getCaptains().size() > 0)
+        {
+            StringBuilder captains = new StringBuilder();
+            for(UUID uuid : getCaptains())
+            {
+                if(Bukkit.getPlayer(uuid) != null)
+                {
+                    if(Factions.getInstance().isKitmap())
+                        captains.append("&a").append(Bukkit.getPlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().getTempKitsUser(uuid).getKills()).append("&e]");
+                    else
+                        captains.append("&a").append(Bukkit.getPlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().getTempHCFUser(uuid).getKills()).append("&e]");
+                }
+                else
+                {
+                    if(Factions.getInstance().isKitmap())
+                        captains.append("&f").append(Bukkit.getOfflinePlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().getTempKitsUser(uuid).getKills()).append("&e]");
+                    else
+                    {
+                        if(API.getUserManager().getTempHCFUser(uuid).deathbanTime() > System.currentTimeMillis())
+                            captains.append("&c").append(Bukkit.getOfflinePlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().getTempHCFUser(uuid).getKills()).append("&e]");
+                        else
+                            captains.append("&f").append(Bukkit.getOfflinePlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().getTempHCFUser(uuid).getKills()).append("&e]");
+                    }
+                }
+            }
+
+            if (captains.toString().endsWith(","))
+            {
+                captains.append(captains.substring(0, captains.length() - 1));
+            }
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Captains: " + captains.toString()));
+        }
+
+        if(getMembers().size() > 0)
+        {
+            StringBuilder members = new StringBuilder();
+            for(UUID uuid : getMembers())
+            {
+                if(Bukkit.getPlayer(uuid) != null)
+                {
+                    if(Factions.getInstance().isKitmap())
+                        members.append("&a").append(Bukkit.getPlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().findKitmapByUniqueId(uuid).getKills()).append("&e]");
+                    else
+                        members.append("&a").append(Bukkit.getPlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().findHCFByUniqueId(uuid).getKills()).append("&e]");
+                }
+                else
+                {
+                    if(API.getUserManager().getTempHCFUser(uuid).deathbanTime() > System.currentTimeMillis())
+                        members.append("&c").append(Bukkit.getOfflinePlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().getTempHCFUser(uuid).getKills()).append("&e]");
+                    else
+                        members.append("&f").append(Bukkit.getOfflinePlayer(uuid).getName()).append("&e[&a").append(API.getUserManager().getTempHCFUser(uuid).getKills()).append("&e]");
+                }
+            }
+
+            if (members.toString().endsWith(","))
+            {
+                members.append(members.substring(0, members.length() - 1));
+            }
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Members: " + members.toString()));
+        }
+
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Balance: &9$" + balance));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Deaths Until Raidable: &a" + dtr));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&m----------------------------------------------------"));
     }
 
 
@@ -424,140 +376,7 @@ public class Faction
         return factionString.toString();
     }
 
-    public void loadFromString(String string)
-    {
-        final String[] split2 = string.split("\n");
-        for (final String line : split2)
-        {
-            final String identifier = line.substring(0, line.indexOf(58));
-            final String[] lineParts = line.substring(line.indexOf(58)).split(",");
-            if (identifier.equalsIgnoreCase("Leader"))
-            {
-                if (!lineParts[0].replace(":", "").equals("null"))
-                {
-                    String preUUID = lineParts[0].replace(":", "");
-                    if (!isUUID(preUUID))
-                        continue;
-
-                    UUID uuid = UUID.fromString(preUUID);
-
-                    this.setLeader(uuid);
-                    this.getAllMembers().add(uuid);
-                }
-            }
-            else if (identifier.equalsIgnoreCase("UUID"))
-                this.uuid = UUID.randomUUID();
-            else if (identifier.equalsIgnoreCase("Members"))
-            {
-                for (final String name : lineParts)
-                {
-                    if (name.length() >= 2 && !name.equalsIgnoreCase("null"))
-                    {
-                        String preUUID = name.replace(":", "");
-                        if (!isUUID(preUUID))
-                            continue;
-
-                        UUID uuid = UUID.fromString(preUUID);
-
-                        this.getAllMembers().add(uuid);
-                        this.getMembers().add(uuid);
-                    }
-                }
-            }
-            else if (identifier.equalsIgnoreCase("Captains"))
-            {
-                for (final String name : lineParts)
-                {
-                    if (name.length() >= 2 && !name.equalsIgnoreCase("null"))
-                    {
-                        String preUUID = name.replace(":", "");
-                        if (!isUUID(preUUID))
-                            continue;
-
-                        UUID uuid = UUID.fromString(preUUID);
-                        this.getCaptains().add(uuid);
-                        this.getAllMembers().add(uuid);
-                    }
-                }
-            }
-            else if (identifier.equalsIgnoreCase("Home"))
-            {
-                Location home = stringToLoc(lineParts[0].replace(":", ""));
-                this.setHome(home);
-            }
-            else if (identifier.equalsIgnoreCase("DTR"))
-            {
-                if (lineParts[0].replace(":", "").equalsIgnoreCase("null"))
-                {
-                    this.setDtr(0.0);
-                }
-                else
-                {
-                    this.setDtr(Double.valueOf(lineParts[0].replace(":", "")));
-                }
-
-            }
-            else if (identifier.equalsIgnoreCase("Balance"))
-            {
-                this.setBalance(Integer.valueOf(lineParts[0].replace(":", "")));
-            }
-            else if (identifier.equalsIgnoreCase("DeathCooldown"))
-            {
-                this.setDeathCooldown(Long.valueOf(lineParts[0].replace(":", "")));
-            }
-            else if (identifier.equalsIgnoreCase("RaidableCooldown"))
-            {
-                this.setRaidableCooldown(Long.valueOf(lineParts[0].replace(":", "")));
-            }
-            else if (identifier.equalsIgnoreCase("FriendlyName"))
-            {
-                this.setName(lineParts[0].replace(":", ""));
-            }
-            else if (identifier.equalsIgnoreCase("Claims"))
-            {
-                System.out.println(lineParts[0]);
-                for (String claim : lineParts)
-                {
-                    claim = claim.replace("[", "").replace("]", "");
-                    if (claim.contains(":"))
-                    {
-                        final String[] split = claim.split(":");
-                        if (split.length != 0)
-                        {
-                            int x1 = 0;
-                            int y1 = 0;
-                            int z1 = 0;
-                            int x2 = 0;
-                            int y2 = 0;
-                            int z2 = 0;
-                            try
-                            {
-                                x1 = Integer.parseInt(split[1].trim());
-                                y1 = Integer.parseInt(split[2].trim());
-                                z1 = Integer.parseInt(split[3].trim());
-                                x2 = Integer.parseInt(split[4].trim());
-                                y2 = Integer.parseInt(split[5].trim());
-                                z2 = Integer.parseInt(split[6].trim());
-                            }
-                            catch (NumberFormatException nfe)
-                            {
-                                System.out.println("Not a number.");
-                            }
-                            final String name2 = split[7].trim();
-                            final String world = split[8].trim();
-                            final Claim claimObj = new Claim(world, x1, y1, z1, x2, y2, z2);
-                            claimObj.setName(name2);
-                            this.getClaims().add(claimObj);
-                            Factions.getInstance().getLandBoard().setFactionAt(claimObj, this);
-                        }
-                    }
-                }
-            }
-        }
-        this.needsSave = false;
-    }
-
-    public String locToString(Location l)
+    private String locToString(Location l)
     {
         return new StringBuilder().append(l.getWorld().getName()).append("~")
                 .append(l.getX()).append("~")
@@ -565,48 +384,6 @@ public class Faction
                 .append(l.getZ()).append("~")
                 .append(l.getYaw()).append("~")
                 .append(l.getPitch()).toString();
-    }
-
-    public Location stringToLoc(String s)
-    {
-        try
-        {
-            String[] parts = s.split("~", 6);
-            if (parts.length != 6)
-            {
-                throw new IllegalArgumentException("Invalid location. It did not contain all the parts");
-            }
-            World w = Bukkit.getWorld(parts[0]);
-            double x = Double.parseDouble(parts[1]);
-            double y = Double.parseDouble(parts[2]);
-            double z = Double.parseDouble(parts[3]);
-            float yaw = Float.parseFloat(parts[4]);
-            float pitch = Float.parseFloat(parts[5]);
-            if (w == null)
-            {
-                throw new IllegalStateException("World cannot be null");
-            }
-            return new Location(w, x, y, z, yaw, pitch);
-        }
-        catch (Exception ex)
-        {
-            return null;
-        }
-    }
-
-    public Location parseLocation(final String[] args)
-    {
-        if (args.length != 6)
-        {
-            return null;
-        }
-        final World world = Bukkit.getWorld(args[0]);
-        final double x = Double.parseDouble(args[1]);
-        final double y = Double.parseDouble(args[2]);
-        final double z = Double.parseDouble(args[3]);
-        final float yaw = Float.parseFloat(args[4]);
-        final float pitch = Float.parseFloat(args[5]);
-        return new Location(world, x, y, z, yaw, pitch);
     }
 
     public Location getHome()
@@ -691,11 +468,9 @@ public class Faction
         }
     }
 
-    private boolean isUUID(String uuid)
+    public void setClaim(Claim claim)
     {
-        if (uuid.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"))
-            return true;
-
-        return false;
+        this.claim = claim;
     }
+
 }

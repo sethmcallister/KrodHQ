@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.user.hcf.HCFUser;
+import xyz.sethy.api.framework.user.kitmap.KitmapUser;
 import xyz.sethy.api.framework.user.sg.SGUser;
 import xyz.sethy.hub.Hub;
 import xyz.sethy.hub.server.Server;
@@ -44,7 +45,7 @@ public class ClockItems
 
         this.kitmap = new ItemStack(373, 1, (byte) 37);
         ItemMeta k = this.kitmap.getItemMeta();
-        k.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3Click to join our &7Kits3 server."));
+        k.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3Click to join our &7Kits&3 server."));
         this.kitmap.setItemMeta(k);
 
         this.soup = new ItemStack(Material.GOLDEN_APPLE, 1);
@@ -62,8 +63,25 @@ public class ClockItems
         lore.add("§7§m-----------------------");
         lore.add("§310§7 man factions.");
         lore.add("§3No§7 allies.");
-        lore.add("§7Protection 1, Sharpness 1.");
+        lore.add("§7Protection 1, Sharpness 2.");
         lore.add("§7§m-----------------------");
+        KitmapUser kitmapUser = API.getUserManager().getTempKitsUser(player.getUniqueId());
+        lore.add("§3Your Stats§7:");
+        if(kitmapUser == null)
+        {
+            lore.add(" §3Kills§7:§f " + 0);
+            lore.add(" §3Deaths§7:§f " + 0);
+            lore.add(" §3Current Kill Streak§7:§f " + 0);
+        }
+        else
+        {
+            lore.add(" §3Kills§7:§f " + kitmapUser.getKills());
+            lore.add(" §3Deaths§7:§f " + kitmapUser.getDeaths());
+            lore.add(" §3Current Kill Streak§7:§f " + kitmapUser.getCurrentKillStreak());
+        }
+
+        lore.add("§7§m-----------------------");
+        lore.add("§3" + Hub.getInstance().getPlayerQueue().getQueueSize(Server.KITMAP) + "§7 players are currently queueing.");
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
@@ -71,25 +89,33 @@ public class ClockItems
 
     public ItemStack getHcf(Player player)
     {
-
-        HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(player.getUniqueId());
-
         ItemStack itemStack = hcf.clone();
         ItemMeta itemMeta = itemStack.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§7§m-----------------------");
         lore.add("§310§7 man factions.");
         lore.add("§3No§7 allies.");
-        lore.add("§7Protection 1, Sharpness 1.");
+        lore.add("§7Protection 1, Sharpness 2.");
         lore.add("§7§m-----------------------");
-        if (hcfUser.deathbanTime() > System.currentTimeMillis())
+        HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(player.getUniqueId());
+        lore.add("§3Your Stats§7:");
+        if(hcfUser == null)
         {
-            lore.add("§cYou are currently death-banned.");
-            lore.add("§cYou can rejoin the server by using one of your §6" + hcfUser.getLives() + "§c lives.");
+            lore.add(" §3Kills§7:§f " + 0);
+            lore.add(" §3Deaths§7:§f " + 0);
+            lore.add("");
         }
-        lore.add("§cKills§7:§f " + hcfUser.getKills());
-        lore.add("§cDeaths§7:§f " + hcfUser.getDeaths());
-        lore.add("");
+        else
+        {
+            if (hcfUser.deathbanTime() > System.currentTimeMillis())
+            {
+                lore.add("§cYou are currently death-banned.");
+                lore.add("§cYou can rejoin the server by using one of your §6" + hcfUser.getLives() + "§c lives.");
+            }
+            lore.add("§cKills§7:§f " + hcfUser.getKills());
+            lore.add("§cDeaths§7:§f " + hcfUser.getDeaths());
+        }
+        lore.add("§7§m-----------------------");
         lore.add("§3" + Hub.getInstance().getPlayerQueue().getQueueSize(Server.HCF) + "§7 players are currently queueing.");
         lore.add("§7§m-----------------------");
         itemMeta.setLore(lore);

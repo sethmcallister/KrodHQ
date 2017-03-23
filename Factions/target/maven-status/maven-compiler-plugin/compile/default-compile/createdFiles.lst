@@ -21,11 +21,11 @@ xyz\sethy\factions\scoreboard\ScorebordTicker.class
 xyz\sethy\factions\commands\faction\FactionCreateCommand.class
 xyz\sethy\factions\timers\TimerHandler.class
 xyz\sethy\factions\commands\faction\staff\FactionForceLeaveCommand.class
-xyz\sethy\factions\combatlog\CombatEntryListener$1.class
 xyz\sethy\factions\dto\claim\Claim$CuboidDirection.class
 xyz\sethy\factions\listeners\WeatherListener.class
 xyz\sethy\factions\tasks\TabUpdaterTask.class
 xyz\sethy\factions\commands\faction\staff\FactionSetDTRBitmaskCommand.class
+xyz\sethy\factions\commands\essentials\core\admin\SpawnCommand.class
 xyz\sethy\factions\dto\region\RegionType.class
 xyz\sethy\factions\listeners\PlayerDeathEventListener.class
 xyz\sethy\factions\commands\faction\FactionLeaderCommand.class
@@ -33,7 +33,6 @@ xyz\sethy\factions\dto\claim\Claim$BorderDirection.class
 xyz\sethy\factions\listeners\crate\StarterKeyListener.class
 xyz\sethy\factions\commands\essentials\core\admin\GiveAllMoneyCommand.class
 xyz\sethy\factions\dto\claim\Claim$1.class
-xyz\sethy\factions\combatlog\CombatEntryListener$2.class
 xyz\sethy\factions\commands\essentials\core\RedeemCommand.class
 xyz\sethy\factions\dto\region\RegionMoveHandler.class
 xyz\sethy\factions\listeners\crate\KrodKeyListener.class
@@ -42,6 +41,7 @@ xyz\sethy\factions\handlers\classes\ClassType.class
 xyz\sethy\factions\tasks\BroadcastMessageTask.class
 xyz\sethy\factions\commands\faction\staff\FactionCreateKoTHCommand.class
 xyz\sethy\factions\commands\faction\FactionListCommand$sizeComparator.class
+xyz\sethy\factions\managers\adaptrs\LocationAdaptor.class
 xyz\sethy\factions\dto\claim\Coordinate.class
 xyz\sethy\factions\handlers\dtr\DTRType.class
 xyz\sethy\factions\listeners\BuySignListener.class
@@ -59,7 +59,6 @@ xyz\sethy\factions\commands\faction\FactionHomeCommand.class
 xyz\sethy\factions\commands\faction\FactionListCommand.class
 xyz\sethy\factions\support\wg\WorldGuardRegionSupport.class
 xyz\sethy\factions\listeners\SpawnListener.class
-xyz\sethy\factions\combatlog\CombatEntryListener.class
 xyz\sethy\factions\tasks\KrodBroadcastTask.class
 xyz\sethy\factions\managers\CrateManager.class
 xyz\sethy\factions\listeners\ASyncChatEventListener.class
@@ -97,6 +96,7 @@ xyz\sethy\factions\commands\essentials\core\CoordsCommand.class
 xyz\sethy\factions\handlers\ItemHandler.class
 xyz\sethy\factions\listeners\CombatListener.class
 xyz\sethy\factions\commands\faction\FactionFocusCommand.class
+xyz\sethy\factions\commands\essentials\core\LogoutCommand$1.class
 xyz\sethy\factions\commands\faction\FactionJoinCommand.class
 xyz\sethy\factions\commands\faction\FactionInviteCommand.class
 xyz\sethy\factions\scoreboard\FScoreboard$ScoreboardText.class
@@ -118,7 +118,6 @@ xyz\sethy\factions\managers\FactionManager.class
 xyz\sethy\factions\commands\faction\FactionDepositCommand.class
 xyz\sethy\factions\commands\faction\FactionSetHomeCommand.class
 xyz\sethy\factions\listeners\UserLogoutListener.class
-xyz\sethy\factions\listeners\fixes\CombatWallFix.class
 xyz\sethy\factions\timers\Timer.class
 xyz\sethy\factions\commands\faction\staff\FactionForceClaimCommand.class
 xyz\sethy\factions\listeners\PlayerInteractListener.class

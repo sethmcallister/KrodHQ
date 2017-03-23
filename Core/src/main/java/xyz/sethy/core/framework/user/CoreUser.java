@@ -133,48 +133,6 @@ public class CoreUser implements User
         this.needsSave = false;
     }
 
-    @Deprecated
-    public void loadFromString(String string)
-    {
-        if (string == null)
-            return;
-
-        final String[] strings = string.split("\n");
-        for (String line : strings)
-        {
-            final String identifier = line.substring(0, line.indexOf(58));
-            final String[] lineParts = line.substring(line.indexOf(58)).split(",");
-            if (identifier.equalsIgnoreCase("UUID"))
-                this.uuid = UUID.fromString(lineParts[0].replace(":", ""));
-            else if (identifier.equalsIgnoreCase("Name"))
-                this.name = lineParts[0].replace(":", "");
-            else if (identifier.equalsIgnoreCase("IP"))
-                this.lastIP = lineParts[0].replace(":", "");
-            else if (identifier.equalsIgnoreCase("LastServer"))
-                this.lastServer = lineParts[0].replace(":", "");
-            else if (identifier.equalsIgnoreCase("Group"))
-                this.group = Group.valueOf(lineParts[0].replace(":", ""));
-            else if (identifier.equalsIgnoreCase("EXP"))
-                this.setEXP(Double.valueOf(lineParts[0].replace(":", "")));
-            else if (identifier.equalsIgnoreCase("Sounds"))
-                this.setPMSounds(Boolean.valueOf(lineParts[0].replace(":", "")));
-        }
-    }
-
-    @Deprecated
-    public String saveToString()
-    {
-        StringBuilder string = new StringBuilder();
-        string.append("UUID:").append(this.getUniqueId().toString()).append("\n");
-        string.append("Name:").append(this.getName()).append("\n");
-        string.append("IP:").append(this.getLastIP()).append("\n");
-        string.append("LastServer:").append(this.getLastIP()).append("\n");
-        string.append("Group:").append(this.getGroup().toString().toUpperCase()).append("\n");
-        string.append("EXP:").append(this.getEXP()).append("\n");
-        string.append("Sounds:").append(this.hasPMSounds()).append("\n");
-        return string.toString();
-    }
-
     public SGUser getSGUser()
     {
         return coreSGUser;

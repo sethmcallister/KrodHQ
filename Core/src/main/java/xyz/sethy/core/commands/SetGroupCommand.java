@@ -54,7 +54,7 @@ public class SetGroupCommand implements CommandExecutor
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
             if(offlinePlayer != null)
             {
-                User user = API.getUserManager().findByUniqueId(offlinePlayer.getUniqueId());
+                User user = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
                 Group group = Group.getByName(args[1].toUpperCase());
 
                 if (group == null)
@@ -80,6 +80,7 @@ public class SetGroupCommand implements CommandExecutor
                 }
 
                 user.setGroup(group);
+                user.forceSave();
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have set &3" + offlinePlayer.getName() + "&7's rank to &3" + group.getScoreboard() + "&7."));
                 return;
             }

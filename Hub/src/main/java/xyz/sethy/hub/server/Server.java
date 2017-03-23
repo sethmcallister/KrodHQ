@@ -5,10 +5,10 @@ package xyz.sethy.hub.server;
  */
 public enum Server
 {
-    HCF("&3Hardcore Factions", "hcf", "&3HCFactions"),
+    HCF("&3Hardcore Factions", "hcf", "&3HCF"),
     SG("&7Survival Games Lobby", "sglobby", "&7SG Lobby"),
     PRACTICE("&bPractice", "practice", "&bPractice"),
-    KITMAP("&3Kit Map", "kitmap", "&3Kit Map");
+    KITMAP("&3Kit Map", "kitmap", "&3Kits");
 
     private String displayName;
     private String bungeeName;

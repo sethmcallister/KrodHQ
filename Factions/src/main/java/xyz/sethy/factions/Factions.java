@@ -2,7 +2,6 @@ package xyz.sethy.factions;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import xyz.sethy.factions.combatlog.CombatEntryListener;
 import xyz.sethy.factions.combatlog.CombatLoggerManager;
 import xyz.sethy.factions.commands.essentials.core.*;
 import xyz.sethy.factions.commands.essentials.core.admin.*;
@@ -23,7 +22,6 @@ import xyz.sethy.factions.listeners.crate.CrateKeyPlaceListener;
 import xyz.sethy.factions.listeners.crate.ElaphKeyListener;
 import xyz.sethy.factions.listeners.crate.KrodKeyListener;
 import xyz.sethy.factions.listeners.crate.StarterKeyListener;
-import xyz.sethy.factions.listeners.fixes.CombatWallFix;
 import xyz.sethy.factions.managers.CrateManager;
 import xyz.sethy.factions.managers.DeathbanManager;
 import xyz.sethy.factions.managers.EnchantmentManager;
@@ -145,8 +143,6 @@ public class Factions
         new FastTileListener();
         new WorldSwitchListener();
         new BuySignListener();
-        new CombatEntryListener();
-        new CombatWallFix();
         new WeatherListener();
         new UserLogoutListener();
         new UserLoggedInListener();
@@ -211,6 +207,8 @@ public class Factions
         new CrateCommand();
         new RedeemCommand();
         new GiveAllMoneyCommand();
+        new SpawnCommand();
+        new LogoutCommand();
     }
 
     public LandBoard getLandBoard()

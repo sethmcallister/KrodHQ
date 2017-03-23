@@ -9,7 +9,7 @@ import xyz.sethy.factions.handlers.commands.ICommand;
 
 import java.util.Comparator;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,7 +20,7 @@ public class FactionListCommand implements ICommand
     @Override
     public void onCommand(Player sender, Command command, String label, String[] args)
     {
-        TreeSet<Faction> factions = new TreeSet<>(new sizeComparator());
+        PriorityQueue<Faction> factions = new PriorityQueue<>(new sizeComparator());
 
         for (Faction faction : Factions.getInstance().getFactionManager().getFactions())
         {
@@ -71,7 +71,8 @@ public class FactionListCommand implements ICommand
             return;
         }
 
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3&m------&7[&aOnline Faction List " + page + "/" + maxPages + "&7]&3&m------"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&m----------------------------------------------------"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Faction List&7 (Page #" + page + "/" + maxPages + ")"));
         for (final Map.Entry<Faction, Integer> factionEntry : factionMap.entrySet())
         {
             if (index++ < start)
@@ -80,14 +81,18 @@ public class FactionListCommand implements ICommand
                 break;
 
             StringBuilder message = new StringBuilder();
+            message.append(" &7" + index + ". ");
             message.append(factionEntry.getKey().getName(sender))
-                    .append(" &7")
+                    .append(" &7[")
                     .append(factionEntry.getKey().getOnlineMembers().size())
                     .append("/")
                     .append(factionEntry.getKey().getAllMembers().size())
-                    .append(" online");
+                    .append("]");
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.toString()));
         }
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You are currently on &fPage #" + page + "/" + maxPages + "&7."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7To view other pages, use &3/f list <page#>"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&m----------------------------------------------------"));
     }
 
     class sizeComparator implements Comparator<Faction>
@@ -97,8 +102,12 @@ public class FactionListCommand implements ICommand
         {
             if (o1.getOnlineMembers().size() < o2.getOnlineMembers().size())
                 return -1;
-            else
+            if (o1.getOnlineMembers().size() > o2.getOnlineMembers().size())
                 return 1;
+            if (o1.getOnlineMembers().size() == o2.getOnlineMembers().size())
+                return 0;
+
+            return -1;
         }
     }
 }

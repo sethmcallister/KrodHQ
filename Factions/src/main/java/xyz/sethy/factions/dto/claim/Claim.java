@@ -44,6 +44,9 @@ public class Claim implements Iterable<Coordinate>
 
     public static int getPrice(final Claim claim, final Faction faction, final boolean buying)
     {
+        if(claim == null)
+            return 0;
+
         final int x = Math.abs(claim.x1 - claim.x2);
         final int z = Math.abs(claim.z1 - claim.z2);
         int blocks = x * z;
@@ -64,7 +67,7 @@ public class Claim implements Iterable<Coordinate>
         curPrice /= 2.0;
         if (buying && faction != null)
         {
-            curPrice += 500 * faction.getClaims().size();
+            curPrice += 500;
         }
         return (int) curPrice / 6;
     }
@@ -399,6 +402,5 @@ public class Claim implements Iterable<Coordinate>
         Horizontal,
         Vertical,
         Both,
-        Unknown;
     }
 }

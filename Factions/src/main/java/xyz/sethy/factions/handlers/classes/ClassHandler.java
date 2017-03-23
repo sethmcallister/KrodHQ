@@ -74,6 +74,18 @@ public class ClassHandler extends BukkitRunnable implements Listener
         {
             if (inventory.getHelmet().getType().equals(Material.IRON_HELMET) && inventory.getChestplate().getType().equals(Material.IRON_CHESTPLATE) && inventory.getLeggings().getType().equals(Material.IRON_LEGGINGS) && inventory.getBoots().getType().equals(Material.IRON_BOOTS))
             {
+                if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.BARD))
+                {
+                    removeEffects(player, ClassType.BARD);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Bard class: &4Disabled"));
+                }
+                else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.ARCHER))
+                {
+                    removeEffects(player, ClassType.ARCHER);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Archer class: &4Disabled"));
+                }
 
                 if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.MINER))
                     return;
@@ -93,6 +105,19 @@ public class ClassHandler extends BukkitRunnable implements Listener
             }
             else if (inventory.getHelmet().getType().equals(Material.LEATHER_HELMET) && inventory.getChestplate().getType().equals(Material.LEATHER_CHESTPLATE) && inventory.getLeggings().getType().equals(Material.LEATHER_LEGGINGS) && inventory.getBoots().getType().equals(Material.LEATHER_BOOTS))
             {
+                if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.BARD))
+                {
+                    removeEffects(player, ClassType.BARD);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Bard class: &4Disabled"));
+                }
+                else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.MINER))
+                {
+                    removeEffects(player, ClassType.MINER);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Miner class: &4Disabled"));
+                }
+
                 if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.ARCHER))
                     return;
 
@@ -108,8 +133,42 @@ public class ClassHandler extends BukkitRunnable implements Listener
                     }
                 }.runTaskLater(API.getPlugin(), 10 * 20L);
             }
+            else if (inventory.getHelmet().getType().equals(Material.DIAMOND_HELMET) && inventory.getChestplate().getType().equals(Material.DIAMOND_CHESTPLATE) && inventory.getLeggings().getType().equals(Material.DIAMOND_LEGGINGS) && inventory.getBoots().getType().equals(Material.DIAMOND_BOOTS))
+            {
+                if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.ARCHER))
+                {
+                    removeEffects(player, ClassType.ARCHER);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Archer class: &4Disabled"));
+                }
+                else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.MINER))
+                {
+                    removeEffects(player, ClassType.MINER);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Miner class: &4Disabled"));
+                }
+            }
             else if (inventory.getHelmet().getType().equals(Material.GOLD_HELMET) && inventory.getChestplate().getType().equals(Material.GOLD_CHESTPLATE) && inventory.getLeggings().getType().equals(Material.GOLD_LEGGINGS) && inventory.getBoots().getType().equals(Material.GOLD_BOOTS))
             {
+                if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.BARD))
+                {
+                    removeEffects(player, ClassType.BARD);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Bard class: &4Disabled"));
+                }
+                else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.ARCHER))
+                {
+                    removeEffects(player, ClassType.ARCHER);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Archer class: &4Disabled"));
+                }
+                else if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.MINER))
+                {
+                    removeEffects(player, ClassType.MINER);
+                    this.classes.remove(player);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Miner class: &4Disabled"));
+                }
+
                 if (this.classes.containsKey(player) && this.classes.get(player).equals(ClassType.BARD))
                 {
                     ItemStack hand = player.getItemInHand();
@@ -410,16 +469,15 @@ public class ClassHandler extends BukkitRunnable implements Listener
         if(Factions.getInstance().getTimerHandler().hasTimer(damaged, TimerType.ARCHER_TAG))
         {
             final ArcherTag archerTag = (ArcherTag) Factions.getInstance().getTimerHandler().getTimer(damaged, TimerType.ARCHER_TAG);
-            archerTag.setTime(30000L  + System.currentTimeMillis());
-            damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been archer tagged for &330 seconds&7."));
-            damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You will take an additional&3 25%&7 damage."));
+            archerTag.setTime(30000  + System.currentTimeMillis());
+            damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&lMarked! &eAn archer has shot you and marked you (+25% damage) for 10 seconds"));
             damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have archer tagged &3" + damaged.getName() + "&7 for &330 seconds&7."));
             return;
         }
 
-        final ArcherTag archerTag = new ArcherTag(TimerType.ARCHER_TAG, 30000L  + System.currentTimeMillis(), damaged, 1);
-        damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been archer tagged for &330 seconds&7."));
-        damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You will take an additional&3 25%&7 damage."));
+        final ArcherTag archerTag = (ArcherTag) Factions.getInstance().getTimerHandler().getTimer(damaged, TimerType.ARCHER_TAG);
+        archerTag.setTime(30000  + System.currentTimeMillis());
+        damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&lMarked! &eAn archer has shot you and marked you (+25% damage) for 10 seconds"));
         damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have archer tagged &3" + damaged.getName() + "&7 for &330 seconds&7."));
         Factions.getInstance().getTimerHandler().addTimer(damaged, archerTag);
     }

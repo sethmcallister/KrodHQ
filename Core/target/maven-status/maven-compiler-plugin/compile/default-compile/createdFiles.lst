@@ -10,7 +10,9 @@ xyz\sethy\core\framework\mute\MuteManager.class
 xyz\sethy\core\commands\DeleteUserCommand.class
 xyz\sethy\core\commands\UnmuteCommand.class
 xyz\sethy\core\commands\MuteCommand.class
+xyz\sethy\core\commands\CheckBanCommand.class
 xyz\sethy\core\framework\Framework.class
+xyz\sethy\core\commands\SetMOTDCommand.class
 xyz\sethy\core\listeners\AsyncPlayerPreLoginListener.class
 xyz\sethy\core\commands\BanCommand.class
 xyz\sethy\core\framework\user\kitmap\CoreKitmapUser.class

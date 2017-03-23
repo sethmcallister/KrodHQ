@@ -1,6 +1,7 @@
 package xyz.sethy.factions.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,9 +38,7 @@ public class CombatListener implements Listener
     public void onCombat(EntityDamageByEntityEvent event)
     {
         if(Factions.getInstance().getTimerHandler().isSotw())
-        {
             return;
-        }
 
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player)
         {
@@ -62,6 +61,7 @@ public class CombatListener implements Listener
             {
                 event.setDamage(0);
                 event.setCancelled(true);
+                event.getDamager().sendMessage(ChatColor.translateAlternateColorCodes('&', "&eYou cannot hurt &2" + event.getEntity().getName()) + "&e.");
                 return;
             }
 
@@ -76,14 +76,20 @@ public class CombatListener implements Listener
                 Timer toremove = Factions.getInstance().getTimerHandler().getTimer(damaged, TimerType.COMBAT_TAG);
                 Factions.getInstance().getTimerHandler().getPlayerTimers(damaged).remove(toremove);
             }
+            else
+                damaged.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eYou have been spawn-tagged for &c30&e seconds."));
 
             if (Factions.getInstance().getTimerHandler().hasTimer(damager, TimerType.COMBAT_TAG))
             {
                 Timer toremove = Factions.getInstance().getTimerHandler().getTimer(damager, TimerType.COMBAT_TAG);
                 Factions.getInstance().getTimerHandler().getPlayerTimers(damager).remove(toremove);
             }
+            else
+                damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eYou have been spawn-tagged for &c30&e seconds."));
 
-            Factions.getInstance().getTimerHandler().getPlayerTimers(damaged).add(new DefaultTimer(TimerType.COMBAT_TAG, 30000 + System.currentTimeMillis(), damaged));
+            if(!Factions.getInstance().getCombatLoggerManager().getNpcRegistry().isNPC(damaged))
+                Factions.getInstance().getTimerHandler().getPlayerTimers(damaged).add(new DefaultTimer(TimerType.COMBAT_TAG, 30000 + System.currentTimeMillis(), damaged));
+
             Factions.getInstance().getTimerHandler().getPlayerTimers(damager).add(new DefaultTimer(TimerType.COMBAT_TAG, 30000 + System.currentTimeMillis(), damager));
         }
     }

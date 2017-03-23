@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.sethy.api.API;
-import xyz.sethy.api.framework.user.User;
+import xyz.sethy.api.framework.user.hcf.HCFUser;
 
 /**
  * Created by Seth on 08/03/2017.
@@ -33,14 +33,14 @@ public class AddLivesCommand implements CommandExecutor
         if (target == null)
         {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
-            User user1 = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
-            user1.getHCFUser().setLives(user1.getHCFUser().getLives() + amount);
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have sent &c" + user1.getName() + " " + amount + "&7 lives."));
+            HCFUser user = API.getUserManager().findHCFByUniqueId(offlinePlayer.getUniqueId());
+            user.setLives(user.getLives() + amount);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have sent &c" + offlinePlayer.getName() + " " + amount + "&7 lives."));
             return true;
         }
-        User user1 = API.getUserManager().findByUniqueId(target.getUniqueId());
-        user1.getHCFUser().setLives(user1.getHCFUser().getLives() + amount);
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have sent &c" + user1.getName() + " " + amount + "&7 lives."));
+        HCFUser user = API.getUserManager().findHCFByUniqueId(target.getUniqueId());
+        user.setLives(user.getLives() + amount);
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have sent &c" + target.getName() + " " + amount + "&7 lives."));
         return true;
     }
 }

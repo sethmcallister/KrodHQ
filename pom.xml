@@ -20,6 +20,7 @@
         <module>Factions</module>
         <module>Essentials</module>
         <module>Guard</module>
+        <module>Bungee</module>
     </modules>
 
     <repositories>
@@ -34,6 +35,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.8-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>

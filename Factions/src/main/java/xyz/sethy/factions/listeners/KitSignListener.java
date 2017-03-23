@@ -52,6 +52,11 @@ public class KitSignListener implements Listener
                 event.setLine(1, ChatColor.translateAlternateColorCodes('&', "&3Click for kit"));
                 event.setLine(2, ChatColor.translateAlternateColorCodes('&', "&4Archer"));
             }
+            if (event.getLine(2).equalsIgnoreCase("bard"))
+            {
+                event.setLine(1, ChatColor.translateAlternateColorCodes('&', "&3Click for kit"));
+                event.setLine(2, ChatColor.translateAlternateColorCodes('&', "&6Bard"));
+            }
         }
     }
 
@@ -116,6 +121,70 @@ public class KitSignListener implements Listener
                     player.getInventory().setItem(9, speed);
                     player.getInventory().setItem(18, speed);
                     player.getInventory().setItem(27, speed);
+                    player.getInventory().setItem(8, new ItemStack(Material.GOLDEN_CARROT, 64));
+                    for (int i = 0; i < player.getInventory().getSize(); ++i)
+                    {
+                        if (player.getInventory().getItem(i) != null)
+                            continue;
+
+                        player.getInventory().addItem(potion.toItemStack(1));
+                    }
+                    player.updateInventory();
+                    this.cooldowns.put(player, 15000L + System.currentTimeMillis());
+                }
+                else if (sign.getLine(2).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', "&6Bard")))
+                {
+                    Player player = event.getPlayer();
+                    if (this.cooldowns.containsKey(player) && this.cooldowns.get(player) > System.currentTimeMillis())
+                    {
+                        long millisLeft = this.cooldowns.get(player) - System.currentTimeMillis();
+                        double value = millisLeft / 1000.0D;
+                        double sec = Math.round(10.0D * value) / 10.0D;
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You cannot choose another kit for &l" + sec + " seconds&7."));
+                        return;
+                    }
+                    player.getInventory().clear();
+                    ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+                    sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+
+                    ItemStack helm = new ItemStack(Material.GOLD_HELMET);
+                    helm.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                    helm.addEnchantment(Enchantment.DURABILITY, 3);
+
+                    ItemStack chestplate = new ItemStack(Material.GOLD_CHESTPLATE);
+                    chestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                    chestplate.addEnchantment(Enchantment.DURABILITY, 3);
+
+                    ItemStack leggings = new ItemStack(Material.GOLD_LEGGINGS);
+                    leggings.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                    leggings.addEnchantment(Enchantment.DURABILITY, 3);
+
+                    ItemStack boots = new ItemStack(Material.GOLD_BOOTS);
+                    boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                    boots.addEnchantment(Enchantment.PROTECTION_FALL, 4);
+                    boots.addEnchantment(Enchantment.DURABILITY, 3);
+
+                    player.getInventory().setItem(0, sword);
+                    player.getInventory().setHelmet(helm);
+                    player.getInventory().setChestplate(chestplate);
+                    player.getInventory().setLeggings(leggings);
+                    player.getInventory().setBoots(boots);
+                    player.getInventory().setItem(1, new ItemStack(Material.ENDER_PEARL, 16));
+                    Potion potion = new Potion(PotionType.INSTANT_HEAL);
+                    potion.setSplash(true);
+                    potion.setLevel(2);
+                    ItemStack speed = new ItemStack(Material.SUGAR, 16);
+                    player.getInventory().setItem(2, speed);
+
+                    ItemStack blazePowder = new ItemStack(Material.BLAZE_POWDER, 1);
+                    player.getInventory().setItem(3, blazePowder);
+
+                    ItemStack ironIngot = new ItemStack(Material.IRON_INGOT, 1);
+                    player.getInventory().setItem(4, ironIngot);
+
+                    ItemStack feather = new ItemStack(Material.FEATHER, 16);
+                    player.getInventory().setItem(5, feather);
+
                     player.getInventory().setItem(8, new ItemStack(Material.GOLDEN_CARROT, 64));
                     for (int i = 0; i < player.getInventory().getSize(); ++i)
                     {

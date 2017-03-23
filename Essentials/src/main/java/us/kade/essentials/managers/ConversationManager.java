@@ -34,8 +34,8 @@ public class ConversationManager
         this.conversations.put(player, target);
         this.conversations.put(target, player);
 
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&d(To &r" + receiver.getGroup().getName() + target.getName() + "&d) ") + message);
-        target.sendMessage(ChatColor.translateAlternateColorCodes('&', "&d(From &r" + user.getGroup().getName() + player.getName() + "&d) ") + message);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7(To &r" + receiver.getGroup().getName() + target.getName() + "&7) ") + message);
+        target.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7(From &r" + user.getGroup().getName() + player.getName() + "&7) ") + message);
         if (receiver.hasPMSounds())
             target.playSound(target.getLocation(), Sound.ORB_PICKUP, 10F, 10F);
     }

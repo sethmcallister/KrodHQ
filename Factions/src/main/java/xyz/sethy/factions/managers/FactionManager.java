@@ -15,6 +15,7 @@ import xyz.sethy.api.framework.group.Group;
 import xyz.sethy.api.framework.user.User;
 import xyz.sethy.factions.Factions;
 import xyz.sethy.factions.dto.Faction;
+import xyz.sethy.factions.dto.claim.Claim;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,13 +31,13 @@ public class FactionManager implements Listener
     private LinkedList<Faction> factions;
     private final RedisClient redisClient = new RedisClient("localhost");
     private final String factionKey = Factions.getInstance().isKitmap() ? "network.kitmap." : "network.factions.";
+    private final String claimKey = Factions.getInstance().isKitmap() ? "network.claims.kitmap." : "network.claims.factions.";
     private final Gson gson = new Gson();
 
     public FactionManager()
     {
         this.factions = new LinkedList<>();
         Bukkit.getServer().getPluginManager().registerEvents(this, Factions.getInstance().getPlugin());
-
         this.loadFactions();
 
         Bukkit.getScheduler().scheduleAsyncRepeatingTask(Factions.getInstance().getPlugin(), new Runnable()
@@ -54,10 +55,14 @@ public class FactionManager implements Listener
                         if (faction.needsSave())
                         {
                             String factionJson = gson.toJson(faction);
+                            String claimJson = gson.toJson(faction.getClaims());
 
                             Future future = connection.set(factionKey + faction.getName().toLowerCase(), factionJson);
-                            connection.awaitAll(future);
-                            System.out.println("Saved faction: " + faction.getName());
+                            Future claimFuture = connection.set(claimKey + faction.getName().toLowerCase(), claimJson);
+
+                            connection.awaitAll(future, claimFuture);
+                            System.out.println(faction.getName() + "---->>>" + factionJson);
+                            System.out.println("faction claim ---->>>" + claimJson);
                             faction.setNeedsSave(false);
                             i++;
                         }
@@ -92,12 +97,20 @@ public class FactionManager implements Listener
                 Future<String> factionJson = connection.get(key);
                 connection.awaitAll(factionJson);
 
-                if(factionJson.get().equalsIgnoreCase("null"))
-                    return;
-
                 final Faction faction = gson.fromJson(factionJson.get(), Faction.class);
-                faction.getOnlineMembers().clear();
-                factions.add(faction);
+                if(faction != null)
+                {
+                    faction.getOnlineMembers().clear();
+                    factions.add(faction);
+                    System.out.println(faction.getName() + " loaded ---->>>" + factionJson.get());
+
+                    Future<String> claimJson = connection.get(claimKey + faction.getName().toLowerCase());
+                    connection.awaitAll(claimJson);
+                    final Claim claim = gson.fromJson(claimJson.get(), Claim.class);
+                    faction.setClaim(claim);
+                    Factions.getInstance().getLandBoard().setFactionAt(claim, faction);
+                    System.out.println(faction.getName() + " loaded claim ---->>>" + claimJson.get());
+                }
             }
         }
         catch (InterruptedException | ExecutionException e)
@@ -109,14 +122,20 @@ public class FactionManager implements Listener
 
     public void saveFactions()
     {
-        System.out.println("1");
         RedisAsyncConnection<String, String> connection = redisClient.connectAsync();
         for (Faction faction : factions)
         {
             String factionJson = gson.toJson(faction);
+            String claimJson = gson.toJson(faction.getClaims());
+
             Future future = connection.set(factionKey + faction.getName().toLowerCase(), factionJson);
-            connection.awaitAll(future);
+            Future claimFuture = connection.set(claimKey + faction.getName().toLowerCase(), claimJson);
+
+            connection.awaitAll(future, claimFuture);
+            System.out.println(faction.getName() + "---->>>" + factionJson);
+            System.out.println("faction claim ---->>>" + claimJson);
             System.out.println("Saved faction: " + faction.getName());
+            faction.setNeedsSave(false);
         }
         connection.close();
     }
@@ -179,7 +198,8 @@ public class FactionManager implements Listener
     public void removeFaction(Faction faction)
     {
         RedisAsyncConnection<String, String> connection = redisClient.connectAsync();
-        connection.awaitAll(connection.set(factionKey + faction.getName(), null));
+        connection.awaitAll(connection.set(factionKey + faction.getName().toLowerCase(), "null"));
+        connection.awaitAll(connection.set(claimKey + faction.getName().toLowerCase(), "null"));
         connection.close();
 
         this.factions.remove(faction);
@@ -188,7 +208,7 @@ public class FactionManager implements Listener
         faction.getMembers().clear();
         faction.getOnlineMembers().clear();
         faction.getCaptains().clear();
-        faction.getClaims().clear();
+        faction.setClaim(null);
     }
 
     @EventHandler
@@ -200,7 +220,7 @@ public class FactionManager implements Listener
             faction.getOnlineMembers().remove(event.getPlayer().getUniqueId());
             for (UUID uuid : faction.getOnlineMembers())
             {
-                Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Member offline: &c" + event.getPlayer().getName()));
+                Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&cMember Offline: &f" + event.getPlayer().getName()));
             }
         }
     }
@@ -214,7 +234,7 @@ public class FactionManager implements Listener
             faction.getOnlineMembers().add(event.getPlayer().getUniqueId());
             for (UUID uuid : faction.getOnlineMembers())
             {
-                Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Member online: &a" + event.getPlayer().getName()));
+                Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&aMember Online: &f" + event.getPlayer().getName()));
             }
             faction.getInformation(event.getPlayer());
         }

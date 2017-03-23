@@ -106,10 +106,10 @@ public class ClaimListener implements Listener
                 return;
             }
 
-            if(to.getData().hasDTRBitmask(DTRType.SAFEZONE))
+            if(to.getData() != null && to.getData().hasDTRBitmask(DTRType.SAFEZONE))
             {
                 Timer timer = timerHandler.getTimer(event.getPlayer(), TimerType.COMBAT_TAG);
-                if(timer.getTime() > 0)
+                if(timer != null && timer.getTime() > 0)
                 {
                     event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You cannot enter spawn while combat tagged."));
                     event.setTo(event.getFrom());
@@ -133,8 +133,8 @@ public class ClaimListener implements Listener
             boolean fromDeathban = from.getData() != null && from.getData().hasDTRBitmask(DTRType.SAFEZONE);
             boolean toDeathban = to.getData() != null && to.getData().hasDTRBitmask(DTRType.SAFEZONE);
 
-            final String fromString = ChatColor.translateAlternateColorCodes('&', "&7Now Leaving&7: " + from.getName(event.getPlayer()) + (fromDeathban ? " &7(&aNon-Deathban&7)" : " &7(&cDeathban&7)"));
-            final String toString = ChatColor.translateAlternateColorCodes('&', "&7Now Entering&7: " + to.getName(event.getPlayer()) + (toDeathban ? " &7(&aNon-Deathban&7)" : " &7(&cDeathban&7)"));
+            final String fromString = ChatColor.translateAlternateColorCodes('&', "&eNow leaving: " + from.getName(event.getPlayer()) + (fromDeathban ? " &e(&aNon-Deathban&e)" : " &e(&cDeathban&e)"));
+            final String toString = ChatColor.translateAlternateColorCodes('&', "&eNow entering: " + to.getName(event.getPlayer()) + (toDeathban ? " &e(&aNon-Deathban&e)" : " &e(&cDeathban&e)"));
             event.getPlayer().sendMessage(fromString);
             event.getPlayer().sendMessage(toString);
         }

@@ -27,7 +27,6 @@ import java.util.concurrent.Future;
 public class UserManager implements IUserManager
 {
     private final ConcurrentLinkedQueue<User> users;
-    private final ConcurrentLinkedQueue<HCFUser> hcfUsers;
     private final ConcurrentLinkedQueue<SGUser> sgUsers;
     private final ConcurrentLinkedQueue<KitmapUser> kitmapUsers;
 
@@ -40,7 +39,6 @@ public class UserManager implements IUserManager
     public UserManager()
     {
         this.users = new ConcurrentLinkedQueue<>();
-        this.hcfUsers = new ConcurrentLinkedQueue<>();
         this.sgUsers = new ConcurrentLinkedQueue<>();
         this.kitmapUsers = new ConcurrentLinkedQueue<>();
         this.gson = new Gson();
@@ -57,25 +55,12 @@ public class UserManager implements IUserManager
                     String userJson = gson.toJson(coreUser);
                     Future<String> userSet = asyncConnection.set(userKey + user.getUniqueId(), userJson);
                     System.out.println(userJson);
-
-                    CoreHCFUser coreHCFUser = (CoreHCFUser) findHCFByUniqueId(user.getUniqueId());
-                    String hcfJson = gson.toJson(coreHCFUser);
-                    Future<String> hcfSet = asyncConnection.set(hcfKey + user.getUniqueId(), hcfJson);
-
-                    CoreKitmapUser core = (CoreKitmapUser) findKitmapByUniqueId(user.getUniqueId());
-                    if(core == null)
-                        core = new CoreKitmapUser(user.getUniqueId());
-
-                    String kitmapJson = gson.toJson(core);
-                    Future<String> kitmapSet = asyncConnection.set(kitmapKey + user.getUniqueId(), kitmapJson);
-
-                    System.out.println(kitmapJson);
-                    asyncConnection.awaitAll(userSet, hcfSet, kitmapSet);
+                    asyncConnection.awaitAll(userSet);
                 }
                 asyncConnection.close();
 
             }
-        }.runTaskTimerAsynchronously(Core.getPlugin(), 10 * 20L, 10 * 20L);
+        }.runTaskTimerAsynchronously(Core.getPlugin(), 60 * 20L, 60 * 20L);
     }
 
     @Override
@@ -87,7 +72,7 @@ public class UserManager implements IUserManager
     @Override
     public HCFUser findHCFByUniqueId(UUID uuid)
     {
-        return hcfUsers.stream().filter(u -> u.getUUID().equals(uuid)).findAny().orElse(null);
+        return getTempHCFUser(uuid);
     }
 
     @Override
@@ -99,12 +84,7 @@ public class UserManager implements IUserManager
     @Override
     public KitmapUser findKitmapByUniqueId(UUID uuid)
     {
-        for(KitmapUser kitmapUser : kitmapUsers)
-        {
-            if(kitmapUser.getUUID().equals(uuid))
-                return kitmapUser;
-        }
-        return null;
+        return kitmapUsers.stream().filter(u -> u.getUUID().equals(uuid)).findAny().orElse(null);
     }
 
 
@@ -153,7 +133,27 @@ public class UserManager implements IUserManager
         }
         catch (InterruptedException | ExecutionException e)
         {
-            hcfUser = null;
+            hcfUser = new CoreHCFUser(uuid);
+            e.printStackTrace();
+        }
+        asyncConnection.close();
+        return hcfUser;
+    }
+
+    @Override
+    public KitmapUser getTempKitsUser(UUID uuid)
+    {
+        RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
+        Future<String> hcfJson = asyncConnection.get(kitmapKey + uuid.toString());
+        asyncConnection.awaitAll(hcfJson);
+        CoreKitmapUser hcfUser;
+        try
+        {
+            hcfUser = this.gson.fromJson(hcfJson.get(), CoreKitmapUser.class);
+        }
+        catch (InterruptedException | ExecutionException e)
+        {
+            hcfUser = new CoreKitmapUser(uuid);
             e.printStackTrace();
         }
         asyncConnection.close();
@@ -163,6 +163,26 @@ public class UserManager implements IUserManager
     public void deleteUser(String uuid)
     {
 
+    }
+
+    public void saveHCF(HCFUser hcfUser)
+    {
+        RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
+        CoreHCFUser coreHCFUser = (CoreHCFUser) hcfUser;
+        String hcfJson = this.gson.toJson(coreHCFUser);
+        Future<String> hcfSet = asyncConnection.set(hcfKey + hcfUser.getUUID(), hcfJson);
+        asyncConnection.awaitAll(hcfSet);
+        asyncConnection.close();
+    }
+
+    public void saveKits(KitmapUser hcfUser)
+    {
+        RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
+        CoreKitmapUser coreHCFUser = (CoreKitmapUser) hcfUser;
+        String hcfJson = this.gson.toJson(coreHCFUser);
+        Future<String> hcfSet = asyncConnection.set(kitmapKey + hcfUser.getUUID(), hcfJson);
+        asyncConnection.awaitAll(hcfSet);
+        asyncConnection.close();
     }
 
     @Override
@@ -175,23 +195,17 @@ public class UserManager implements IUserManager
         Future<String> userSet = asyncConnection.set(userKey + user.getUniqueId(), userJson);
         System.out.println(userJson);
 
-        CoreHCFUser coreHCFUser = (CoreHCFUser) findHCFByUniqueId(user.getUniqueId());
-        String hcfJson = this.gson.toJson(coreHCFUser);
-        Future<String> hcfSet = asyncConnection.set(hcfKey + user.getUniqueId(), hcfJson);
+        if(Core.getInstance().isKitmap())
+        {
+            CoreKitmapUser coreKitmapUser = (CoreKitmapUser) findKitmapByUniqueId(user.getUniqueId());
+            String kitmapJson = this.gson.toJson(coreKitmapUser);
+            Future<String> kitsJson = asyncConnection.set(kitmapKey + user.getUniqueId().toString(), kitmapJson);
+            asyncConnection.awaitAll(kitsJson);
+            this.kitmapUsers.remove(coreKitmapUser);
+        }
 
-        CoreKitmapUser core = (CoreKitmapUser) findKitmapByUniqueId(user.getUniqueId());
-        if(core == null)
-            core = new CoreKitmapUser(user.getUniqueId());
-
-        String kitmapJson = this.gson.toJson(core);
-        Future<String> kitmapSet = asyncConnection.set(kitmapKey + user.getUniqueId(), kitmapJson);
-
-        System.out.println("------------");
-        System.out.println(kitmapJson);
-        asyncConnection.awaitAll(userSet, hcfSet, kitmapSet);
+        asyncConnection.awaitAll(userSet);
         this.users.remove(coreUser);
-        this.hcfUsers.remove(coreHCFUser);
-        this.kitmapUsers.remove(core);
         asyncConnection.close();
     }
 
@@ -200,28 +214,24 @@ public class UserManager implements IUserManager
         RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
 
         Future<String> userJson = asyncConnection.get(userKey + uuid.toString());
-        Future<String> hcfJson = asyncConnection.get(hcfKey + uuid.toString());
-        Future<String> kitmapJson = asyncConnection.get(kitmapKey + uuid.toString());
-        asyncConnection.awaitAll(userJson, hcfJson, kitmapJson);
+        if(Core.getInstance().isKitmap())
+        {
+            Future<String> kitsJson = asyncConnection.get(kitmapKey + uuid.toString());
+            asyncConnection.awaitAll(kitsJson);
+            CoreKitmapUser coreKitmapUser = this.gson.fromJson(kitsJson.get(), CoreKitmapUser.class);
+            if(coreKitmapUser == null)
+                coreKitmapUser = new CoreKitmapUser(uuid);
+
+            this.kitmapUsers.add(coreKitmapUser);
+        }
+        asyncConnection.awaitAll(userJson);
 
         CoreUser user = this.gson.fromJson(userJson.get(), CoreUser.class);
-        CoreHCFUser hcfUser = this.gson.fromJson(hcfJson.get(), CoreHCFUser.class);
-        CoreKitmapUser kitmapUser = this.gson.fromJson(kitmapJson.get(), CoreKitmapUser.class);
 
         if(user == null)
             user = new CoreUser(uuid);
 
-        if(hcfUser == null)
-            hcfUser = new CoreHCFUser(uuid);
-
-        if(kitmapUser == null)
-            kitmapUser = new CoreKitmapUser(uuid);
-
         this.users.add(user);
-        this.hcfUsers.add(hcfUser);
-        this.kitmapUsers.add(kitmapUser);
-
-        System.out.println("User Json -> " + userJson.get());
         Bukkit.getPluginManager().callEvent(new UserLoggedInEvent(user, Bukkit.getPlayer(uuid)));
         asyncConnection.close();
         return user;

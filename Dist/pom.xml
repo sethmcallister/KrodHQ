@@ -13,6 +13,39 @@
 
     <build>
         <plugins>
+                <!--<plugin>-->
+                    <!--<groupId>org.codehaus.mojo</groupId>-->
+                    <!--<artifactId>findbugs-maven-plugin</artifactId>-->
+                    <!--<version>2.5.2</version>-->
+                    <!--<configuration>-->
+                        <!--&lt;!&ndash;-->
+                            <!--Enables analysis which takes more memory but finds more bugs.-->
+                            <!--If you run out of memory, changes the value of the effort element-->
+                            <!--to 'Low'.-->
+                        <!--&ndash;&gt;-->
+                        <!--<effort>Max</effort>-->
+                        <!--&lt;!&ndash; Build doesn't fail if problems are found &ndash;&gt;-->
+                        <!--<failOnError>false</failOnError>-->
+                        <!--&lt;!&ndash; Reports all bugs (other values are medium and max) &ndash;&gt;-->
+                        <!--<threshold>Low</threshold>-->
+                        <!--&lt;!&ndash; Produces XML report &ndash;&gt;-->
+                        <!--<xmlOutput>true</xmlOutput>-->
+                        <!--&lt;!&ndash; Configures the directory in which the XML report is created &ndash;&gt;-->
+                        <!--<findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>-->
+                    <!--</configuration>-->
+                    <!--<executions>-->
+                        <!--&lt;!&ndash;-->
+                            <!--Ensures that FindBugs inspects source code when project is compiled.-->
+                        <!--&ndash;&gt;-->
+                        <!--<execution>-->
+                            <!--<id>analyze-compile</id>-->
+                            <!--<phase>compile</phase>-->
+                            <!--<goals>-->
+                                <!--<goal>check</goal>-->
+                            <!--</goals>-->
+                        <!--</execution>-->
+                    <!--</executions>-->
+                <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -43,6 +76,7 @@
                                     <include>com.lambdaworks:lettuce</include>
                                     <include>org.jboss.netty:netty</include>
                                     <include>com.google.code.gson:gson</include>
+                                    <include>net.techcable:npclib</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -60,9 +94,7 @@
         </plugins>
     </build>
 
-
     <repositories>
-
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/artifactory/repo/</url>
@@ -71,9 +103,18 @@
             <id>stealthyone-repo</id>
             <url>http://repo.stealthyone.com/content/groups/public</url>
         </repository>
+        <repository>
+            <id>techcable-repo</id>
+            <url>http://repo.techcable.net/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>net.techcable</groupId>
+            <artifactId>npclib</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>

@@ -36,7 +36,7 @@ C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\d
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\handlers\dtr\DTRType.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\scoreboard\ScorebordTicker.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\listeners\crate\ElaphKeyListener.java
-C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\listeners\fixes\CombatWallFix.java
+C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\commands\essentials\core\admin\SpawnCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\listeners\TntMinecraftFixListener.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\timers\ArcherTag.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\tasks\KrodBroadcastTask.java
@@ -103,11 +103,11 @@ C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\c
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\dto\Faction.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\commands\essentials\core\admin\AddLivesCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\handlers\classes\ClassHandler.java
+C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\managers\adaptrs\LocationAdaptor.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\commands\essentials\core\admin\SOTWCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\Factions.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\tasks\TabUpdaterTask.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\listeners\ClaimListener.java
-C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\combatlog\CombatEntryListener.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\listeners\crate\CrateKeyPlaceListener.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\handlers\InventoryManager.java
 C:\Users\Seth\IdeaProjects\KiharReal\Factions\src\main\java\xyz\sethy\factions\listeners\FastTileListener.java

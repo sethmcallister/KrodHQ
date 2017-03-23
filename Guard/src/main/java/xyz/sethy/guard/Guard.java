@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 import xyz.sethy.api.API;
@@ -191,11 +192,7 @@ public class Guard implements Listener
                     API.getBanManager().addBan(antiCheatBan);
                     player.kickPlayer(ChatColor.translateAlternateColorCodes('&', "&cYou're account has been permanently suspended \n&fReason&7: " + "KAC caught using " + check.getName() + "\n&fBy&7: &3" + "CONSOLE"));
 
-                    API.sendBungeeMessage("&7&m----------------------------------------------------");
-                    API.sendBungeeMessage(" ");
                     API.sendBungeeMessage("&7The player &3" + player.getName() + "&7 has been caught using &3" + check.getName() + "&7.");
-                    API.sendBungeeMessage(" ");
-                    API.sendBungeeMessage("&7&m----------------------------------------------------");
 
                 }
             }, 15 * 20L);
@@ -243,6 +240,11 @@ public class Guard implements Listener
         else
             this.violations.get(player.getUniqueId()).put(check, this.violations.get(player.getUniqueId()).get(check) + 1);
 
+        if(check instanceof Phase)
+        {
+            if(this.violations.get(player.getUniqueId()).get(check) > 50)
+                player.teleport(player.getLocation().add(0, 1, 0), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        }
 
 //        addViolation(player, check);
         FancyMessage message = new FancyMessage();

@@ -2,6 +2,7 @@ package xyz.sethy.factions.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,9 +30,7 @@ public class UserLoggedInListener implements Listener
     public void onUserLogIn(UserLoggedInEvent event)
     {
         if(event.getPlayer() == null)
-        {
             return;
-        }
 
         if(event.getUser().getGroup().getPermission() >= Group.MOD.getPermission())
         {
@@ -40,44 +39,40 @@ public class UserLoggedInListener implements Listener
             event.getPlayer().addAttachment(API.getPlugin(), "co.rollback", true);
             event.getPlayer().addAttachment(API.getPlugin(), "co.restore", true);
             event.getPlayer().addAttachment(API.getPlugin(), "co.help", true);
-            return;
         }
 
         if(!event.getPlayer().isOnline())
-        {
             return;
-        }
 
         HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(event.getPlayer().getUniqueId());
 
-        if (hcfUser.getPvPTimer() > System.currentTimeMillis())
+        if (hcfUser.getPvPTimer() > 0)
         {
             DefaultTimer defaultTimer = new DefaultTimer(TimerType.PVP_TIMER, event.getUser().getHCFUser().getPvPTimer(), event.getPlayer());
             Factions.getInstance().getTimerHandler().addTimer(event.getPlayer(), defaultTimer);
-
-            if (defaultTimer.isFrozen())
-                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Your PvP Timer is currently frozen, leave &aSpawn&7 to resume."));
         }
 
         if(!event.getPlayer().hasPlayedBefore())
         {
             if(Factions.getInstance().isKitmap())
+            {
+                event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 0.5, 74, 0.5));
                 return;
+            }
 
+            event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 0.5, 77, 0.5));
             DefaultTimer timer = new DefaultTimer(TimerType.PVP_TIMER, 1800000L + System.currentTimeMillis(), event.getPlayer());
             Factions.getInstance().getTimerHandler().addTimer(event.getPlayer(), timer);
-            timer.freeze();
-            event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Your PvP Timer is currently frozen, leave &aSpawn&7 to resume."));
-
             ItemStack starterKey = CrateManager.getStarterKey().clone();
             starterKey.setAmount(3);
 
-            hcfUser.setBalance(250);
+            hcfUser.setBalance(300);
             hcfUser.setKills(0);
             hcfUser.setDeaths(0);
             event.getPlayer().getInventory().clear();
             event.getPlayer().getInventory().addItem(new ItemStack(Material.FISHING_ROD, 3));
             event.getPlayer().getInventory().addItem(starterKey);
+            hcfUser.setRedeemedRank(false);
             if(event.getUser().getGroup().equals(Group.ANT))
             {
                 hcfUser.setLives(hcfUser.getLives() + 2);

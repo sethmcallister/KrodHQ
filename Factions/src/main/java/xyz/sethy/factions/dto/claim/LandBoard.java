@@ -25,9 +25,9 @@ public class LandBoard
     {
         for (final Faction faction : Factions.getInstance().getFactionManager().getFactions())
         {
-            for (final Claim claim : faction.getClaims())
+            if(faction.getClaims() != null)
             {
-                this.setFactionAt(claim, faction);
+                this.setFactionAt(faction.getClaims(), faction);
             }
         }
     }
@@ -44,9 +44,9 @@ public class LandBoard
         final Set<Map.Entry<Claim, Faction>> regions = new HashSet<>();
         for (final Map.Entry<Claim, Faction> regionEntry : this.boardMap.entrySet())
         {
-            if (!regions.contains(regionEntry) && max.getWorld().getName().equals(regionEntry.getKey().getWorld()) && max.getBlockX() >= regionEntry.getKey().getX1() && min.getBlockX() <= regionEntry.getKey().getX2() && max.getBlockZ() >= regionEntry.getKey().getZ1() && min.getBlockZ() <= regionEntry.getKey().getZ2() && max.getBlockY() >= regionEntry.getKey().getY1() && min.getBlockY() <= regionEntry.getKey().getY2())
+            if (regionEntry.getValue() != null && regionEntry.getKey() != null && !regions.contains(regionEntry) && max.getWorld().getName().equals(regionEntry.getKey().getWorld()) && max.getBlockX() >= regionEntry.getKey().getX1() && min.getBlockX() <= regionEntry.getKey().getX2() && max.getBlockZ() >= regionEntry.getKey().getZ1() && min.getBlockZ() <= regionEntry.getKey().getZ2() && max.getBlockY() >= regionEntry.getKey().getY1() && min.getBlockY() <= regionEntry.getKey().getY2())
             {
-                if(regionEntry.getValue().getClaims().contains(regionEntry.getKey()))
+                if(regionEntry.getValue().getClaims() != null && regionEntry.getValue().getClaims().equals(regionEntry.getKey()))
                     regions.add(regionEntry);
             }
         }
@@ -57,9 +57,9 @@ public class LandBoard
     {
         for (final Map.Entry<Claim, Faction> entry : this.boardMap.entrySet())
         {
-            if (entry.getKey().contains(location))
+            if (entry.getKey() != null && entry.getKey().contains(location))
             {
-                if(entry.getValue().getClaims().contains(entry.getKey()))
+                if(entry.getValue() != null && entry.getValue().getClaims() != null && entry.getValue().getClaims().equals(entry.getKey()))
                     return entry;
             }
         }
@@ -69,6 +69,7 @@ public class LandBoard
     public Claim getClaim(final Location location)
     {
         final Map.Entry<Claim, Faction> regionData = this.getRegionData(location);
+
         return (regionData == null) ? null : regionData.getKey();
     }
 
@@ -97,7 +98,7 @@ public class LandBoard
         visualClaims.addAll(VisualClaim.getCurrentMaps().values());
         for (final VisualClaim visualClaim : visualClaims)
         {
-            if (modified.isWithin(visualClaim.getPlayer().getLocation().getBlockX(), visualClaim.getPlayer().getLocation().getBlockZ(), 50, modified.getWorld()))
+            if (modified != null && modified.isWithin(visualClaim.getPlayer().getLocation().getBlockX(), visualClaim.getPlayer().getLocation().getBlockZ(), 50, modified.getWorld()))
             {
                 visualClaim.draw(true);
                 visualClaim.draw(true);
@@ -107,10 +108,8 @@ public class LandBoard
 
     public void clear(final Faction faction)
     {
-        for (final Claim claim : faction.getClaims())
-        {
-            this.boardMap.remove(claim);
-        }
+        if(faction.getClaims() != null)
+            this.boardMap.remove(faction.getClaims());
     }
 
     public boolean isUnclaimed(final Location location)

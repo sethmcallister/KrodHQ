@@ -106,13 +106,13 @@ public class PvPCommand extends CommandBase
         {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
             User user1 = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
-            user1.getHCFUser().setLives(amount);
+            API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).setLives(amount);
             user1.forceSave();
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have set &7" + user1.getName() + "&7's lives to &c" + amount + "&7."));
             return;
         }
         User user1 = API.getUserManager().findByUniqueId(target.getUniqueId());
-        user1.getHCFUser().setLives(amount);
+        API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).setLives(amount);
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have set &7" + user1.getName() + "&7's lives to &c" + amount + "&7."));
         target.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Your lives have been set to &c" + amount + "&7."));
     }
@@ -126,7 +126,7 @@ public class PvPCommand extends CommandBase
             return;
         }
         Integer amount = NumberUtils.createInteger(args[2]);
-        if (user.getHCFUser().getLives() < amount)
+        if (API.getUserManager().findHCFByUniqueId(user.getUniqueId()).getLives() < amount)
         {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have enough lives to do this."));
             return;
@@ -135,15 +135,15 @@ public class PvPCommand extends CommandBase
         {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
             User user1 = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
-            user.getHCFUser().setLives(user.getHCFUser().getLives() - amount);
-            user1.getHCFUser().setLives(user1.getHCFUser().getLives() + amount);
+            API.getUserManager().findHCFByUniqueId(user.getUniqueId()).setLives(API.getUserManager().findHCFByUniqueId(user.getUniqueId()).getLives() - amount);
+            API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).setLives(API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).getLives() + amount);
             user1.forceSave();
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have sent &c" + user1.getName() + " " + amount + "&7 lives."));
             return;
         }
         User user1 = API.getUserManager().findByUniqueId(target.getUniqueId());
-        user.getHCFUser().setLives(user.getHCFUser().getLives() - amount);
-        user1.getHCFUser().setLives(user1.getHCFUser().getLives() + amount);
+        API.getUserManager().findHCFByUniqueId(user.getUniqueId()).setLives(API.getUserManager().findHCFByUniqueId(user.getUniqueId()).getLives() - amount);
+        API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).setLives(API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).getLives() + amount);
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have sent &c" + user1.getName() + " " + amount + "&7 lives."));
     }
 
@@ -162,13 +162,13 @@ public class PvPCommand extends CommandBase
             {
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
                 User user1 = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
-                if (user.getHCFUser().getLives() < 1)
+                if (API.getUserManager().findHCFByUniqueId(user.getUniqueId()).getLives() < 1)
                 {
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You do not have enough lives to revive this player."));
                     return;
                 }
-                user1.getHCFUser().setDeathbanTime(0L);
-                user1.forceSave();
+                API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).setDeathbanTime(0L);
+                API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).forceSave();
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have successfully revived &7" + user1.getName() + "&3."));
                 return;
             }
@@ -177,13 +177,13 @@ public class PvPCommand extends CommandBase
         {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
             User user1 = API.getUserManager().getTempUser(offlinePlayer.getUniqueId());
-            if (user.getHCFUser().getLives() < 1)
+            if (API.getUserManager().findHCFByUniqueId(user.getUniqueId()).getLives() < 1)
             {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You do not have enough lives to revive this player."));
                 return;
             }
-            user.getHCFUser().setLives(user.getHCFUser().getLives() - 1);
-            user1.getHCFUser().setDeathbanTime(0L);
+            API.getUserManager().findHCFByUniqueId(user.getUniqueId()).setLives(API.getUserManager().findHCFByUniqueId(user.getUniqueId()).getLives() - 1);
+            API.getUserManager().findHCFByUniqueId(user1.getUniqueId()).setDeathbanTime(0L);
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You have successfully revived &7" + user1.getName() + "&3."));
             return;
         }
@@ -206,7 +206,8 @@ public class PvPCommand extends CommandBase
 
     private void handleLives(Player player, User user)
     {
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You currently have &7" + user.getHCFUser().getLives() + "&3."));
+
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You currently have &7" + API.getUserManager().findHCFByUniqueId(player.getUniqueId()) + "&3."));
         return;
     }
 

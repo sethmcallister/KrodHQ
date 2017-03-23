@@ -1,7 +1,6 @@
 package xyz.sethy.core.framework.user.hcf;
 
 import xyz.sethy.api.API;
-import xyz.sethy.api.framework.user.User;
 import xyz.sethy.api.framework.user.hcf.HCFUser;
 import xyz.sethy.core.framework.user.UserManager;
 
@@ -26,6 +25,7 @@ public class CoreHCFUser implements HCFUser
     private AtomicReference<String> deathMessage;
     private AtomicBoolean joinedSinceSOTW;
     private AtomicBoolean redeemedRank;
+    private Boolean forceUndeathbanned;
 
     public CoreHCFUser(UUID uuid)
     {
@@ -39,6 +39,7 @@ public class CoreHCFUser implements HCFUser
         this.deathMessage = new AtomicReference<>();
         this.joinedSinceSOTW = new AtomicBoolean();
         this.redeemedRank = new AtomicBoolean();
+        this.forceUndeathbanned = false;
     }
 
     @Override
@@ -81,30 +82,35 @@ public class CoreHCFUser implements HCFUser
     public void setKills(int kills)
     {
         this.kills.set(kills);
+        forceSave();
     }
 
     @Override
     public void setDeaths(int deaths)
     {
         this.deaths.set(deaths);
+        forceSave();
     }
 
     @Override
     public void setLives(int lives)
     {
         this.lives.set(lives);
+        forceSave();
     }
 
     @Override
     public void setDeathbanTime(long time)
     {
         this.deathban.set(time);
+        forceSave();
     }
 
     @Override
     public void setBalance(double balance)
     {
         this.balance.set(balance);
+        forceSave();
     }
 
     @Override
@@ -117,6 +123,7 @@ public class CoreHCFUser implements HCFUser
     public void setPvPTimer(long time)
     {
         this.pvpTimer.set(time);
+        forceSave();
     }
 
     @Override
@@ -129,6 +136,7 @@ public class CoreHCFUser implements HCFUser
     public void setDeathbanMessage(String message)
     {
         deathMessage.set(message);
+        forceSave();
     }
 
     @Override
@@ -141,6 +149,7 @@ public class CoreHCFUser implements HCFUser
     public void setJoinedSinceSOTW(boolean result)
     {
         joinedSinceSOTW.set(result);
+        forceSave();
     }
 
     @Override
@@ -153,12 +162,24 @@ public class CoreHCFUser implements HCFUser
     public void setRedeemedRank(boolean result)
     {
         this.redeemedRank.set(result);
+        forceSave();
     }
 
     @Override
     public void forceSave()
     {
         UserManager userManager = (UserManager) API.getUserManager();
-        userManager.unloadUser((User) this);
+        userManager.saveHCF(this);
+    }
+
+    public boolean hasForceUndeathbanned()
+    {
+        return forceUndeathbanned;
+    }
+
+    public void setForceUndeathbanned(boolean result)
+    {
+        this.forceUndeathbanned = result;
+        forceSave();
     }
 }

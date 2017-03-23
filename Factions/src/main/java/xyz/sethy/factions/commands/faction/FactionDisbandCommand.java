@@ -48,8 +48,8 @@ public class FactionDisbandCommand implements ICommand
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7The faction &r" + faction.getName() + "&7 has been disbanded by &c" + sender.getName() + "&7."));
         }
         int amount;
-        if (faction.getClaims().size() == 1)
-            amount = faction.getBalance() + Claim.getPrice(faction.getClaims().get(0), faction, false);
+        if (faction.getClaims() != null)
+            amount = faction.getBalance() + Claim.getPrice(faction.getClaims(), faction, false);
         else
             amount = faction.getBalance();
 

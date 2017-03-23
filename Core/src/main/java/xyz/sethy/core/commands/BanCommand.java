@@ -34,7 +34,7 @@ public class BanCommand extends CommandBase
             return;
         }
 
-        String reason = StringUtils.join(args, " ", 2, args.length);
+        String reason = StringUtils.join(args, " ", 1, args.length);
         Player player = Bukkit.getPlayer(args[0]);
         if (player == null)
         {

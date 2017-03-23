@@ -35,7 +35,16 @@ public class EnchantmentDisallowListener implements Listener
             if (sharpness > Factions.getInstance().getEnchantmentManager().getMaxLevel(Enchantment.DAMAGE_ALL))
             {
                 item.removeEnchantment(Enchantment.DAMAGE_ALL);
-                item.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                item.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+            }
+        }
+        else if(item.containsEnchantment(Enchantment.FIRE_ASPECT))
+        {
+            int fireAspect = item.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
+            if(fireAspect > Factions.getInstance().getEnchantmentManager().getMaxLevel(Enchantment.FIRE_ASPECT))
+            {
+                item.removeEnchantment(Enchantment.FIRE_ASPECT);
+                item.addEnchantment(Enchantment.FIRE_ASPECT, 0);
             }
         }
     }

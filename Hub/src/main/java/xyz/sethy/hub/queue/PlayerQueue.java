@@ -153,26 +153,15 @@ public class PlayerQueue
 
         if(server.equals(Server.HCF))
         {
-            HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(player.getUniqueId());
+            HCFUser hcfUser = API.getUserManager().getTempHCFUser(player.getUniqueId());
             if(this.waitingForLives.containsKey(player) && this.waitingForLives.get(player) > System.currentTimeMillis())
             {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Thank you for using a life; You are not longer death-banned."));
                 hcfUser.setDeathbanTime(0L);
                 hcfUser.setDeathbanMessage("");
                 hcfUser.setLives(hcfUser.getLives() - 1);
+                hcfUser.setForceUndeathbanned(true);
                 addToQueue(Server.HCF, player);
-                return;
-            }
-            if(hcfUser.deathbanTime() > System.currentTimeMillis())
-            {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou are currently death-banned, You cannot join HCF for another &3" + formatTime(hcfUser.deathbanTime() - System.currentTimeMillis()) + "&7."));
-                if(hcfUser.getLives() > 0)
-                {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have &3" + hcfUser.getLives() + "&7 rejoin the queue within 20 seconds to use a life!"));
-                    this.waitingForLives.put(player, System.currentTimeMillis() + 20000);
-                }
-                else
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You appear to have not lives, You can purchase some @&3 store.KrodHQ.com&7 to bypass this deathban."));
                 return;
             }
         }

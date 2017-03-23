@@ -5,13 +5,14 @@ package xyz.sethy.factions.timers;
  */
 public enum TimerType
 {
-    COMBAT_TAG("&cCombat Tag"),
-    ENDERPEARL("&3Enderpearl"),
+    COMBAT_TAG("&c&lSpawn Tag"),
+    ENDERPEARL("&e&lEnderpearl"),
     PVP_TIMER("&aPvP Timer"),
     TELEPORT("&9Teleport"),
-    ARCHER_TAG("&4Archer Tag"),
+    ARCHER_TAG("&6&lArcher Mark"),
     ARCHER_COOLDOWN("&4Speed"),
-    F_STUCK("&9Stuck");
+    F_STUCK("&9Stuck"),
+    LOGOUT("&4Logout");
 
     private String score;
 

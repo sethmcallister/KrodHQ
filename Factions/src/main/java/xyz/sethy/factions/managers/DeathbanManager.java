@@ -24,11 +24,17 @@ public class DeathbanManager
 
     public long getDeathbanTime(Group group)
     {
+        if(!this.deathbanTimes.containsKey(group))
+            return 0L;
+
         return this.deathbanTimes.get(group) + System.currentTimeMillis();
     }
 
     public long getDeathbanTime(User user)
     {
+        if(!this.deathbanTimes.containsKey(user.getGroup()))
+            return 0L;
+
         return this.deathbanTimes.get(user.getGroup()) + System.currentTimeMillis();
     }
 }

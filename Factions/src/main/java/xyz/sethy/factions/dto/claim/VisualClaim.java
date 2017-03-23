@@ -243,7 +243,7 @@ public class VisualClaim implements Listener
         {
             final int price = this.getPrice();
             final Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
-            if (!this.bypass && faction.getClaims().size() >= 1)
+            if (!this.bypass && faction.getClaims() != null)
             {
                 this.player.sendMessage(ChatColor.RED + "Your faction has the maximum amount of claims, which is " + 1 + ".");
                 return;
@@ -291,7 +291,7 @@ public class VisualClaim implements Listener
                 claim.setY2(256);
             }
             Factions.getInstance().getLandBoard().setFactionAt(claim, faction);
-            faction.getClaims().add(claim);
+            faction.setClaim(claim);
             faction.flagSave();
             this.player.sendMessage(ChatColor.GRAY + "You have claimed this land for your faction!");
             if (Factions.getInstance().isKitmap())
@@ -403,7 +403,7 @@ public class VisualClaim implements Listener
         final Set<Claim> cloneCheck = new HashSet<>();
         touching.forEach(tee -> cloneCheck.add(tee.clone()));
         final boolean contains = cloneCheck.removeIf(faction::ownsClaim);
-        if (!this.bypass && faction.getClaims().size() > 0 && !contains)
+        if (!this.bypass && faction.getClaims() != null && !contains)
         {
             this.player.sendMessage(ChatColor.RED + "All of your claims must be touching each other!");
             return true;

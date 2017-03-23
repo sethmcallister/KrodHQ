@@ -76,7 +76,7 @@ public class FactionStuckCommand implements ICommand, Listener
             return;
         }
 
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You will be teleported to safety in &c5 minuets&7."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You will be teleported to safety in &c5 minutes&7."));
 
         Timer timer1 = new DefaultTimer(TimerType.F_STUCK, TimeUnit.MINUTES.toMillis(5L), sender);
         Factions.getInstance().getTimerHandler().addTimer(sender, timer1);
@@ -141,8 +141,8 @@ public class FactionStuckCommand implements ICommand, Listener
 
     private static void kick(final Player player)
     {
-        player.setMetadata("loggedout", new FixedMetadataValue(API.getPlugin(), true));
-        player.kickPlayer(ChatColor.RED + "We couldn't find a safe location, so we safely logged you out for now. Contact a staff member before logging back on! " + ChatColor.BLUE + "TeamSpeak: ts.kihar.net");
+        player.setMetadata("SageLogout", new FixedMetadataValue(API.getPlugin(), true));
+        player.kickPlayer(ChatColor.RED + "We couldn't find a safe location, so we safely logged you out for now. Contact a staff member before logging back on! " + ChatColor.BLUE + "TeamSpeak: ts.KrodHQ.com");
     }
 
     @EventHandler

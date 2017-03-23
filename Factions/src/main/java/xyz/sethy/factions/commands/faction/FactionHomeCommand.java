@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FactionHomeCommand implements ICommand, Listener
 {
-    public static ConcurrentHashMap<Player, Integer> teleporting = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Player, Integer> teleporting = new ConcurrentHashMap<>();
 
     @Override
     public void onCommand(Player sender, Command command, String label, String[] args)
@@ -49,7 +49,7 @@ public class FactionHomeCommand implements ICommand, Listener
         Timer timer = Factions.getInstance().getTimerHandler().getTimer(sender, TimerType.COMBAT_TAG);
         if (timer != null && timer.getTime() > 0)
         {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou cannot /f home while in combat."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou may not teleport to your factions home while in spawn-tag."));
             return;
         }
 
@@ -91,12 +91,10 @@ public class FactionHomeCommand implements ICommand, Listener
             {
                 if (i != 0)
                 {
-                    sender.playSound(sender.getLocation(), Sound.NOTE_BASS_DRUM, 1f, 1f);
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Teleporting to faction home in &c" + i + "&7 seconds."));
                     i--;
                     return;
                 }
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Teleporting you to your faction's home."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been teleported to your faction's home."));
                 sender.playSound(sender.getLocation(), Sound.ENDERMAN_TELEPORT, 1f, 1f);
                 sender.teleport(faction.getHome());
                 Bukkit.getScheduler().cancelTask(teleporting.get(sender));

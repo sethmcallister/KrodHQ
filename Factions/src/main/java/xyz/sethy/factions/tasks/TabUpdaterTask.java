@@ -38,21 +38,21 @@ public class TabUpdaterTask extends BukkitRunnable
         Team friendly = this.getExistingOrCreateNewTeam(player, "friendly", scoreboard, ChatColor.DARK_GREEN);
         Faction faction = Factions.getInstance().getFactionManager().findByPlayer(player);
 
-        if (faction != null)
+        if(faction == null)
+            return;
+
+        friendly.addEntry(player.getName());
+        for (Player player1 : Bukkit.getOnlinePlayers())
         {
-            friendly.addEntry(player.getName());
-            for (Player player1 : Bukkit.getOnlinePlayers())
-            {
-                if (!player.canSee(player1))
-                    continue;
+            if (!player.canSee(player1))
+                continue;
 
-                Faction faction1 = Factions.getInstance().getFactionManager().findByPlayer(player1);
+            Faction faction1 = Factions.getInstance().getFactionManager().findByPlayer(player1);
 
-                if (faction1 == null || !faction.equals(faction1) || player == player1)
-                    continue;
+            if (faction1 == null || !faction.equals(faction1) || player == player1)
+                continue;
 
-                friendly.addEntry(player1.getName());
-            }
+            friendly.addEntry(player1.getName());
         }
 
         if (newScoreboard)

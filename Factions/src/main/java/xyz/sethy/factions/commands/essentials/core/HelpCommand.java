@@ -33,9 +33,8 @@ public class HelpCommand extends CommandBase
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Factions Help:&7 /factions"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Koth Help:/f&7 /koth"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Lives Help:&7 /pvp"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Balance Help:&7 Emerald Economy"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Balance Help:&7 /balance : /pay"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Coords Help:&7 /coords"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Ingore Help:&7 /ignore"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Message Help:&7 /msg : /reply : /togglepms"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3Staff Help:&7 /report : /request"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3List Help:&7 /who"));

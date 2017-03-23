@@ -15,7 +15,7 @@ public class TeleportCommand extends CommandBase
 {
     public TeleportCommand()
     {
-        super("teleport", Group.ADMIN, true);
+        super("teleport", Group.TRAIL_MOD, true);
         Bukkit.getPluginCommand("teleport").setExecutor(this);
     }
 

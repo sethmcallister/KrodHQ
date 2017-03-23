@@ -143,7 +143,7 @@ public class BuySignListener implements Listener
         if (event.getLine(0).equalsIgnoreCase("[Buy]"))
         {
             event.setLine(0, ChatColor.GREEN + "[Buy]");
-            if (Material.getMaterial(event.getLine(1)) == null && Material.getMaterial(Ints.tryParse(event.getLine(1))) == null && !event.getLine(1).equals("CROWBAR") && !event.getLine(1).equals("END_PORTAL"))
+            if (Material.getMaterial(event.getLine(1)) == null && Material.getMaterial(Ints.tryParse(event.getLine(1))) == null && !event.getLine(1).equals("WRENCH") && !event.getLine(1).equals("END_PORTAL"))
             {
                 player.sendMessage(ChatColor.RED + "Invalid material!");
                 return;

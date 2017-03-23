@@ -12,6 +12,9 @@ commands:
   sotw:
   broadcast:
   alert:
+  spawn:
+  checkban:
+  logout:
   warn:
   setbalance:
     aliases: [setbal, secmoney, seteco, setecon]
@@ -24,6 +27,7 @@ commands:
   setkb:
   refund:
   addlives:
+  setmotd:
   tempmute:
   safeshutdown:
   redeem:

@@ -29,7 +29,7 @@ public class BalanceCommand extends CommandBase
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThis command is disabled during kitmap."));
             return;
         }
-        HCFUser hcfUser = API.getUserManager().findByUniqueId(sender.getUniqueId()).getHCFUser();
+        HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(sender.getUniqueId());
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3&lBalance&7: &f" + hcfUser.getBalance()));
     }
 }

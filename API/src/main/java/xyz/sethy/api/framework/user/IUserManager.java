@@ -30,4 +30,6 @@ public abstract interface IUserManager
     User getTempUser(UUID paramUUID);
 
     HCFUser getTempHCFUser(UUID uuid);
+
+    KitmapUser getTempKitsUser(UUID uuid);
 }

@@ -1,5 +1,6 @@
 package us.kade.essentials.util;
 
+import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class MessageUtil
                 continue;
 
             User user = API.getUserManager().findByUniqueId(player.getUniqueId());
-            if (user.getGroup().getPermission() > Group.TRAIL_MOD.getPermission())
+            if (user.getGroup().getPermission() >= Group.TRAIL_MOD.getPermission())
             {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.translateAlternateColorCodes('&', messsage)));
             }
@@ -32,9 +33,21 @@ public class MessageUtil
         for (Player player : Bukkit.getOnlinePlayers())
         {
             User user = API.getUserManager().findByUniqueId(player.getUniqueId());
-            if (user.getGroup().getPermission() > Group.TRAIL_MOD.getPermission())
+            if (user.getGroup().getPermission() >= Group.TRAIL_MOD.getPermission())
             {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.translateAlternateColorCodes('&', messsage)));
+            }
+        }
+    }
+
+    public static void sendStaffMessage(FancyMessage fancyMessage)
+    {
+        for (Player player : Bukkit.getOnlinePlayers())
+        {
+            User user = API.getUserManager().findByUniqueId(player.getUniqueId());
+            if (user.getGroup().getPermission() >= Group.TRAIL_MOD.getPermission())
+            {
+                fancyMessage.send(player);
             }
         }
     }

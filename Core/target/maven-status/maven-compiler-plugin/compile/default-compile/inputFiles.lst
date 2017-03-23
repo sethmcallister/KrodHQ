@@ -6,6 +6,7 @@ C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\commands\
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\framework\user\hcf\CoreHCFUser.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\listeners\PlayerQuitListner.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\files\FileHandler.java
+C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\commands\CheckBanCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\framework\user\UserManager.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\commands\MuteCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\utils\DateUtils.java
@@ -34,4 +35,5 @@ C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\commands\
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\commands\AlertCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\Core.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\commands\InformationCommand.java
+C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\commands\SetMOTDCommand.java
 C:\Users\Seth\IdeaProjects\KiharReal\Core\src\main\java\xyz\sethy\core\fixes\KnockbackFix.java

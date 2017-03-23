@@ -58,7 +58,7 @@ public class EnderpearlListener implements Listener
                     double sec = Math.round(10.0D * value) / 10.0D;
                     event.setCancelled(true);
                     event.getPlayer().updateInventory();
-                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Pearl cooldown: &c" + sec + " seconds&7."));
+                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou cannot use this for another &c&l" + sec + "&c seconds."));
                     return;
                 }
                 Factions.getInstance().getTimerHandler().addTimer(player, new DefaultTimer(TimerType.ENDERPEARL, 16000 + System.currentTimeMillis(), player));

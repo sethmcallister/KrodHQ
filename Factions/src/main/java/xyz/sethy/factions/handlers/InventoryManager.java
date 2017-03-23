@@ -19,6 +19,16 @@ public class InventoryManager
         this.playerInventory = new ConcurrentHashMap<>();
     }
 
+    public ConcurrentHashMap<Player, ItemStack[]> getPlayerInventory()
+    {
+        return playerInventory;
+    }
+
+    public ConcurrentHashMap<Player, ItemStack[]> getPlayerArmor()
+    {
+        return playerArmor;
+    }
+
     public ItemStack[] getPlayerInventory(Player player)
     {
         return this.playerInventory.get(player);

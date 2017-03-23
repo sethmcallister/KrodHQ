@@ -1,10 +1,10 @@
 package xyz.sethy.core.framework.user.kitmap;
 
+import xyz.sethy.api.API;
 import xyz.sethy.api.framework.user.kitmap.KitmapUser;
+import xyz.sethy.core.framework.user.UserManager;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by sethm on 08/01/2017.
@@ -12,16 +12,18 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CoreKitmapUser implements KitmapUser
 {
     private UUID uuid;
-    private AtomicInteger kills;
-    private AtomicInteger deaths;
-    private AtomicReference<Double> balance;
+    private Integer kills;
+    private Integer deaths;
+    private Double balance;
+    private Integer killStreak;
 
     public CoreKitmapUser(UUID uuid)
     {
         this.uuid = uuid;
-        this.kills = new AtomicInteger(0);
-        this.deaths = new AtomicInteger(0);
-        this.balance = new AtomicReference<>(0D);
+        this.kills = 0;
+        this.deaths = 0;
+        this.balance = 0.0;
+        this.killStreak = 0;
     }
 
     @Override
@@ -33,36 +35,58 @@ public class CoreKitmapUser implements KitmapUser
     @Override
     public int getKills()
     {
-        return kills.get();
+        return kills;
     }
 
     @Override
     public int getDeaths()
     {
-        return deaths.get();
+        return deaths;
     }
 
     @Override
     public double getBalance()
     {
-        return balance.get();
+        return balance;
     }
 
     @Override
     public void setKills(int kills)
     {
-        this.kills.set(kills);
+        this.kills = kills;
+        forceSave();
     }
 
     @Override
     public void setDeaths(int deaths)
     {
-        this.deaths.set(deaths);
+        this.deaths = deaths;
+        forceSave();
     }
 
     @Override
     public void setBalance(double balance)
     {
-        this.balance.set(balance);
+        this.balance = balance;
+        forceSave();
+    }
+
+    @Override
+    public Integer getCurrentKillStreak()
+    {
+        return killStreak;
+    }
+
+    @Override
+    public void setKillStreak(int killStreak)
+    {
+        this.killStreak = killStreak;
+        forceSave();
+    }
+
+    private void forceSave()
+    {
+        UserManager userManager = (UserManager) API.getUserManager();
+        userManager.saveKits(this);
     }
 }

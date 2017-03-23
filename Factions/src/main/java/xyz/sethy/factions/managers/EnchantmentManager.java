@@ -15,8 +15,9 @@ public class EnchantmentManager
     {
         this.maxLevels = new ConcurrentHashMap<>();
         this.maxLevels.put(Enchantment.DAMAGE_ALL, 2);
-        this.maxLevels.put(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        this.maxLevels.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
         this.maxLevels.put(Enchantment.DURABILITY, 3);
+        this.maxLevels.put(Enchantment.FIRE_ASPECT, 0);
     }
 
     public int getMaxLevel(Enchantment enchantment)

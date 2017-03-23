@@ -38,23 +38,19 @@ public class FactionUnclaimCommand implements ICommand
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou cannot unclaim land while your faction is raidable."));
             return;
         }
-        final int claims = faction.getClaims().size();
+        final int claims = faction.getClaims() == null ? 0 : 1;
         int refund = 0;
-        for (final Claim claim : faction.getClaims())
-        {
-            refund += Claim.getPrice(claim, faction, false);
-        }
+        refund += Claim.getPrice(faction.getClaims(), faction, false);
         final int finalRefund = refund;
         faction.setBalance(faction.getBalance() + refund);
-        Claim claim = faction.getClaims().get(0);
-        faction.getClaims().remove(claim);
+        faction.setClaim(null);
 
-        Factions.getInstance().getLandBoard().clear(faction);
+        Factions.getInstance().getLandBoard().setFactionAt(null, faction);
 
         faction.setHome(null);
         faction.flagSave();
 
-        faction.getOnlineMembers().forEach(uuid -> Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Your faction has been refunded &3$" + finalRefund + "s&7.")));
+        faction.getOnlineMembers().forEach(uuid -> Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Your faction has been refunded &3$" + finalRefund + "&7.")));
         faction.getOnlineMembers().forEach(uuid -> Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&7" + sender.getName() + " has unclaimed all of your faction's land.")));
     }
 }

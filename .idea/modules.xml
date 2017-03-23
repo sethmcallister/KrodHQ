@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/API.iml" filepath="$PROJECT_DIR$/API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Bungee/Bungee.iml" filepath="$PROJECT_DIR$/Bungee/Bungee.iml" />
       <module fileurl="file://$PROJECT_DIR$/Core/Core.iml" filepath="$PROJECT_DIR$/Core/Core.iml" />
       <module fileurl="file://$PROJECT_DIR$/Dist.iml" filepath="$PROJECT_DIR$/Dist.iml" />
       <module fileurl="file://$PROJECT_DIR$/Essentials/Essentials.iml" filepath="$PROJECT_DIR$/Essentials/Essentials.iml" />

@@ -43,4 +43,7 @@ public interface HCFUser
     void setRedeemedRank(boolean result);
 
     void forceSave();
+
+    boolean hasForceUndeathbanned();
+    void setForceUndeathbanned(boolean result);
 }

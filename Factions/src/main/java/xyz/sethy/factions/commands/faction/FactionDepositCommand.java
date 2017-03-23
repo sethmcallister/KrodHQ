@@ -30,7 +30,7 @@ public class FactionDepositCommand implements ICommand
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3You are currently not in a faction."));
             return;
         }
-        HCFUser user = API.getUserManager().findByUniqueId(sender.getUniqueId()).getHCFUser();
+        HCFUser user = API.getUserManager().findHCFByUniqueId(sender.getUniqueId());
 
         if(args[1].equalsIgnoreCase("all"))
         {

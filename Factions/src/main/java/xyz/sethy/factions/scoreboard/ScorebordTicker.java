@@ -109,18 +109,11 @@ public class ScorebordTicker implements Runnable
                     KitmapUser kitmapUser = API.getUserManager().findKitmapByUniqueId(player.getUniqueId());
                     int kills = kitmapUser.getKills();
                     int deaths = kitmapUser.getDeaths();
-                    double kd;
-                    if(kills == 0)
-                        kd = 0.0D;
-                    else if(deaths == 0)
-                        kd = kills;
-                    else
-                        kd = kills/deaths;
+                    int ks = kitmapUser.getCurrentKillStreak();
 
-                    scoreboard.add(translateString("&eKills&7: "), String.valueOf(kills));
-                    scoreboard.add(translateString("&eDeaths&7: "), String.valueOf(deaths));
-                    scoreboard.add(translateString("&eK/D Ratio&7: "), String.valueOf(kd));
-                    scoreboard.add(translateString("&eBalance&7: "), String.valueOf(kitmapUser.getBalance()));
+                    scoreboard.add(translateString("&7Kills&7: "), String.valueOf(kills));
+                    scoreboard.add(translateString("&7Deaths&7: "), String.valueOf(deaths));
+                    scoreboard.add(translateString("&7Kill Streak"), translateString("&7:&f ") + String.valueOf(ks));
                 }
 
                 if(timerHandler.getSotwTime() > System.currentTimeMillis())
@@ -148,14 +141,14 @@ public class ScorebordTicker implements Runnable
                     if (lol1.size() == 1)
                     {
                         String left = translateString("" + lol1.toArray()[0]);
-                        scoreboard.add(translateString("&7") + left, translateString("&7:&f ") + formatTime(time));
+                        scoreboard.add(translateString("&3&l") + left, translateString("&7:&f ") + formatTime(time));
                     }
                     else if (lol1.size() == 2)
                     {
                         String left = translateString("" + lol1.toArray()[0]);
                         String right = ChatColor.getLastColors(left) + translateString((String) lol1.toArray()[1]);
 
-                        scoreboard.add(translateString("&7") + left, right + translateString("&7:&f ") + formatTime(time));
+                        scoreboard.add(translateString("&3&l") + left, right + translateString("&7:&f ") + formatTime(time));
                     }
                 }
                 ArrayList<Timer> defaultTimers = timerHandler.getPlayerTimers(player);
@@ -182,10 +175,10 @@ public class ScorebordTicker implements Runnable
                             if(!this.lastPvPTime.containsKey(player))
                                 continue;
 
-                            right = translateString("&7:&f ") + formatTime(this.lastPvPTime.get(player));
+                            right = translateString("&7:&c ") + formatTime(this.lastPvPTime.get(player));
                         }
                         else
-                            right = translateString("&7:&f ") + formatTime(timer.getTime());
+                            right = translateString("&7:&c ") + formatTime(timer.getTime());
 
                         scoreboard.add(left, right);
                     }

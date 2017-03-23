@@ -43,6 +43,7 @@ public class FactionForceLeaderCommand implements ICommand
             if (faction.getLeader() != null)
                 faction.getCaptains().add(faction.getLeader());
             faction.setLeader(sender.getUniqueId());
+            faction.getMembers().remove(sender.getUniqueId());
             for (UUID uuid : faction.getOnlineMembers())
             {
                 Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&3" + sender.getName() + "&7 has &3forcefully&7 made himself the leader of the faction."));
@@ -72,6 +73,7 @@ public class FactionForceLeaderCommand implements ICommand
         if (faction.getLeader() != null)
             faction.getCaptains().add(faction.getLeader());
         faction.setLeader(target.getUniqueId());
+        faction.getMembers().remove(target.getUniqueId());
         for (UUID uuid : faction.getOnlineMembers())
         {
             Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', "&3" + sender.getName() + "&7 has &3forcefully&7 made &3" + target.getName() + "&7 the leader of the faction."));

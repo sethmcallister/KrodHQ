@@ -32,7 +32,7 @@ public class FactionLeaveCommand implements ICommand
         }
         if (faction.isLeader(sender))
         {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou cannot leave a while you are leader."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou cannot leave a faction while you are leader."));
             return;
         }
 

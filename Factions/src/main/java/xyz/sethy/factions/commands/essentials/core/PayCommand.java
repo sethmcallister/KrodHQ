@@ -42,9 +42,8 @@ public class PayCommand extends CommandBase
             return;
         }
         double amount = NumberUtils.createNumber(args[1]).doubleValue();
-        HCFUser hcfUser1 = API.getUserManager().findByUniqueId(sender.getUniqueId()).getHCFUser();
-
-        HCFUser hcfUser2 = API.getUserManager().findByUniqueId(target.getUniqueId()).getHCFUser();
+        HCFUser hcfUser1 = API.getUserManager().findHCFByUniqueId(sender.getUniqueId());
+        HCFUser hcfUser2 = API.getUserManager().findHCFByUniqueId(target.getUniqueId());
 
         if (hcfUser1.getBalance() < amount)
         {

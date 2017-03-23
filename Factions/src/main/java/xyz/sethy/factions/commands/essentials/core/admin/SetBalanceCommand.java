@@ -35,7 +35,7 @@ public class SetBalanceCommand extends CommandBase
             return;
         }
         double amount = NumberUtils.createNumber(args[0]).doubleValue();
-        HCFUser user = API.getUserManager().findByUniqueId(sender.getUniqueId()).getHCFUser();
-        user.setBalance(amount);
+        HCFUser hcfUser = API.getUserManager().findHCFByUniqueId(sender.getUniqueId());
+        hcfUser.setBalance(amount);
     }
 }
