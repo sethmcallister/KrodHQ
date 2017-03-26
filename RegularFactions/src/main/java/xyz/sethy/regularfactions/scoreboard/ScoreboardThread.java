@@ -1,5 +1,6 @@
 package xyz.sethy.regularfactions.scoreboard;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -8,6 +9,7 @@ import xyz.sethy.api.framework.user.User;
 import xyz.sethy.hub.Hub;
 import xyz.sethy.hub.queue.PlayerQueue;
 import xyz.sethy.hub.server.Server;
+import xyz.sethy.regularfactions.RegularFacitons;
 
 import java.text.DecimalFormat;
 
@@ -17,23 +19,19 @@ import java.text.DecimalFormat;
 public class ScoreboardThread extends BukkitRunnable
 {
     private final DecimalFormat FORMAT = new DecimalFormat("0.0");
-    private final PlayerQueue playerQueue = Hub.getInstance().getPlayerQueue();
 
     @Override
     public void run()
     {
-        for (Player player : Hub.getInstance().getPlayers())
+        for (Player player : Bukkit.getOnlinePlayers())
         {
-            Scoreboard scoreboard = Hub.getInstance().getScoreboardHandler().getScoreboard(player);
+            Scoreboard scoreboard = RegularFacitons.getInstance().getScoreboardHandler().getScoreboard(player);
             if (scoreboard == null)
                 continue;
 
             scoreboard.clear();
             User user = API.getUserManager().findByUniqueId(player.getUniqueId());
-
             scoreboard.add(translateString("&7&m-----------"), translateString("&7&m-----------"));
-
-            
 
             scoreboard.add(translateString("&7&m-----------"), translateString("&7&m-----------"));
             scoreboard.update();
