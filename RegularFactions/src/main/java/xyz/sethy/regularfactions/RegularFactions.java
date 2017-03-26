@@ -1,5 +1,8 @@
 package xyz.sethy.regularfactions;
 
+
+import xyz.sethy.regularfactions.commands.SetWarpCommand;
+import xyz.sethy.regularfactions.commands.WarpCommand;
 import xyz.sethy.regularfactions.scoreboard.ScoreboardHandler;
 
 /**
@@ -12,8 +15,12 @@ public class RegularFactions
 
     public RegularFactions()
     {
+<<<<<<< HEAD:RegularFactions/src/main/java/xyz/sethy/regularfactions/RegularFactions.java
 
         regularFactions = this;
+=======
+        regularFacitons = this;
+>>>>>>> d4faab182280b8c37e6da0d998c4b96901e2959c:RegularFactions/src/main/java/xyz/sethy/regularfactions/RegularFacitons.java
         this.scoreboardHandler = new ScoreboardHandler();
     }
 
@@ -25,5 +32,10 @@ public class RegularFactions
     public ScoreboardHandler getScoreboardHandler()
     {
         return scoreboardHandler;
+    }
+
+    public void registerCommands(){
+        new WarpCommand();
+        new SetWarpCommand();
     }
 }

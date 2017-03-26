@@ -72,6 +72,7 @@ xyz\sethy\factions\listeners\EnderpearlListener.class
 xyz\sethy\factions\listeners\WorldSwitchListener.class
 xyz\sethy\factions\commands\faction\FactionKickCommand.class
 xyz\sethy\factions\commands\faction\FactionLeaveCommand.class
+xyz\sethy\factions\airdrop\Airdrop.class
 xyz\sethy\factions\commands\faction\FactionStuckCommand.class
 xyz\sethy\factions\handlers\commands\ICommand.class
 xyz\sethy\factions\handlers\dtr\DTRHandler.class
@@ -104,6 +105,7 @@ xyz\sethy\factions\combatlog\CombatEntry.class
 xyz\sethy\factions\koth\dto\Koth.class
 xyz\sethy\factions\commands\essentials\core\HelpCommand.class
 xyz\sethy\factions\dto\Faction$1.class
+xyz\sethy\factions\tasks\AirDropTask.class
 xyz\sethy\factions\dto\claim\VisualClaimType.class
 xyz\sethy\factions\managers\FactionManager$1.class
 xyz\sethy\factions\timers\ArcherTag.class
