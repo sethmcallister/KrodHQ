@@ -32,7 +32,7 @@
       <module name="Hub" target="1.8" />
       <module name="network" target="1.5" />
       <module name="Network" target="1.5" />
-      <module name="RegularFactions" target="1.5" />
+      <module name="RegularFactions" target="1.7" />
       <module name="SurvivalGames" target="1.8" />
       <module name="SurvivalGamesLobby" target="1.8" />
     </bytecodeTargetLevel>
