@@ -9,5 +9,5 @@ import org.bukkit.event.Listener;
 public class Tablist implements Listener{
 
     @EventHandler
-    public void
+    public void on
 }
