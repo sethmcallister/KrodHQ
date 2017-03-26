@@ -22,6 +22,7 @@ public class RedeemCommand extends CommandBase
         super("redeem", Group.DEFAULT, true);
         Bukkit.getPluginCommand("redeem").setExecutor(this);
     }
+
     @Override
     public void execute(Player sender, Command paramCommand, String paramString, String[] paramArrayOfString)
     {

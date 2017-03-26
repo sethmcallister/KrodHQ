@@ -8,10 +8,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.sethy.api.events.UserLoggedInEvent;
 import xyz.sethy.api.framework.user.IUserManager;
 import xyz.sethy.api.framework.user.User;
+import xyz.sethy.api.framework.user.factions.FactionUser;
 import xyz.sethy.api.framework.user.hcf.HCFUser;
 import xyz.sethy.api.framework.user.kitmap.KitmapUser;
 import xyz.sethy.api.framework.user.sg.SGUser;
 import xyz.sethy.core.Core;
+import xyz.sethy.core.framework.user.factions.CoreFactionUser;
 import xyz.sethy.core.framework.user.hcf.CoreHCFUser;
 import xyz.sethy.core.framework.user.kitmap.CoreKitmapUser;
 
@@ -29,18 +31,21 @@ public class UserManager implements IUserManager
     private final ConcurrentLinkedQueue<User> users;
     private final ConcurrentLinkedQueue<SGUser> sgUsers;
     private final ConcurrentLinkedQueue<KitmapUser> kitmapUsers;
+    private final ConcurrentLinkedQueue<FactionUser> factionUsers;
 
     private final RedisClient redisClient = new RedisClient("localhost");
     private final Gson gson;
     private final String userKey = "network.users.";
     private final String hcfKey = "network.hcf.";
     private final String kitmapKey = "network.kits.";
+    private final String factionKey = "network.reg_factions.";
 
     public UserManager()
     {
         this.users = new ConcurrentLinkedQueue<>();
         this.sgUsers = new ConcurrentLinkedQueue<>();
         this.kitmapUsers = new ConcurrentLinkedQueue<>();
+        this.factionUsers = new ConcurrentLinkedQueue<>();
         this.gson = new Gson();
 
         new BukkitRunnable()
@@ -160,6 +165,32 @@ public class UserManager implements IUserManager
         return hcfUser;
     }
 
+    @Override
+    public FactionUser getFactionUser(UUID uuid)
+    {
+        return factionUsers.stream().filter(factionUser -> factionUser.getUUID().equals(uuid)).findFirst().orElse(null);
+    }
+
+    @Override
+    public FactionUser getTempFactionUser(UUID uuid)
+    {
+        RedisAsyncConnection<String, String> asyncConnection = redisClient.connectAsync();
+        Future<String> hcfJson = asyncConnection.get(factionKey + uuid.toString());
+        asyncConnection.awaitAll(hcfJson);
+        CoreFactionUser hcfUser;
+        try
+        {
+            hcfUser = this.gson.fromJson(hcfJson.get(), CoreFactionUser.class);
+        }
+        catch (InterruptedException | ExecutionException e)
+        {
+            hcfUser = new CoreFactionUser(uuid);
+            e.printStackTrace();
+        }
+        asyncConnection.close();
+        return hcfUser;
+    }
+
     public void deleteUser(String uuid)
     {
 
@@ -235,5 +266,10 @@ public class UserManager implements IUserManager
         Bukkit.getPluginManager().callEvent(new UserLoggedInEvent(user, Bukkit.getPlayer(uuid)));
         asyncConnection.close();
         return user;
+    }
+
+    public ConcurrentLinkedQueue<FactionUser> getFactionUsers()
+    {
+        return factionUsers;
     }
 }

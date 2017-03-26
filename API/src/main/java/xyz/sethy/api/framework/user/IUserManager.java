@@ -1,5 +1,6 @@
 package xyz.sethy.api.framework.user;
 
+import xyz.sethy.api.framework.user.factions.FactionUser;
 import xyz.sethy.api.framework.user.hcf.HCFUser;
 import xyz.sethy.api.framework.user.kitmap.KitmapUser;
 import xyz.sethy.api.framework.user.sg.SGUser;
@@ -32,4 +33,7 @@ public abstract interface IUserManager
     HCFUser getTempHCFUser(UUID uuid);
 
     KitmapUser getTempKitsUser(UUID uuid);
+
+    FactionUser getFactionUser(UUID uuid);
+    FactionUser getTempFactionUser(UUID uuid);
 }

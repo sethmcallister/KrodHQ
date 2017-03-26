@@ -15,6 +15,7 @@ import xyz.sethy.api.framework.user.User;
  */
 public abstract class CommandBase implements CommandExecutor
 {
+    private User user;
     private String command;
     private Group group;
     private boolean isPlayerOnly;
@@ -36,12 +37,13 @@ public abstract class CommandBase implements CommandExecutor
                 return true;
             }
             Player player = (Player) sender;
+            User user = API.getUserManager().findByUniqueId(player.getUniqueId());
+            this.user = user;
             if (player.isOp())
             {
                 execute(player, command1, label, args);
                 return true;
             }
-            User user = API.getUserManager().findByUniqueId(player.getUniqueId());
             if (user.getGroup().getPermission() < this.group.getPermission())
             {
                 player.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
@@ -53,7 +55,7 @@ public abstract class CommandBase implements CommandExecutor
         return false;
     }
 
-    public abstract void execute(Player paramPlayer, Command paramCommand, String paramString, String[] paramArrayOfString);
+    public abstract void execute(Player sender, Command command, String label, String[] args);
 
     public String getCommand()
     {
@@ -68,5 +70,10 @@ public abstract class CommandBase implements CommandExecutor
     public Group getGroup()
     {
         return this.group;
+    }
+
+    public User getUser()
+    {
+        return user;
     }
 }
