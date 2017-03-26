@@ -1,5 +1,8 @@
 package xyz.sethy.regularfactions;
 
+
+import xyz.sethy.regularfactions.commands.SetWarpCommand;
+import xyz.sethy.regularfactions.commands.WarpCommand;
 import xyz.sethy.regularfactions.scoreboard.ScoreboardHandler;
 
 /**
@@ -12,7 +15,6 @@ public class RegularFacitons
 
     public RegularFacitons()
     {
-
         regularFacitons = this;
         this.scoreboardHandler = new ScoreboardHandler();
     }
@@ -25,5 +27,10 @@ public class RegularFacitons
     public ScoreboardHandler getScoreboardHandler()
     {
         return scoreboardHandler;
+    }
+
+    public void registerCommands(){
+        new WarpCommand();
+        new SetWarpCommand();
     }
 }

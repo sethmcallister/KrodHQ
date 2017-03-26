@@ -1,48 +1,47 @@
 package xyz.sethy.regularfactions.commands;
 
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import xyz.sethy.api.API;
+import xyz.sethy.api.framework.commands.CommandBase;
+import xyz.sethy.api.framework.group.Group;
 
 /**
  * Created by Alex on 3/26/2017.
  */
-public class WarpCommand implements CommandExecutor{
+public class WarpCommand extends CommandBase{
 
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-            if (command.getName().equalsIgnoreCase("setwarp")){
-                if (!(commandSender instanceof Player)){
-                    commandSender.sendMessage("§cConsole isn't eligable to set warps.");
-                    return true;
+        public WarpCommand(){
+            super("warp", Group.DEFAULT, true);
+        }
+
+     @Override
+    public void execute(Player sender, Command command, String label, String[] args){
+            if (args.length == 0){
+                sender.sendMessage("§cSyntax: /warp <warp> \n§fValidated warps:");
+                for (String key : API.getPlugin().getConfig().getKeys(false))
+                {
+                    sender.sendMessage(key);
                 }
-                Player player = (Player)commandSender;
-                if (!player.hasPermission("warp.set")){
-                    player.sendMessage("§cYou don't have enough permission to execute this command!");
-                    return true;
-                }
-                if (strings.length == 0){
-                    player.sendMessage("§cSyntax: /setwarp <warp>");
-                    return true;
-                }
-                Location location = player.getLocation();
-                API.getPlugin().getConfig().createSection(strings[0].toLowerCase());
-                //Creates the section of the warp in config.
-                ConfigurationSection cs = API.getPlugin().getConfig().getConfigurationSection(strings[0].toLowerCase());
-                cs.set("X", location.getX());
-                cs.set("Y", location.getY());
-                cs.set("Z", location.getZ());
-                cs.set("YAW", location.getYaw());
-                cs.set("PITCH", location.getPitch());
-                cs.set("world", location.getWorld().getName());
-                API.getPlugin().saveConfig();
-                // Save is completed and warp is created
-                player.sendMessage("§aWarp §2" + strings[0] + "§a has been created at your location.");
+                return;
             }
-        return false;
-    }
+            if (API.getPlugin().getConfig().getConfigurationSection(args[0].toLowerCase()) == null){
+                sender.sendMessage("§2" + args[0] + "§a is not a existing warp.");
+                return;
+            }
+         Configuration config = API.getPlugin().getConfig();
+         ConfigurationSection cs = API.getPlugin().getConfig().getConfigurationSection(args[0].toLowerCase());
+         World w = Bukkit.getWorld(API.getPlugin().getConfig().getString("world"));
+         double x = config.getDouble("X");
+         double y = config.getDouble("Y");
+         double z = config.getDouble("Z");
+         Location location = new Location(w, x, y, z);
+         sender.teleport(location);
+     }
 }

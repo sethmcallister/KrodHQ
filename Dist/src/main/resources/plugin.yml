@@ -5,6 +5,8 @@ load: startup
 version: 0.0.1
 depend: [ProtocolLib]
 commands:
+  setwarp:
+  warp:
   deleteuser:
   setrank:
   help:
