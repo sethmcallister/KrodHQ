@@ -42,7 +42,7 @@
             <artifactId>WorldEdit</artifactId>
             <scope>system</scope>
             <version>6.1</version>
-            <systemPath>C:/Users/Seth/Desktop/Resources/worldedit-bukkit-6.0.jar</systemPath>
+            <systemPath>C:/Users/AlexTennant/Documents/worldedit-bukkit-6.0.jar</systemPath>
         </dependency>
     </dependencies>
 

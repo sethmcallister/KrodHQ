@@ -33,6 +33,7 @@ xyz\sethy\core\framework\ban\CoreBan.class
 xyz\sethy\core\commands\TempBanCommand.class
 xyz\sethy\core\framework\user\UserManager.class
 xyz\sethy\core\commands\SetKBCommand.class
+xyz\sethy\core\framework\user\factions\CoreFactionUser.class
 xyz\sethy\core\commands\MutechatCommand.class
 xyz\sethy\core\commands\PingCommand.class
 xyz\sethy\core\commands\SlowChatCommand.class

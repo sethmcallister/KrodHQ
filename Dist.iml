@@ -25,7 +25,6 @@
     <orderEntry type="library" name="Maven: org.jboss.netty:netty:3.2.10.Final" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.5" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:21.0" level="project" />
-    <orderEntry type="library" name="Maven: xyz.sethy:threads:0.0.1" level="project" />
     <orderEntry type="module" module-name="API" />
     <orderEntry type="module" module-name="Core" />
     <orderEntry type="module" module-name="SurvivalGamesLobby" />
@@ -35,7 +34,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.sk89q:WorldEdit:6.1">
         <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/com/sk89q/WorldEdit/6.1/WorldEdit-6.1.jar!/" />
+          <root url="jar://$USER_HOME$/Documents/worldedit-bukkit-6.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -63,7 +62,6 @@
     <orderEntry type="library" name="Maven: de.schlichtherle:truezip:6.8.3" level="project" />
     <orderEntry type="library" name="Maven: rhino:js:1.7R2" level="project" />
     <orderEntry type="library" name="Maven: mkremins:fanciful:0.4.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: net.md-5:bungeecord-api:1.8-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.spigotmc:spigot:1.7.10-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.comphenix.protocol:ProtocolLib:3.6.5" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:2.2.2" level="project" />

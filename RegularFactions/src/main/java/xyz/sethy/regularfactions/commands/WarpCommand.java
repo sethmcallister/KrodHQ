@@ -27,7 +27,7 @@ public class WarpCommand extends CommandBase{
                 sender.sendMessage("§cSyntax: /warp <warp> \n§fValidated warps:");
                 for (String key : API.getPlugin().getConfig().getKeys(false))
                 {
-                    sender.sendMessage(key);
+                    sender.sendMessage(key.split(","));
                 }
                 return;
             }
