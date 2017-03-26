@@ -21,6 +21,7 @@
         <module>Essentials</module>
         <module>Guard</module>
         <module>Bungee</module>
+        <module>RegularFactions</module>
     </modules>
 
     <repositories>

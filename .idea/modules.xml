@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/Guard/Guard.iml" filepath="$PROJECT_DIR$/Guard/Guard.iml" />
       <module fileurl="file://$PROJECT_DIR$/Hub.iml" filepath="$PROJECT_DIR$/Hub.iml" />
       <module fileurl="file://$PROJECT_DIR$/Network.iml" filepath="$PROJECT_DIR$/Network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RegularFactions/RegularFactions.iml" filepath="$PROJECT_DIR$/RegularFactions/RegularFactions.iml" />
       <module fileurl="file://$PROJECT_DIR$/SurvivalGames.iml" filepath="$PROJECT_DIR$/SurvivalGames.iml" />
       <module fileurl="file://$PROJECT_DIR$/SurvivalGamesLobby.iml" filepath="$PROJECT_DIR$/SurvivalGamesLobby.iml" />
     </modules>
