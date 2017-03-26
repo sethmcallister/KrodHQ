@@ -14,14 +14,12 @@ public class RegularFactions
     private final ScoreboardHandler scoreboardHandler;
 
     public RegularFactions()
+
     {
-<<<<<<< HEAD:RegularFactions/src/main/java/xyz/sethy/regularfactions/RegularFactions.java
 
         regularFactions = this;
-=======
-        regularFacitons = this;
->>>>>>> d4faab182280b8c37e6da0d998c4b96901e2959c:RegularFactions/src/main/java/xyz/sethy/regularfactions/RegularFacitons.java
-        this.scoreboardHandler = new ScoreboardHandler();
+this.scoreboardHandler = new ScoreboardHandler();
+this.registerCommands();
     }
 
     public static RegularFactions getInstance()

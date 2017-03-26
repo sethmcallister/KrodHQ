@@ -4,5 +4,5 @@ xyz\sethy\regularfactions\scoreboard\Scoreboard.class
 xyz\sethy\regularfactions\listeners\UserLoginListener.class
 xyz\sethy\regularfactions\scoreboard\ScoreboardHandler.class
 xyz\sethy\regularfactions\commands\WarpCommand.class
-xyz\sethy\regularfactions\RegularFacitons.class
+xyz\sethy\regularfactions\RegularFactions.class
 xyz\sethy\regularfactions\scoreboard\ScoreboardThread.class

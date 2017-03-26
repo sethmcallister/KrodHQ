@@ -39,6 +39,7 @@
                   <include>org.jboss.netty:netty</include>
                   <include>com.google.code.gson:gson</include>
                   <include>net.techcable:npclib</include>
+                  <include>xyz.sethy:RegularFactions</include>
                 </includes>
               </artifactSet>
             </configuration>
