@@ -1,5 +1,6 @@
 name: KrodHQ
 main: xyz.sethy.core.Core
+author: KrodHQ-Developers
 load: startup
 version: 0.0.1
 depend: [ProtocolLib]

@@ -7,6 +7,6 @@ public class RegularFacitons
 {
     public RegularFacitons()
     {
-        int i = 1;
+
     }
 }

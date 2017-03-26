@@ -33,7 +33,7 @@ public class ScoreboardThread extends BukkitRunnable
 
             scoreboard.add(translateString("&7&m-----------"), translateString("&7&m-----------"));
 
-            
+
 
             scoreboard.add(translateString("&7&m-----------"), translateString("&7&m-----------"));
             scoreboard.update();
