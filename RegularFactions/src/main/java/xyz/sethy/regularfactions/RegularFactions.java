@@ -5,21 +5,21 @@ import xyz.sethy.regularfactions.scoreboard.ScoreboardHandler;
 /**
  * Created by Seth on 26/03/2017.
  */
-public class RegularFacitons
+public class RegularFactions
 {
-    private static RegularFacitons regularFacitons;
+    private static RegularFactions regularFactions;
     private final ScoreboardHandler scoreboardHandler;
 
-    public RegularFacitons()
+    public RegularFactions()
     {
 
-        regularFacitons = this;
+        regularFactions = this;
         this.scoreboardHandler = new ScoreboardHandler();
     }
 
-    public static RegularFacitons getInstance()
+    public static RegularFactions getInstance()
     {
-        return regularFacitons;
+        return regularFactions;
     }
 
     public ScoreboardHandler getScoreboardHandler()

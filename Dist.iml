@@ -19,6 +19,7 @@
     <orderEntry type="library" name="Maven: xyz.sethy:threads:0.0.1" level="project" />
     <orderEntry type="module" module-name="API" />
     <orderEntry type="module" module-name="Core" />
+    <orderEntry type="module" module-name="RegularFactions" />
     <orderEntry type="module" module-name="SurvivalGamesLobby" />
     <orderEntry type="module" module-name="Guard" />
     <orderEntry type="library" name="Maven: com.comphenix.protocol:ProtocolLib-API:4.1.0" level="project" />

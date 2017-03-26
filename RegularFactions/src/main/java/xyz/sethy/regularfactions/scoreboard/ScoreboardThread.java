@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.sethy.api.API;
 import xyz.sethy.api.framework.user.User;
-import xyz.sethy.regularfactions.RegularFacitons;
+import xyz.sethy.regularfactions.RegularFactions;
 
 import java.text.DecimalFormat;
 
@@ -22,7 +22,7 @@ public class ScoreboardThread extends BukkitRunnable
     {
         for (Player player : Bukkit.getOnlinePlayers())
         {
-            Scoreboard scoreboard = RegularFacitons.getInstance().getScoreboardHandler().getScoreboard(player);
+            Scoreboard scoreboard = RegularFactions.getInstance().getScoreboardHandler().getScoreboard(player);
             if (scoreboard == null)
                 continue;
 

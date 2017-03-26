@@ -16,6 +16,7 @@ import xyz.sethy.core.utils.DateUtils;
 import xyz.sethy.factions.Factions;
 import xyz.sethy.guard.Guard;
 import xyz.sethy.hub.Hub;
+import xyz.sethy.regularfactions.RegularFactions;
 import xyz.sethy.sg.SG;
 import xyz.sethy.sglobby.SGLobby;
 
@@ -111,6 +112,11 @@ public class Core extends JavaPlugin implements Listener
             this.kitmap = true;
             new Factions(this, true);
             getLogger().info("Enabling server as Kitmap instance.");
+        }
+        if(this.fileHandler.getModulesFile().getBoolean("MODULES.FACTIONS"))
+        {
+            getLogger().info("Enabling server as factions instance");
+            new RegularFactions();
         }
     }
 

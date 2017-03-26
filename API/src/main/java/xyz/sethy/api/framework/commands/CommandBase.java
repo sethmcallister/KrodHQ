@@ -25,6 +25,7 @@ public abstract class CommandBase implements CommandExecutor
         this.command = command;
         this.group = group;
         this.isPlayerOnly = playerOnly;
+        API.getPlugin().getServer().getPluginCommand(command).setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command command1, String label, String[] args)
