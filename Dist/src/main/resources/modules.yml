@@ -1,5 +1,6 @@
 MODULES:
-                  SG_LOBBY: true
-                  HUB: false
-                  SG: false
-                  HCF_FIX: false
+  SG_LOBBY: false
+  HUB: false
+  REG_FACTIONS: true
+  SG: false
+  HCF_FIX: false
